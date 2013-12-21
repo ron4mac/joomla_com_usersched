@@ -1,0 +1,176 @@
+#configform input[type="submit"] {
+	float: right;
+}
+#configform input[type="checkbox"] {
+	float: left;
+	margin-right: 1em;
+}
+#configform input[type="text"] {
+	margin-left: 1em;
+	margin-bottom: 1em;
+}
+#configform input.numer {
+	width: 4em;
+}
+#configform label {
+	display:block;
+	margin-bottom: 0.5em;
+}
+#configform .clr {
+	clear:both;
+}
+
+#formtabs {
+	clear: both;
+}
+
+/* alertees configuration */
+.aetable p {
+	clear: both;
+	width: 100%;
+	margin: 0;
+}
+.aetable span {
+	float: left;
+	padding: 0 10px;
+}
+.aetable span.col1 {
+	width: 110px;
+}
+.aetable span.col2 {
+	width: 186px;
+}
+.aetable span.col3 {
+	width: 186px;
+}
+.aetable span.col4 {
+	width: 60px;
+	text-align: center;
+}
+.aetable span.col4 input {
+	float: none !important;
+	margin: 0 !important;
+}
+.aetable span .aename {
+	width: 110px;
+	margin-left: 0 !important;
+}
+.aetable span .aeemail {
+	width: 180px;
+	margin-left: 0 !important;
+}
+.aetable span .aesms {
+	width: 180px;
+	margin-left: 0 !important;
+}
+.aetable .addicon {
+	margin-left: 10px;
+	width: 16px;
+	height: 16px;
+	background:#eee url(../static/plusbut.png) no-repeat;}
+	cursor: pointer;
+}
+
+.aecolumn1 {
+	position: relative;
+	left: 10px;
+}
+.aecolumn2 {
+	position: relative;
+	left: 100px;
+}
+.aecolumn3 {
+	position: relative;
+	left: 190px;
+}
+
+/* categories configuration */
+.ectable p {
+	clear: both;
+	width: 100%;
+	margin: 0;
+}
+.ectable span {
+	float: left;
+	padding: 0 10px;
+}
+.ectable span.col1 {
+	width: 180px;
+}
+.ectable span.col2 {
+	width: 80px;
+}
+.ectable span.col3 {
+	width: 80px;
+}
+.ectable span.col4 {
+	width: 60px;
+	text-align: center;
+}
+.ectable span.col4 input {
+	float: none !important;
+	margin: 0 !important;
+}
+.ectable span .ecname {
+	width: 180px;
+	margin-left: 0 !important;
+}
+.ectable span .ectcolr {
+	width: 80px;
+	margin-left: 0 !important;
+}
+.ectable span .ecbcolr {
+	width: 80px;
+	margin-left: 0 !important;
+}
+.ectable span .catsamp {
+	width: 80px;
+	margin-left: 0 !important;
+}
+.ectable .addicon {
+	margin-left: 10px;
+	width: 16px;
+	height: 16px;
+	background:#eee url(../static/plusbut.png) no-repeat;}
+	cursor: pointer;
+}
+
+.eccolumn1 {
+	position: relative;
+	left: 10px;
+}
+.eccolumn2 {
+	position: relative;
+	left: 100px;
+}
+.eccolumn3 {
+	position: relative;
+	left: 190px;
+}
+
+/* stabber */
+a:active,
+a:focus {outline:0;}
+.stab_clr {display:block;clear:both;height:0;line-height:0;margin:0;padding:0;border:0;}
+
+/* Tabs
+------------------------------------------ */
+.stabber {display:none;}
+.stabberlive {margin:4px 0;padding:0;}
+
+/* The tab navigation */
+ul.stabbernav {margin:0 0 0 8px!important;padding:0!important;list-style:none!important;list-style-image:none!important;background:none!important;line-height:normal!important;height:auto!important;text-align:left!important;}
+ul.stabbernav li {margin:0!important;padding:0!important;line-height:normal!important;list-style:none!important;list-style-image:none!important;background:none!important;display:inline!important;}
+ul.stabbernav li a {font-size:14px;margin:0 2px 0 0;padding:4px 10px 2px;color:#222;border-radius:2px 2px 0 0;border:1px solid #bbb;border-bottom:none;background:#eee url(../static/tab_bg.jpg) repeat-x 50%;}
+ul.stabbernav li a:hover {color:#c64934;border:1px solid #aaa;border-bottom:none;background:#f2f2f2;text-decoration:none;}
+ul.stabbernav li a:active,
+ul.stabbernav li a:focus {outline:0;}
+ul.stabbernav li.stabberactive a {background:#fff;border-bottom:1px solid #fff;}
+ul.stabbernav li.stabberactive a:hover {background:#fff;border-bottom:1px solid #fff;text-decoration:none;}
+ul.stabbernav li.stabberactive,
+ul.stabbernav li.stabberinactive {background:none;padding:0;margin:0;}
+
+/* The tab content */
+.stabberlive .stabbertab {text-align:left;margin:2px 0 0!important;padding:8px;border:1px solid #bbb;border-radius:2px;background:#fff;}
+.stabberlive .stabbertab h2.sheading,
+.stabberlive .stabbertabhide {display:none;}

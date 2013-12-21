@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="2.5" method="upgrade">
+	<name>com_usersched</name>
+	<author>Ron Crans</author>
+	<creationDate>December 2013</creationDate>
+	<copyright>(C) 2013 Ron Crans.</copyright>
+	<license>GNU General Public License version 2 or later</license>
+	<authorEmail>ron@rjconline.net</authorEmail>
+	<authorUrl>rjconline.net</authorUrl>
+	<version>0.8.6dev</version>
+	<description>COM_USERSCHED_XML_DESCRIPTION</description>
+	<scriptfile>script.php</scriptfile>
+	<files folder="site">
+		<filename>controller.php</filename>
+		<filename>index.html</filename>
+		<filename>router.php</filename>
+		<filename>usersched.php</filename>
+		<filename>bdayajax.php</filename>
+		<filename>js.php</filename>
+		<filename>periodic.php</filename>
+		<filename>periodic_sn.php</filename>
+		<filename>periodic_so.php</filename>
+		<folder>models</folder>
+		<folder>views</folder>
+		<folder>helpers</folder>
+		<folder>skins</folder>
+		<folder>static</folder>
+		<folder>pdf</folder>
+		<folder>scheduler</folder>
+	</files>
+	<languages folder="site">
+		<language tag="en-GB">language/en-GB.com_usersched.ini</language>
+	</languages>
+	<administration>
+		<menu link="option=com_usersched" img="components/com_usersched/static/usersched16.png">COM_USERSCHED_MENU</menu>
+		<files folder="admin">
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
+			<filename>controller.php</filename>
+			<filename>index.html</filename>
+			<filename>usersched.php</filename>
+			<filename>periodic.php</filename>
+			<folder>helpers</folder>
+			<folder>models</folder>
+			<folder>views</folder>
+			<folder>static</folder>
+			<folder>help</folder>
+		</files>
+		<languages folder="admin">
+			<language tag="en-GB">language/en-GB.com_usersched.ini</language>
+			<language tag="en-GB">language/en-GB.com_usersched.sys.ini</language>
+		</languages>
+	</administration>
+</extension>

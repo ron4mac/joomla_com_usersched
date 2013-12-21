@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+
+	<fieldset name="component">
+		<field
+			name="default_skin"
+			type="folderlist"
+			directory="components/com_usersched/skins"
+			hide_none="1"
+			label="COM_USERSCHED_SKIN_DEFAULT_LABEL"
+			description="COM_USERSCHED_SKIN_DEFAULT_DESC">
+		</field>
+	</fieldset>
+
+	<fieldset name="useroptions" description="COM_USERSCHED_CONFIG_CALOPTS_DESC">
+		<field
+			name="user_canskin"
+			type="radio"
+			class="btn-group btn-group-yesno"
+			default="0"
+			label="COM_USERSCHED_CONFIG_CANSKIN_LABEL"
+			description="COM_USERSCHED_CONFIG_CANSKIN_DESC"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field
+			name="user_canalert"
+			type="radio"
+			class="btn-group btn-group-yesno"
+			default="0"
+			label="COM_USERSCHED_CONFIG_CANALERT_LABEL"
+			description="COM_USERSCHED_CONFIG_CANALERT_DESC"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field
+			name="user_recurrevt"
+			type="radio"
+			class="btn-group btn-group-yesno"
+			default="0"
+			label="COM_USERSCHED_CONFIG_RECURR_LABEL"
+			description="COM_USERSCHED_CONFIG_RECURR_DESC"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	</fieldset>
+
+	<fieldset name="grpoptions" description="COM_USERSCHED_CONFIG_CALOPTS_DESC">
+		<field
+			name="grp_canskin"
+			type="radio"
+			class="btn-group btn-group-yesno"
+			default="0"
+			label="COM_USERSCHED_CONFIG_CANSKIN_LABEL"
+			description="COM_USERSCHED_CONFIG_CANSKIN_DESC"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field
+			name="grp_canalert"
+			type="radio"
+			class="btn-group btn-group-yesno"
+			default="0"
+			label="COM_USERSCHED_CONFIG_CANALERT_LABEL"
+			description="COM_USERSCHED_CONFIG_CANALERT_DESC"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	</fieldset>
+
+	<fieldset
+		name="permissions"
+		label="JCONFIG_PERMISSIONS_LABEL"
+		description="JCONFIG_PERMISSIONS_DESC"
+		>
+		<field
+			name="rules"
+			type="rules"
+			label="JCONFIG_PERMISSIONS_LABEL"
+			filter="rules"
+			validate="rules"
+			component="com_usersched"
+			section="component" />
+	</fieldset>
+
+</config>

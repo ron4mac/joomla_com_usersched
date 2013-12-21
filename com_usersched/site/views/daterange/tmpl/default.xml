@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_USERSCHED_DATERANGE_TITLE" option="COM_USERSCHED_DATERANGE_OPTION">
+		<help
+			key = "JHELP_MENUS_MENU_ITEM_SEARCH_RESULTS"
+		/>
+		<message>
+			<![CDATA[COM_USERSCHED_DATERANGE_DESC]]>
+		</message>
+	</layout>
+
+	<fields name="params">
+
+		<!-- Basic options. -->
+		<fieldset name="basic" label="COM_MENUS_BASIC_FIELDSET_LABEL" addfieldpath="administrator/components/com_usersched/fields">
+
+			<field name="cal_type" type="radio"
+				default="0"
+				description="COM_USERSCHED_CALTYPE_DESC"
+				label="COM_USERSCHED_CALTYPE_LABEL"
+			>
+				<option value="2" onclick="show_hide(this.value)">COM_USERSCHED_SITE_CAL</option>
+				<option value="1" onclick="show_hide(this.value)">COM_USERSCHED_GROUP_CAL</option>
+				<option value="0" onclick="show_hide(this.value)">COM_USERSCHED_USER_CAL</option>
+			</field>
+
+			<field name="relative" type="radio" default="abs"
+				label="Relative/Absolute Date Range"
+				description="Should date range be relative to today or absolute dates. You can also specify dates using the php function strtotime"
+			>
+				<option value="abs">Absolute</option>
+				<option value="rel">Relative</option>
+				<option value="strtotime">strtotime</option>
+			</field>
+
+			<field name='relstart' type='text' default="-1w" label='START_RELATIVE_TO_TODAY'  description="JEV_RELSTART_DESC" />
+			<field name='relend' type='text' default="+1m" label='END_RELATIVE_TO_TODAY'  description="JEV_RELEND_DESC" />
+
+			<field name="site_auth" id="site_auth" type="jsboot" mask="2"
+				multiple="true"
+				label="Editable by:"
+				description="Select the group(s) who may edit the calendar"
+				></field>
+			<field name="group_auth" id="group_auth" type="jsboot" mask="1"
+				label="Owning group:"
+				description="Select the group who owns/edits the calendar"
+				></field>
+
+		</fieldset>
+	</fields>
+</metadata>
