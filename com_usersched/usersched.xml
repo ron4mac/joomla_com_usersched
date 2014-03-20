@@ -39,7 +39,6 @@
 			<filename>controller.php</filename>
 			<filename>index.html</filename>
 			<filename>usersched.php</filename>
-			<filename>periodic.php</filename>
 			<folder>helpers</folder>
 			<folder>models</folder>
 			<folder>views</folder>
