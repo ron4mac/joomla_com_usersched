@@ -5,13 +5,19 @@ defined('_JEXEC') or die;
  * @param	array
  * @return	array
  */
-function UserSchedBuildRoute(&$query)
+function UserschedBuildRoute(&$query)
 {
-	$segments = array();
+	$segments = array();	//var_dump($query);
 
 	if (isset($query['view'])) {
+		$segments[] = $query['view'];
 		unset($query['view']);
 	}
+	if (isset($query['task'])) {
+		$segments[] = $query['task'];
+		unset($query['task']);
+	}
+
 	return $segments;
 }
 
@@ -19,13 +25,12 @@ function UserSchedBuildRoute(&$query)
  * @param	array
  * @return	array
  */
-function UserSchedParseRoute($segments)
+function UserschedParseRoute($segments)
 {
 	$vars = array();
 
-	$searchword	= array_shift($segments);
-	$vars['searchword'] = $searchword;
-	$vars['view'] = 'usersched';
+	if ($segments[0]) $vars['view'] = $segments[0];
+	if ($segments[1]) $vars['task'] = $segments[1];
 
 	return $vars;
 }

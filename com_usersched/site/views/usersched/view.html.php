@@ -71,8 +71,8 @@ class UserschedViewUsersched extends JViewLegacy
 		switch ($this->cal_type) {
 			case 0:		// user
 				$start = 'start';
-				$this->jID = $this->user->id;
-				if ($this->jID <= 0) return;
+				if ($this->user->id <= 0) return;
+				$this->jID = array($this->user->id);
 				$this->canCfg = true;
 				$caldb = new RJUserData('sched');
 				break;
@@ -102,6 +102,10 @@ class UserschedViewUsersched extends JViewLegacy
 				break;
 		}
 
+		// store the caltype and user in the session
+		if (!is_array($this->jID)) $this->jID = array($this->jID);
+		$this->state('calid', true, $this->cal_type.':'.implode(',', $this->jID));
+
 		if ($caldb->dataExists()) {
 			$this->alertees = $caldb->getTable('alertees','',true);
 			$this->categories = $caldb->getTable('categories','',true);
@@ -114,11 +118,13 @@ class UserschedViewUsersched extends JViewLegacy
 				parent::display($tpl);
 			}
 		} else {
-			JHtml::script('components/com_usersched/static/config.js',true);
-			JHtml::script('components/com_usersched/static/color-picker.js');
-			JHtml::stylesheet('components/com_usersched/static/config.css');
-			$this->skinOptions = $this->getSkinOptions();
-			parent::display($start);
+		//	JHtml::script('components/com_usersched/static/config.js',true);
+		//	JHtml::script('components/com_usersched/static/color-picker.js');
+		//	JHtml::stylesheet('components/com_usersched/static/config.css');
+		//	$this->skinOptions = $this->getSkinOptions();
+		//	parent::display($start);
+			$app->redirect(JRoute::_('index.php?view=config', false)); 
+		//	$this->setRedirect(JRoute::_('index.php?view=config', false));
 		}
 
 /*
@@ -249,12 +255,12 @@ class UserschedViewUsersched extends JViewLegacy
 
 	protected function state ($vari, $set=false, $val='0', $glb=false)
 	{
-		$mainframe =& JFactory::getApplication();
+		$app = JFactory::getApplication();
 		if ($set) {
-			$mainframe->setUserState($option.'_'.$vari, $val);
+			$app->setUserState($option.'_'.$vari, $val);
 			return;
 		}
-		return $mainframe->getUserState(($glb ? '' : "{$option}_").$vari, '0');
+		return $app->getUserState(($glb ? '' : "{$option}_").$vari, '0');
 	}
 
 }

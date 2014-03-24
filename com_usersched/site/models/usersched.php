@@ -169,17 +169,7 @@ class UserSchedModelUserSched extends JModelLegacy
 			if ($data->get($int)) $blank[$int] = $data->getInt($int);
 		}
 		//echo'<xmp>';var_dump($params,$blank);jexit();
-		switch ($params->get('cal_type')) {
-			case 0:
-				$db = new RJUserData('sched');
-				break;
-			case 1:
-				$db = new RJUserData('sched',false,$params->get('group_auth'),true);
-				break;
-			case 2:
-				$db = new RJUserData('sched',false,0,true);
-				break;
-		}
+		$db =& $this->getUserDatabase($params);
 		if ($db->dataExists()) {
 			$db->getDbase()->db_connect();
 			$q = $db->getDbase()->_update('options',array('value'=>"'".$db->getDbase()->escape_str(serialize($blank))."'"),array('name = "config"'));
@@ -191,6 +181,53 @@ class UserSchedModelUserSched extends JModelLegacy
 
 		$this->manageAlertees($data,$db);
 		$this->manageCategories($data,$db);
+	}
+
+	function importical ()
+	{
+		$params = $this->state->get('parameters.menu');
+		$db =& $this->getUserDatabase($params);
+		if (!$db->dataExists()) return false;
+		$db->getDbase()->db_connect();	// cause it to open read/write
+		if ($icalfile = JFactory::getApplication()->input->files->get('ical_file', null)) {
+			if ($icalfile['tmp_name']) {
+				$icaldata = file_get_contents($icalfile['tmp_name']);
+				$this->importIcalendar($icaldata, $db);
+			} else return false;
+		} else return false;
+		return true;
+	}
+
+	function export2ical ()
+	{
+		require_once JPATH_COMPONENT . '/helpers/ical.php';
+		$exporter = new ICalExporter();
+		$params = $this->state->get('parameters.menu');
+		$db =& $this->getUserDatabase($params);
+		if ($db->dataExists()) {
+			$evts = $db->getTable('events','',true);
+			$ical = $exporter->toICal($evts);
+			header('Content-type: text/calendar');
+			header('Content-Disposition: attachment; filename="schedule.ics"');
+			echo $ical;
+		}
+	}
+
+	private function getUserDatabase ($params)
+	{
+		$db = null;
+		switch ($params->get('cal_type')) {
+			case 0:
+				$db = new RJUserData('sched');
+				break;
+			case 1:
+				$db = new RJUserData('sched',false,$params->get('group_auth'),true);
+				break;
+			case 2:
+				$db = new RJUserData('sched',false,0,true);
+				break;
+		}
+		return $db;
 	}
 
 	private function manageAlertees ($data, $db)
@@ -285,4 +322,36 @@ class UserSchedModelUserSched extends JModelLegacy
 		$r = $db->getDbase()->execute($q);
 	}
 
+	private function importIcalendar ($data, $db)
+	{
+		require_once JPATH_COMPONENT . '/helpers/ical.php';
+		if (!db || !data) return;
+		$exporter = new ICalExporter();
+		$events = $exporter->toHash($data);
+		//echo'<pre>';var_dump($events);echo'</pre>';jexit();
+		$db3 = $db->getDbase();
+		foreach ($events as $evt) {
+			$this->addEvent($evt, $db3);
+		}
+	}
+
+	private function addEvent ($evt, $db)
+	{
+		//echo'<pre>';var_dump($evt);echo'</pre>';return;
+		foreach ($evt as $k=>$v) {
+			switch (gettype($v)) {
+				case 'string':
+					$evt[$k] = '\''.$db->escape_str($v).'\'';
+					break;
+				default:
+					if ($k == 'event_id') unset($evt[$k]);
+					//$evt[$k] = $db->escape_str($v);
+					break;
+			}
+		}
+		if (!isset($evt['user'])) $evt['user'] = JFactory::getUser()->id;
+		$q = $db->_insert('events', array_keys($evt), array_values($evt));
+		//echo'<pre>';var_dump($q);echo'</pre>';
+		$db->execute($q);
+	}
 }

@@ -6,7 +6,6 @@ defined('_JEXEC') or die;
  */
 class UserschedViewUsersched extends JViewLegacy
 {
-	protected $enabled;
 	protected $items;
 	protected $pagination;
 	protected $state;
@@ -58,12 +57,12 @@ class UserschedViewUsersched extends JViewLegacy
 
 	protected function state($vari, $set=false, $val='0', $glb=false)
 	{
-		$mainframe =& JFactory::getApplication();
+		$app = JFactory::getApplication();
 		if ($set) {
-			$mainframe->setUserState($option.'_'.$vari, $val);
+			$app->setUserState($option.'_'.$vari, $val);
 			return;
 		}
-		return $mainframe->getUserState(($glb ? '' : "{$option}_").$vari, '0');
+		return $app->getUserState(($glb ? '' : "{$option}_").$vari, '0');
 	}
 
 }

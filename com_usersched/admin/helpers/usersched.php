@@ -21,6 +21,11 @@ class UserSchedHelper
 			'index.php?option=com_usersched&view=configs',
 			$vName == 'configs'
 		);
+		JSubMenuHelper::addEntry(
+			JText::_('COM_USERSCHED_SUBMENU_SKINS'),
+			'index.php?option=com_usersched&view=skins',
+			$vName == 'skins'
+		);
 
 		if ($vName=='configs') {
 			JToolBarHelper::title(
@@ -83,6 +88,7 @@ class UserSchedHelper
 
 	public static function getUserScheds ($u=true,$g=false,$s=false)
 	{
+		jimport('joomla.filesystem.folder');
 		$scheds = array();
 		$spath = JPATH_SITE . '/userstor/';
 		$folds = JFolder::folders($spath);
@@ -92,7 +98,7 @@ class UserSchedHelper
 					case '@':
 						if (!$u) break;
 						$uid = (int)substr($fold,1);
-						$user =& JFactory::getUser($uid);
+						$user = JFactory::getUser($uid);
 						$scheds[] = array('name'=>$user->name,'uname'=>$user->username,'uid'=>$uid);
 						break;
 					case '_':

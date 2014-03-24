@@ -16,33 +16,33 @@ scheduler.__alerts = {
 	}
 };
 
-//function sched_extend() {
+function sched_extend() {
 
 	scheduler.locale.labels.section_alerts = scheduler.__alerts.locale.alert_title;
-//	var lsl = scheduler.config.lightbox.sections.length;
-//	scheduler.config.lightbox.sections.splice(lsl-2,0,{ name: "alerts", height: 42, map_to: "text", type: "alerts_editor", button:"shide" });
+	var lsl = scheduler.config.lightbox.sections.length;
+	scheduler.config.lightbox.sections.splice(lsl-2,0,{ name: "alerts", height: 42, map_to: "text", type: "alerts_editor", button:"shide" });
 	scheduler.locale.labels.button_shide = scheduler.__alerts.locale.alert_show;
 
 	scheduler.form_blocks["alerts_editor"] = {
 		render:function(sns) {
-			var htm = '<form id ="alert_form" style="display:none"><div class="sched_alerts"><div class="sched_alrtatr"><label>'+scheduler.__alerts.locale.alert_users+'</label>\
+			var htm = '<form id ="alert_form" style="display:none"><div><label>'+scheduler.__alerts.locale.alert_users+'</label>\
 <select id="sel_alertusers" name="sel_alertusers[]" multiple="multiple" class="alrt_users">\
 '+scheduler.alertWho+'\
-</select></div>\
-<div class="sched_alrtatr"><label>'+scheduler.__alerts.locale.alert_method+'</label>\
+</select>\
+<label>'+scheduler.__alerts.locale.alert_method+'</label>\
 <select id="alertmethod" name="alertmethod" class="alrt_meth">\
 <option value="1">'+scheduler.__alerts.locale.alert_email+'</option>\
 <option value="2">'+scheduler.__alerts.locale.alert_SMS+'</option>\
 <option value="3">'+scheduler.__alerts.locale.alert_both+'</option>\
-</select></div>\
-<div class="sched_alrtatr"><label>'+scheduler.__alerts.locale.alert_lead+'</label>\
+</select>\
+<label>'+scheduler.__alerts.locale.alert_lead+'</label>\
 <input name="alertlead_val" id="alertlead_val" type="number" min="0" class="alrt_lead">\
 <select size="1" name="alertlead_mul" id="alertlead_mul">\
 <option value="1">'+scheduler.__alerts.locale.alert_minutes+'</option>\
 <option value="2">'+scheduler.__alerts.locale.alert_hours+'</option>\
 <option value="3">'+scheduler.__alerts.locale.alert_days+'</option>\
 <option value="4">'+scheduler.__alerts.locale.alert_weeks+'</option>\
-</select></div>\
+</select>\
 </div></form>\
 ';
 			return htm;
@@ -73,12 +73,12 @@ scheduler.__alerts = {
 
 	sched_setAutoEnd();
 
-//}
+}
 
 
 function sched_fillAlert(elem,val,evt) {
 	elem.alertmethod.value = evt.alert_meth ? evt.alert_meth : 1;
-//console.log(evt);
+console.log(evt);
 	var optionsSelected = evt.alert_user ? evt.alert_user.split(/,/) : [];
 	var select = elem.sel_alertusers;
 	for (var i = 0, l = select.options.length, o; i < l; i++) {
@@ -154,14 +154,10 @@ function sched_getAlert(elem,evt) {
 function sched_setAutoEnd () {
 	var old_setValue = scheduler.form_blocks.time.set_value;
 	scheduler.form_blocks.time.set_value = function(node,value,ev,config){
-			//console.log(ev);
-			var is_fd = (scheduler.date.time_part(ev.start_date)===0 && scheduler.date.time_part(ev.end_date)===0);
 			old_setValue.apply(this, arguments);
 			var s=node.getElementsByTagName("select");
-			var map = config._time_format_order;	//console.log(config);
-			ev.sdnd_adj = (ev.event_length*1) ? ev.event_length : (ev.end_date - ev.start_date)/1000;
-			//console.log('esa'+ev.sdnd_adj);
-			
+			var map = config._time_format_order;console.log(config);
+			ev.sdnd_adj = ev.event_length;
 
 			function _update_lightbox_select() {
 				var nsd = new Date(s[map[3]].value,s[map[2]].value,s[map[1]].value,0,s[map[0]].value);
@@ -185,24 +181,4 @@ function sched_setAutoEnd () {
 				s[i].onchange = function(){_sched_update_evtdiff();};
 			}
 		}
-	if (scheduler.form_blocks.calendar_time) {
-		var oldc_setValue = scheduler.form_blocks.calendar_time.set_value;
-		scheduler.form_blocks.calendar_time.set_value = function(node,val,evt){
-			var evLen = evt.end_date - evt.start_date;
-			var inputs = node.getElementsByTagName("input");
-			var selects = node.getElementsByTagName("select");
-			oldc_setValue.apply(this, arguments);
-			console.log(evLen,inputs,selects,val,evt);
-			function _rj_update_minical_select() {
-				start_date = scheduler.date.add(inputs[0]._date, selects[0].value, "minute");
-				end_date = new Date(start_date.getTime() + evLen);
-				console.log(start_date,end_date);
-				inputs[1].value = scheduler.templates.calendar_time(end_date);
-				inputs[1]._date = scheduler.date.date_part(new Date(end_date));
-
-				//selects[1].value = end_date.getHours() * 60 + end_date.getMinutes();
-			}
-			inputs[0].onchange = _rj_update_minical_select;
-			}
-	}
 }

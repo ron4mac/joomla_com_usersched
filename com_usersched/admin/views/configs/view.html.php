@@ -6,7 +6,6 @@ defined('_JEXEC') or die;
  */
 class UserSchedViewConfigs extends JViewLegacy
 {
-	protected $enabled;
 	protected $items;
 	protected $pagination;
 	protected $state;
@@ -15,14 +14,11 @@ class UserSchedViewConfigs extends JViewLegacy
 	 * Display the view
 	 */
 	public function display($tpl = null)
-	{	//var_dump('vht',$this);jexit();
+	{
 		jimport('joomla.html.pagination');
-//		$this->items		= $this->get('Items');
 		$this->items = UserSchedHelper::getUserScheds();
-//		$this->pagination	= $this->get('Pagination');
 		$this->pagination = new JPagination(count($this->items), 0, 20);
 		$this->state		= $this->get('State');
-//		$this->enabled		= $this->state->params->get('enabled');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
@@ -36,8 +32,6 @@ class UserSchedViewConfigs extends JViewLegacy
 
 	/**
 	 * Add the page title and toolbar.
-	 *
-	 * @since	1.6
 	 */
 	protected function addToolbar()
 	{
@@ -61,12 +55,12 @@ class UserSchedViewConfigs extends JViewLegacy
 
 	protected function state($vari, $set=false, $val='0', $glb=false)
 	{
-		$mainframe =& JFactory::getApplication();
+		$app = JFactory::getApplication();
 		if ($set) {
-			$mainframe->setUserState($option.'_'.$vari, $val);
+			$app->setUserState($option.'_'.$vari, $val);
 			return;
 		}
-		return $mainframe->getUserState(($glb ? '' : "{$option}_").$vari, '0');
+		return $app->getUserState(($glb ? '' : "{$option}_").$vari, '0');
 	}
 
 }

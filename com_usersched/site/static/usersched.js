@@ -70,7 +70,6 @@ function mergeObjects (obj1, obj2) {
 
 function configScheduler () {
 	var uid = scheduler.uid();
-	var url = 'index.php/usersched';
 	var d = document.createElement("div");
 	d.innerHTML = '<form id="' + uid + '" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded"><input type="hidden" name="task" value="doConfig" /></form>';
 	d.firstChild.submit();

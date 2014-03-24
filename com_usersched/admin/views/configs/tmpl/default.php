@@ -15,22 +15,19 @@ $canDo = UserSchedHelper::getActions();
 <form action="<?php echo JRoute::_('index.php?option=com_usersched&view=configs'); ?>" method="post" name="adminForm" id="adminForm">
 	<div class="clr"> </div>
 
-	<table class="adminlist">
+	<table  class="table table-striped">
 		<thead>
 			<tr>
-				<th width="20">
-					<?php echo JText::_('JGRID_HEADING_ROW_NUMBER'); ?>
-				</th>
-				<th width="20">
-				</th>
+				<th width="1%"></th>
+				<th width="1%"><?php echo JHtml::_('grid.checkall'); ?></th>
 				<th class="title">
-					<?php echo JHtml::_('grid.sort', 'COM_SEARCH_HEADING_PHRASE', 'a.search_term', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_HEADING_NAME', 'a.search_term', $listDirn, $listOrder); ?>
 				</th>
 				<th width="15%">
-					<?php echo JHtml::_('grid.sort', 'JGLOBAL_HITS', 'a.hits', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_HEADING_UNAME', 'a.hits', $listDirn, $listOrder); ?>
 				</th>
 				<th width="15%">
-					<?php echo JText::_('COM_SEARCH_HEADING_RESULTS'); ?>
+					<?php echo JText::_('COM_USERSCHED_HEADING_UID'); ?>
 				</th>
 				<th width="30%">
 					&#160;
@@ -39,7 +36,7 @@ $canDo = UserSchedHelper::getActions();
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="12">
+				<td colspan="6">
 					<?php echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
@@ -52,15 +49,14 @@ $canDo = UserSchedHelper::getActions();
 				</td>
 				<td>
 					<?php echo JHtml::_('grid.id', $i, $item['uid']); ?>
-					<!-- <input type="checkbox" class="ssel" name="scheds[]" value="<?php echo $item['uid'] ?>"> -->
 				</td>
 				<td>
 					<?php echo $item['name']; ?>
 				</td>
-				<td class="center">
+				<td>
 					<?php echo $item['uname']; ?>
 				</td>
-				<td class="center">
+				<td>
 					<?php echo $item['uid'] ?>
 				</td>
 				<td>

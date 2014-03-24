@@ -23,9 +23,10 @@ class UserSchedController extends JControllerLegacy
 	{
 		//$doc = JFactory::getDocument();
 		//$doc->addStyleSheet(JURI::root().'components/com_usersched/static/config.css');
-		$app = JFactory::getApplication();
-		$app->input->set('layout', 'default_config');
-		parent::display();
+//		$app = JFactory::getApplication();
+//		$app->input->set('layout', 'default_config');
+//		parent::display();
+		$this->setRedirect(JRoute::_('index.php?view=config', false));
 	}
 
 	function setcfg ()
@@ -34,6 +35,30 @@ class UserSchedController extends JControllerLegacy
 		$m = &$this->getModel();
 		$m->saveConfig(JFactory::getApplication()->input->post);
 		$this->setRedirect(JRoute::_('index.php', false), 'Configuration saved');
+	}
+
+	function impical ()
+	{
+		JSession::checkToken();
+		$m = &$this->getModel();
+		$r = $m->importical();
+		if ($r) {
+			$msg = 'iCalendar events imported';
+			$fbk = 'success';
+		} else {
+			$msg = 'Failed to import events';
+			$fbk = 'error';
+		}
+		JFactory::getApplication()->enqueueMessage($msg, $fbk);
+		$this->setRedirect(JRoute::_('index.php', false));
+	}
+
+	function exp2ical ()
+	{
+		JSession::checkToken();
+		$m = &$this->getModel();
+		$m->export2ical();
+		jexit();
 	}
 
 	function periodic ()

@@ -15,14 +15,11 @@ $canDo = UserSchedHelper::getActions();
 <form action="<?php echo JRoute::_('index.php?option=com_usersched&view=calendars'); ?>" method="post" name="adminForm" id="adminForm">
 	<div class="clr"> </div>
 
-	<table class="adminlist">
+	<table  class="table table-striped">
 		<thead>
 			<tr>
-				<th width="20">
-					<?php echo JText::_('JGRID_HEADING_ROW_NUMBER'); ?>
-				</th>
-				<th width="20">
-				</th>
+				<th width="1%"></th>
+				<th width="1%"><?php echo JHtml::_('grid.checkall'); ?></th>
 				<th class="title">
 					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_GROUPNAME', 'a.name', $listDirn, $listOrder); ?>
 				</th>
