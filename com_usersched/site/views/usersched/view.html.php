@@ -70,33 +70,26 @@ class UserschedViewUsersched extends JViewLegacy
 
 		switch ($this->cal_type) {
 			case 0:		// user
-				$start = 'start';
 				if ($this->user->id <= 0) return;
 				$this->jID = array($this->user->id);
 				$this->canCfg = true;
 				$caldb = new RJUserData('sched');
 				break;
 			case 1:		// group
-				$start = 'gstart';
 				$this->jID = $this->params->get('group_auth');
 				$gauth = $this->jID;
 				if (!is_array($gauth)) $gauth = array($gauth);
 				if (array_intersect($this->user->groups,$gauth)) {
 					$this->canCfg = true;
-				} else {
-					$start = 'nope';
 				}
 				$caldb = new RJUserData('sched',false,$this->jID,true);
 				break;
 			case 2:		// site
-				$start = 'sstart';
 				$this->jID = $this->params->get('site_auth');
 				$sauth = $this->jID;
 				if (!is_array($sauth)) $sauth = array($sauth);
 				if (array_intersect($this->user->groups,$sauth)) {
 					$this->canCfg = true;
-				} else {
-					$start = 'nope';
 				}
 				$caldb = new RJUserData('sched',false,0,true);
 				break;
@@ -107,8 +100,8 @@ class UserschedViewUsersched extends JViewLegacy
 		$this->state('calid', true, $this->cal_type.':'.implode(',', $this->jID));
 
 		if ($caldb->dataExists()) {
-			$this->alertees = $caldb->getTable('alertees','',true);
-			$this->categories = $caldb->getTable('categories','',true);
+			$this->alertees = $caldb->getTable('alertees','',true); $this->alertees = $this->alertees ?: array();	//if (!$this->alertees) $this->alertees = array();
+			$this->categories = $caldb->getTable('categories','',true); $this->categories = $this->categories ?: array();	//if (!$this->categories) $this->categories = array();
 			$cfg = $caldb->getTable('options','name = "config"');
 			if ($cfg) {
 				$this->settings = unserialize($cfg['value']);
@@ -219,7 +212,7 @@ class UserschedViewUsersched extends JViewLegacy
 		$path = JPATH_SITE . '/components/com_usersched/skins';
 
 		// Prepend some default options
-		$options[] = JHtml::_('select.option', '', JText::_('DEFAULT_SKIN'));
+		$options[] = JHtml::_('select.option', '', JText::_('JOPTION_USE_DEFAULT'));
 
 		// Get a list of folders in the search path with the given filter.
 		$folders = JFolder::folders($path);
@@ -237,6 +230,7 @@ class UserschedViewUsersched extends JViewLegacy
 	protected function categoriesJSON ()
 	{
 		$jsn = array('{key:"",label:"[ none ]"}');
+		if ($this->categories)
 		foreach ($this->categories as $cat) {
 			$jsn[] = json_encode(array('key'=>$cat['id'], 'label'=>$cat['name']));
 		}
@@ -246,6 +240,7 @@ class UserschedViewUsersched extends JViewLegacy
 	protected function categoriesCSS ()
 	{
 		$css = '';
+		if ($this->categories)
 		foreach ($this->categories as $cat) {
 //			$css .= '.dhx_cal_event.evCat'.$cat['id'].' div.dhx_title, .dhx_cal_event_line.evCat'.$cat['id'].' {background-color: '.$cat['bgcolor'].' !important;background-image: none;color: '.$cat['txcolor'].' !important;}'."\n";
 			$css .= '.dhx_cal_event div.evCat'.$cat['id'].', .dhx_cal_event_line.evCat'.$cat['id'].', .dhx_cal_event_clear.evCat'.$cat['id'].' {background-color: '.$cat['bgcolor'].' !important;background-image: none;color: '.$cat['txcolor'].' !important;}'."\n";

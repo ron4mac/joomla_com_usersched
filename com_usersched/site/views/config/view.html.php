@@ -63,12 +63,15 @@ class UserschedViewConfig extends JViewLegacy
 	function display ($tpl = null)
 	{
 		$app = JFactory::getApplication();
+		$this->params = JComponentHelper::getParams('com_usersched');
 		$this->user = JFactory::getUser();
 		$calid = $this->state('calid');
 		//var_dump($calid);jexit();
 		list($this->cal_type, $auth) = explode(':', $calid);
 		$authids = explode(',', $auth);
 		$this->canCfg = false;
+		$this->canSkin = false;
+		$this->canAlert = false;
 
 		switch ($this->cal_type) {
 			case 0:		// user
@@ -76,12 +79,16 @@ class UserschedViewConfig extends JViewLegacy
 				if (!in_array($this->user->id, $authids)) return;
 				$start = 'start';
 				$this->canCfg = true;
+				$this->canSkin = $this->params->get('user_canskin');
+				$this->canAlert = $this->params->get('user_canalert');
 				$caldb = new RJUserData('sched');
 				break;
 			case 1:		// group
 				$start = 'gstart';
 				if (array_intersect($this->user->groups,$authids)) {
 					$this->canCfg = true;
+					$this->canSkin = $this->params->get('grp_canskin');
+					$this->canAlert = $this->params->get('grp_canalert');
 				} else {
 					$start = 'nope';
 				}
@@ -91,6 +98,8 @@ class UserschedViewConfig extends JViewLegacy
 				$start = 'sstart';
 				if (array_intersect($this->user->groups,$authids)) {
 					$this->canCfg = true;
+					$this->canSkin = true;
+					$this->canAlert = true;
 				} else {
 					$start = 'nope';
 				}
@@ -99,8 +108,8 @@ class UserschedViewConfig extends JViewLegacy
 		}
 
 		if ($caldb->dataExists()) {
-			$this->alertees = $caldb->getTable('alertees','',true);
-			$this->categories = $caldb->getTable('categories','',true);
+			$this->alertees = $caldb->getTable('alertees','',true); if (!$this->alertees) $this->alertees = array();
+			$this->categories = $caldb->getTable('categories','',true); if (!$this->categories) $this->categories = array();
 			$cfg = $caldb->getTable('options','name = "config"');
 			if ($cfg) {
 				$this->settings = unserialize($cfg['value']);
@@ -110,6 +119,8 @@ class UserschedViewConfig extends JViewLegacy
 				parent::display($tpl);
 			}
 		} else {
+			$this->alertees = array();
+			$this->categories = array(); 
 			JHtml::script('components/com_usersched/static/config.js',true);
 			JHtml::script('components/com_usersched/static/color-picker.js');
 			JHtml::stylesheet('components/com_usersched/static/config.css');
@@ -151,7 +162,7 @@ class UserschedViewConfig extends JViewLegacy
 		$path = JPATH_SITE . '/components/com_usersched/skins';
 
 		// Prepend some default options
-		$options[] = JHtml::_('select.option', '', JText::_('DEFAULT_SKIN'));
+		$options[] = JHtml::_('select.option', '', JText::_('JOPTION_USE_DEFAULT'));
 
 		// Get a list of folders in the search path with the given filter.
 		$folders = JFolder::folders($path);

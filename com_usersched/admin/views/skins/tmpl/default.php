@@ -4,12 +4,20 @@ defined('_JEXEC') or die;
 // Include the component HTML helpers.
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
-JHtml::_('behavior.multiselect');
 
-//var_dump('vdf',$this);jexit();
+$script = '
+	function previewSkin (row) {
+    var c = document.adminForm, d = c[row];
+    if (d) {
+    	skin = encodeURIComponent(d.value);
+    	window.open("'.JUri::root().'components/com_usersched/preview/skinPreview.php?skin="+skin,"_blank","menubar=0,scrollbar=0,toolbar=0,status=0,location=0,titlebar=0,height=675,width=900")
+        //alert(skin);
+		}
+	}
+';
+// Add the script to the document head.
+JFactory::getDocument()->addScriptDeclaration($script);
 
-$listOrder	= $this->state('list.ordering');
-$listDirn	= $this->state('list.direction');
 $canDo		= UserSchedHelper::getActions();
 $imgPath = JUri::base().'components/com_usersched/static/';
 $selIcon = 'selected.png';
@@ -24,13 +32,7 @@ $unselIcon = 'unselected.png';
 				<th width="1%"></th>
 				<th width="1%"><?php echo JHtml::_('grid.checkall'); ?></th>
 				<th width="15%">
-					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_USERNAME', 'username', $listDirn, $listOrder); ?>
-				</th>
-				<th width="15%">
-					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_FULLNAME', 'fullname', $listDirn, $listOrder); ?>
-				</th>
-				<th width="15%">
-					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_USERID', 'userid', $listDirn, $listOrder); ?>
+					<?php echo JText::_('COM_USERSCHED_SKIN_NAME'); ?>
 				</th>
 				<th width="1%">
 					<?php echo JText::_('COM_USERSCHED_USERSKIN_COLUMN') ?>
@@ -48,7 +50,7 @@ $unselIcon = 'unselected.png';
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="8">
+				<td colspan="7">
 					<?php echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
@@ -63,10 +65,7 @@ $unselIcon = 'unselected.png';
 						<?php echo JHtml::_('grid.id', $i, $item['name']); ?>
 					</td>
 					<td>
-						<?php echo $item['uname']; ?>
-					</td>
-					<td>
-						<?php echo $item['name']; ?>
+						<a href="javascript:void(0);" onclick="return previewSkin('cb<?php echo $i; ?>')" title="<?php echo JText::_('COM_USERSCHED_PREVIEW_SKIN'); ?>"><?php echo $item['name']; ?></a>
 					</td>
 					<td class="center">
 						<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i; ?>','skins.makeDfltU')"><img src="<?php echo $imgPath.($item['isUdef']?$selIcon:$unselIcon)?>" /></a>
@@ -89,8 +88,6 @@ $unselIcon = 'unselected.png';
 	<div>
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="boxchecked" value="0" />
-		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
-		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>

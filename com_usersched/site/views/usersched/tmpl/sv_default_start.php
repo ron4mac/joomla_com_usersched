@@ -44,6 +44,6 @@ $this->config = array(
 	'templates_username' => false,
 	);
 
-echo '<p>'.JText::_('COM_USERSCHED_NEWGRPCAL').'</p>';
+echo '<p>You can configure a dynamic calendar for yourself here. Adjust the following settings, submit them and your calendar will begin.</p>';
 echo $this->loadTemplate('tform');
 ?>

@@ -31,7 +31,7 @@ $jscodes = 'l='.$locale[4];
 $jscodes .= '&c=YJR';
 if ($this->canCfg) $jscodes .= 'A';
 //try to convince the browser to reload the whole thing (for development purposes)
-//$jscodes .='&'.time();
+//$jscodes .='&t='.time();
 JHtml::_('behavior.framework', true);
 JFactory::getDocument()->addScript('components/com_usersched/js.php?'.$jscodes);
 /*

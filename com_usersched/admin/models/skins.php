@@ -8,13 +8,13 @@ class UserschedModelSkins extends JModelList
 {
 
 	protected $_total = -1;
-
+/*
 	public function __construct($config = array())
 	{   
 		$config['filter_fields'] = array('fullname', 'username', 'userid');
 		parent::__construct($config);
 	}
-
+*/
 	public function getItems ()
 	{	//return array();
 		// Get a storage key.
@@ -43,10 +43,10 @@ class UserschedModelSkins extends JModelList
 
 		$start = $this->getState('list.start');
 		$limit = $this->getState('list.limit');
-		$listOrder = $this->getState('list.ordering');
-		$listDirn = $this->getState('list.direction');
+//		$listOrder = $this->getState('list.ordering');
+//		$listDirn = $this->getState('list.direction');
 	//	echo $listOrder;echo $listDirn;
-
+/*
 		foreach ($skins as $key => $row) {
 			$name[$key]  = $row['name'];
 			$uname[$key] = $row['uname'];
@@ -66,7 +66,7 @@ class UserschedModelSkins extends JModelList
 				array_multisort($uid, SORT_ASC, $uname, SORT_ASC, $name, SORT_ASC, $skins);
 				break;
 		}
-
+*/
 
 		// Add the items to the internal cache.
 		$this->cache[$store] = array_slice($skins,$start,$limit?$limit:null);
@@ -94,7 +94,7 @@ class UserschedModelSkins extends JModelList
 	}
 
 	protected function populateState ($ordering = null, $direction = null) {
-		parent::populateState('username', 'ASC');
+//		parent::populateState('username', 'ASC');
 	}
 
 }

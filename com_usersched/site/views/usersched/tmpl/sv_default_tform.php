@@ -2,7 +2,7 @@
 defined('_JEXEC') or die;
 ?>
 <div id="ical-inout">
-	<a href="index.php?option=com_usersched&view=ical">Import/Export iCalendar events</a>
+	<a href="<? =JRoute::_('index.php?view=ical') ?>">Import/Export iCalendar events</a>
 	<!-- <a href="index.php?option=com_usersched&view=ical&task=in">Import events from ICAL</a> -->
 	<!-- <a href="index.php?option=com_usersched&view=ical&task=out">Export events to ICAL</a> -->
 	<!-- <a href="<?php JRoute::_('index.php?view=ical', false); ?>">Import events from ICAL</a> -->
@@ -64,11 +64,9 @@ defined('_JEXEC') or die;
 		<option value="year" locale="year"<?=$defaultmode=='year'?' selected="selected"':''?>>Year</option>
 		<option value="map" locale="map"<?=$defaultmode=='map'?' selected="selected"':''?>>Map</option>
 	</select>
-<?php if ($this->canSkin): ?>
 	<div class="clr">&nbsp;</div>
 	<label for="settings_skin">Calendar 'skin'</label>
 	<?=JHtml::_('select.genericlist', $this->skinOptions, 'settings_skin', '', 'value', 'text', $this->config['settings_skin'], 'settings_skin'); ?>
-<?php endif; ?>
 </div>
 <div class="stabbertab" title="Scales">
 	<label for="templates_minmin">Minimal step of event duration (in minutes)</label>
@@ -111,9 +109,8 @@ defined('_JEXEC') or die;
 	<!-- <div class="clr">&nbsp;</div> -->
 	<div class="addicon clr" title="Add a category" onclick="addCategory(this)"></div>
 </div>
-<?php if ($this->canAlert): ?>
 <div class="stabbertab aetable" title="Alertees">
-	<p><span class="col1">Name</span><span class="col2">Email</span><span class="col3">SMS (<a href="http://www.emailtextmessages.com/" target="_blank">gateways</a>)</span><span class="col4">&nbsp;Delete!</span></p>
+	<p><span class="col1">Name</span><span class="col2">Email</span><span class="col3">SMS (<a href="http://wikipedia.org/wiki/List_of_SMS_gateways" target="_blank">gateways</a>)</span><span class="col4">&nbsp;Delete!</span></p>
 	<!-- <a href="http://wikipedia.org/wiki/List_of_SMS_gateways" target="_blank" style="float:right">SMS gateways</a> -->
 	<?php foreach ($this->alertees as $ae) :?>
 	<p>
@@ -127,7 +124,6 @@ defined('_JEXEC') or die;
 	<!-- <div class="clr">&nbsp;</div> -->
 	<div class="addicon clr" title="Add an alertee" onclick="addAlertee(this)" style></div>
 </div>
-<?php endif; ?>
 </div>
 <input type="hidden" name="cal_type" value="<?=$this->cal_type?>" />
 <input type="hidden" name="jID" value="<?=$this->jID?>" />

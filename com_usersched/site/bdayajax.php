@@ -14,7 +14,7 @@ $app = JFactory::getApplication('site');
 $app->initialise();
 $yr = $app->input->get('y');
 
-$db =& JFactory::getDbo();
+$db = JFactory::getDbo();
 
 $groups = array(2);
 

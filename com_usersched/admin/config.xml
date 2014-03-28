@@ -71,6 +71,17 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
+		<field
+			name="grp_recurrevt"
+			type="radio"
+			class="btn-group btn-group-yesno"
+			default="0"
+			label="COM_USERSCHED_CONFIG_RECURR_LABEL"
+			description="COM_USERSCHED_CONFIG_RECURR_DESC"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 	</fieldset>
 
 	<fieldset name="component">
