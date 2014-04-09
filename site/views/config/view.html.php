@@ -6,7 +6,7 @@ jimport('rjuserdata.userdata');
 
 class UserschedViewConfig extends JViewLegacy
 {
-	protected $config = array(
+	protected $config = array (
 	'default_date' => '%j %M %Y',
 	'month_date' => '%F %Y',
 	'load_date' => '%Y-%m-%d',
@@ -34,6 +34,7 @@ class UserschedViewConfig extends JViewLegacy
 	'cascade_event_count' => 4,
 	'cascade_event_margin' => 30,
 
+	'multi_day' => true,
 	'multi_day_height_limit' => 0,
 
 	'drag_lightbox' => true,
@@ -127,6 +128,7 @@ class UserschedViewConfig extends JViewLegacy
 			JHtml::script('components/com_usersched/static/color-picker.js');
 			JHtml::stylesheet('components/com_usersched/static/config.css');
 			$this->skinOptions = $this->getSkinOptions();
+			$this->config = UserSchedHelper::$dfltConfig;
 			parent::display($start);
 		}
 	}
@@ -147,7 +149,7 @@ class UserschedViewConfig extends JViewLegacy
 		$this->config['start_on_monday'] = $s['settings_firstday'];
 		$this->config['first_hour'] = $s['templates_starthour'];
 		$this->config['last_hour'] = $s['templates_endhour'];
-		$this->config['dblclick_create'] = $s['settings_singleclick'];
+//		$this->config['dblclick_create'] = $s['settings_singleclick'];
 	}
 
 	protected function getConfig ()

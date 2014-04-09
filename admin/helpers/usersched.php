@@ -7,20 +7,20 @@ class UserSchedHelper
 	public static function addSubmenu ($vName)
 	{
 		JSubMenuHelper::addEntry(
-			JText::_('COM_USERSCHED_SUBMENU_USERSCHED'),
+			JText::_('COM_USERSCHED_SUBMENU_USERCALS'),
 			'index.php?option=com_usersched',
 			$vName == 'usersched'
 		);
 		JSubMenuHelper::addEntry(
-			JText::_('COM_USERSCHED_SUBMENU_CALENDARS'),
+			JText::_('COM_USERSCHED_SUBMENU_GRPCALS'),
 			'index.php?option=com_usersched&view=calendars',
 			$vName == 'calendars'
 		);
-		JSubMenuHelper::addEntry(
-			JText::_('COM_USERSCHED_SUBMENU_CONFIGURATIONS'),
-			'index.php?option=com_usersched&view=configs',
-			$vName == 'configs'
-		);
+//		JSubMenuHelper::addEntry(
+//			JText::_('COM_USERSCHED_SUBMENU_CONFIGURATIONS'),
+//			'index.php?option=com_usersched&view=configs',
+//			$vName == 'configs'
+//		);
 		JSubMenuHelper::addEntry(
 			JText::_('COM_USERSCHED_SUBMENU_SKINS'),
 			'index.php?option=com_usersched&view=skins',

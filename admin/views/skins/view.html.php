@@ -38,7 +38,7 @@ class UserschedViewSkins extends JViewLegacy
 	{
 		$canDo	= UserSchedHelper::getActions();
 
-		JToolBarHelper::title(JText::_('COM_USERSCHED_MANAGER_USCHEDS'), 'usersched');
+		JToolBarHelper::title(JText::_('COM_USERSCHED_MANAGER_SKINS'), 'usersched');
 
 		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_MANAGER_DELETEOK'));
 		//JToolBarHelper::trash('usersched.trash');
@@ -52,7 +52,7 @@ class UserschedViewSkins extends JViewLegacy
 			JToolBarHelper::preferences('com_usersched');
 		}
 		JToolBarHelper::divider();
-		JToolBarHelper::help('user_schedulers', true);
+		JToolBarHelper::help('Calendar_skins', true);
 	}
 
 	protected function state ($vari, $set=false, $val='', $glb=false)

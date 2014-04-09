@@ -115,7 +115,7 @@ function recursNow (&$evt, $atime) {
 		case 'day':
 			$tyc = 'D';
 			$divsr = $count * 86400;
-			$pdelta = (int)(($atime + $evt['alert_lead'].- $evt['t_start']) / $divsr);
+			$pdelta = (int)(($atime + $evt['alert_lead'] - $evt['t_start']) / $divsr);
 //			bugout($atime.':'.$evt['t_start'].':'.$pdelta.':'.$count);
 			$dt->add(new DateInterval('P'.($pdelta*$count).$tyc));
 			break;

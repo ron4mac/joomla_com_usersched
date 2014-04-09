@@ -21,13 +21,13 @@ $canDo = UserSchedHelper::getActions();
 				<th width="1%"></th>
 				<th width="1%"><?php echo JHtml::_('myGrid.checkall'); ?></th>
 				<th class="title">
-					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_HEADING_NAME', 'a.search_term', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_FULLNAME', 'a.search_term', $listDirn, $listOrder); ?>
 				</th>
 				<th width="15%">
-					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_HEADING_UNAME', 'a.hits', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_USERNAME', 'a.hits', $listDirn, $listOrder); ?>
 				</th>
 				<th width="15%">
-					<?php echo JText::_('COM_USERSCHED_HEADING_UID'); ?>
+					<?php echo JText::_('COM_USERSCHED_USERID'); ?>
 				</th>
 				<th width="30%">
 					&#160;

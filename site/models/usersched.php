@@ -16,7 +16,7 @@ class UserSchedModelUserSched extends JModelLegacy
 	'month_day' => '%d',
 
 	'hour_size_px' => 42,
-	'time_step' => 5,
+	'time_step' => 15,
 
 	'start_on_monday' => 1,
 	'first_hour' => 0,
@@ -34,6 +34,7 @@ class UserSchedModelUserSched extends JModelLegacy
 	'cascade_event_count' => 4,
 	'cascade_event_margin' => 30,
 
+	'multi_day' => false,
 	'multi_day_height_limit' => 0,
 
 	'drag_lightbox' => true,
@@ -78,7 +79,7 @@ class UserSchedModelUserSched extends JModelLegacy
 			'settings_posts' => false,
 			'settings_repeat' => false,
 			'settings_firstday' => false,
-			'settings_multiday' => false,
+			'settings_multi_day' => false,
 			'settings_fullday' => false,
 			'settings_marknow' => false,
 			'settings_singleclick' => false,
@@ -117,7 +118,7 @@ class UserSchedModelUserSched extends JModelLegacy
 			'settings_posts',
 			'settings_repeat',
 			'settings_firstday',
-			'settings_multiday',
+			'settings_multi_day',
 			'settings_fullday',
 			'settings_marknow',
 			'settings_singleclick',

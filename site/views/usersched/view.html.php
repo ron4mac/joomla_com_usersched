@@ -2,6 +2,7 @@
 defined('_JEXEC') or die;
 
 require_once JPATH_COMPONENT.'/helpers/usersched.php';
+jimport('joomla.application.component.helper');
 jimport('rjuserdata.userdata');
 
 class UserschedViewUsersched extends JViewLegacy
@@ -34,6 +35,7 @@ class UserschedViewUsersched extends JViewLegacy
 	'cascade_event_count' => 4,
 	'cascade_event_margin' => 30,
 
+	'multi_day' => true,
 	'multi_day_height_limit' => 0,
 
 	'drag_lightbox' => true,
@@ -105,6 +107,7 @@ class UserschedViewUsersched extends JViewLegacy
 			$this->alertees = $caldb->getTable('alertees','',true); $this->alertees = $this->alertees ?: array();	//if (!$this->alertees) $this->alertees = array();
 			$this->categories = $caldb->getTable('categories','',true); $this->categories = $this->categories ?: array();	//if (!$this->categories) $this->categories = array();
 			$cfg = $caldb->getTable('options','name = "config"');
+			$this->show_versions = JComponentHelper::getParams('com_usersched')->get('show_versions', true);
 			if ($cfg) {
 				$this->settings = unserialize($cfg['value']);
 				$this->applyCfg($cfg['value']);
@@ -133,6 +136,10 @@ class UserschedViewUsersched extends JViewLegacy
 	protected function applyCfg ($cfg)
 	{
 		$s = unserialize($cfg);
+		
+		$this->config['separate_short_events'] = $s['settings_collision'];
+		$this->config['max_month_events'] = $s['settings_eventnumber'];
+
 		$this->config['default_date'] = $s['templates_defaultdate'];
 		$this->config['month_date'] = $s['templates_monthdate'];
 		$this->config['week_date'] = $s['templates_weekdate'];
@@ -144,9 +151,11 @@ class UserschedViewUsersched extends JViewLegacy
 		$this->config['time_step'] = $s['templates_minmin'];
 
 		$this->config['start_on_monday'] = $s['settings_firstday'];
+		$this->config['multi_day'] = $s['settings_multi_day'];
+
 		$this->config['first_hour'] = $s['templates_starthour'];
 		$this->config['last_hour'] = $s['templates_endhour'];
-		$this->config['dblclick_create'] = $s['settings_singleclick'];
+//		$this->config['dblclick_create'] = $s['settings_singleclick'];
 	}
 
 	protected function getConfig ()
@@ -193,8 +202,13 @@ class UserschedViewUsersched extends JViewLegacy
 		$css = '';
 		if ($this->categories)
 		foreach ($this->categories as $cat) {
-//			$css .= '.dhx_cal_event.evCat'.$cat['id'].' div.dhx_title, .dhx_cal_event_line.evCat'.$cat['id'].' {background-color: '.$cat['bgcolor'].' !important;background-image: none;color: '.$cat['txcolor'].' !important;}'."\n";
-			$css .= '.dhx_cal_event div.evCat'.$cat['id'].', .dhx_cal_event_line.evCat'.$cat['id'].', .dhx_cal_event_clear.evCat'.$cat['id'].' {background-color: '.$cat['bgcolor'].' !important;background-image: none;color: '.$cat['txcolor'].' !important;}'."\n";
+			$css .= '.dhx_cal_event div.evCat'.$cat['id']
+			.',.dhx_cal_event_line.evCat'.$cat['id']
+			.',.dhx_cal_event_clear.evCat'.$cat['id']
+			.' {background-image:none;';
+			if ($cat['bgcolor']) $css .= 'background-color:'.$cat['bgcolor'].' !important;';
+			if ($cat['txcolor']) $css .= 'color:'.$cat['txcolor'].' !important;';
+			$css .= "}\n";
 		}
 		return $css;
 	}

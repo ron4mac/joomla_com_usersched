@@ -42,9 +42,9 @@ class UserschedViewConfigs extends JViewLegacy
 		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_MANAGER_DELETEOK'));
 		//JToolBarHelper::trash('usersched.trash');
 
-		if ($canDo->get('core.edit.state')) {
-			JToolBarHelper::custom('scheds.reset', 'refresh.png', 'refresh_f2.png', 'JUSERSCHED_RESET', false);
-		}
+//		if ($canDo->get('core.edit.state')) {
+//			JToolBarHelper::custom('scheds.reset', 'refresh.png', 'refresh_f2.png', 'JUSERSCHED_RESET', false);
+//		}
 		//JToolBarHelper::divider();
 		if ($canDo->get('core.admin')) {
 			JToolBarHelper::preferences('com_usersched');

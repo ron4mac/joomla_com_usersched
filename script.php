@@ -44,13 +44,16 @@ class com_userschedInstallerScript
 	{
 		echo '<p>' . JText::_('COM_HELLOWORLD_POSTFLIGHT_' . $type . '_TEXT') . '</p>';
 		$defaults = '{';
-		$defaults .= '"user_canskin":"1",';
-		$defaults .= '"user_canalert":"1",';
-		$defaults .= '"grp_canskin":"1",';
-		$defaults .= '"grp_canalert":"1"';
+		$defaults .= '"user_canskin":"0",';
+		$defaults .= '"user_canalert":"0",';
+		$defaults .= '"user_recurrevt":"0",';
+		$defaults .= '"grp_canskin":"0",';
+		$defaults .= '"grp_canalert":"0",';
+		$defaults .= '"grp_recurrevt":"0",';
+		$defaults .= '"show_versions":"1"';
 		$defaults .= '}';
 		if ($type == 'install') {
-			$db = &JFactory::getDBO();
+			$db = JFactory::getDBO();
 			$query = $db->getQuery(true);
 			$query->update('#__extensions');
 			$query->set('params = ' . $db->quote($defaults));
@@ -58,7 +61,7 @@ class com_userschedInstallerScript
 			$db->setQuery($query);
 			$db->query();
 		} else if ($type == 'update') {
-			$db = &JFactory::getDBO();
+			$db = JFactory::getDBO();
 			$query = $db->getQuery(true);
 
 			$query->select('params');

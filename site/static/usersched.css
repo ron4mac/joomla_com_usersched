@@ -68,8 +68,9 @@ div.dhx_custom_button_shide {
 }
 
 div.userschedver, div.schedulerver {
-	color: #CCC;
-	font-size: 0.25em;
+	color: #BBB;
+	font-size: 0.6em;
+	line-height: 1;
 }
 div.userschedver {
 	float: left;

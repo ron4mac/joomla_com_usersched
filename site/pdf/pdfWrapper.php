@@ -38,7 +38,7 @@ class pdfWrapper {
 		$this->cb->SetKeywords('');
 
 		// sets font family and size
-		$this->cb->SetFont('freesans', '', 8);
+		$this->cb->SetFont('helvetica', '', 8);
 	}
 
 

@@ -89,7 +89,9 @@ $tabs_rightx = 64;
 	<div class="dhx_cal_header"></div>
 	<div class="dhx_cal_data"></div>
 </div>
-<div class="userschedver">UserSched 0.9DEV</div><div class="schedulerver">Scheduler 4.0</div>
+<?php if ($this->show_versions) :?>
+<div id="versionbar" class="userschedver">UserSched <span id="userschedver">x.x.x</span></div><div class="schedulerver">Scheduler <span id="schedulerver">x.x.x</span></div>
+<?php endif; ?>
 <?php
 	//echo'<xmp>';var_dump($this);echo'</xmp>';
 ?>

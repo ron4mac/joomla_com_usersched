@@ -1,11 +1,16 @@
-window.usersched = { version: '0.9DEV' };
+window.usersched = { version: '0.8.9dev' };
 
 window.addEvent("domready",function() {
 
+	if (document.getElementById("versionbar")) {
+		document.getElementById("userschedver").innerHTML = window.usersched.version;
+		document.getElementById("schedulerver").innerHTML = scheduler.version;
+	}
+
 	if (scheduler.cfg_cfg) {
 		//console.log(scheduler.config);console.log(scheduler.cfg_cfg);
-		mergeObjects(scheduler.config, scheduler.cfg_cfg);
-		delete(scheduler.cfg_cfg);
+		mergeCfgObjects(scheduler.config, scheduler.cfg_cfg);
+		//delete(scheduler.cfg_cfg);
 		//console.log(scheduler.config);
 	}
 
@@ -16,6 +21,8 @@ window.addEvent("domready",function() {
 	scheduler.config.details_on_create = true;
 	scheduler.config.details_on_dblclick = true;
 	scheduler.config.full_day = true;
+
+	scheduler.config.use_select_menu_space = true;
 
 	scheduler.config.left_border = true;
 	scheduler.keys.edit_save = -1;	//keep enter/return key from saving event
@@ -53,18 +60,24 @@ window.addEvent("domready",function() {
 	});
 
 	scheduler.init('scheduler_here', new Date(), usched_mode);
-	
+
 	scheduler.setLoadMode(usched_mode);
 	scheduler.load(userschedlurl);
 
 	var dp = new dataProcessor(userschedlurl);
 	dp.init(scheduler);
+
+	// force the event tooltip to hide when the mouse leaves the calendar area
+	var dhxcaldatahere = document.getElementById('scheduler_here');
+	var dhxcaldatas = dhxcaldatahere.getElementsByClassName('dhx_cal_data');
+	var dhxcaldata = dhxcaldatas[0];
+	dhxcaldata.onmouseout = function() { dhtmlXTooltip.hide() };
 });
 
-function mergeObjects (obj1, obj2) {
+function mergeCfgObjects (obj1, obj2) {
 	for (var p in obj2)
-		if (obj1.hasOwnProperty(p))
-			obj1[p] = typeof obj2[p] === 'object' ? mergeObjects(obj1[p], obj2[p]) : obj2[p];
+		if (obj2.hasOwnProperty(p))
+			obj1[p] = typeof obj2[p] === 'object' ? mergeCfgObjects(obj1[p], obj2[p]) : obj2[p];
 	return obj1;
 }
 
@@ -83,6 +96,10 @@ scheduler.templates.event_class = function(start, end, event) {
 	if (event.category) return "evCat"+event.category;
 	return "";
 };
+scheduler.templates.month_events_link = function(date, count){
+	return "<a>more("+count+")</a>";
+};
+
 scheduler.attachEvent("onClick",function(id,e) {
 	if (scheduler.getEvent(id).xevt) return false;
 	return true;
@@ -157,7 +174,7 @@ scheduler.render_event_bar = function (ev) {
 
 	html += scheduler.templates.event_bar_text(ev.start_date, ev.end_date, ev) + '</div>';
 	html += '</div>';
-	d.innerHTML = html
+	d.innerHTML = html;
 
 	this._rendered.push(d.firstChild);
 	parent.appendChild(d.firstChild);
@@ -165,19 +182,19 @@ scheduler.render_event_bar = function (ev) {
 
 scheduler.templates.event_bar_date = function(start,end,event) {
 	return '';
-}
+};
 scheduler.templates.event_text = function(start,end,event) {
 	var parts = event.text.split(/[\r\n]+/);
 	return parts[0];
-}
+};
 scheduler.templates.event_bar_text = function(start,end,event) {
 	var parts = event.text.split(/[\r\n]+/);
 	return parts[0];
-}
+};
 scheduler.templates.year_tooltip = function(start,end,event) {
 	var parts = event.text.split(/[\r\n]+/);
 	return parts.join("<br/>");
-}
+};
 scheduler.templates.tooltip_text = function(start,end,event) {
 	var vm = scheduler._mode;
 	var parts = event.text.split(/[\r\n]+/);
