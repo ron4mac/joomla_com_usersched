@@ -2,9 +2,9 @@
 defined('_JEXEC') or die;
 
 /**
- * View class for a list of calendar skins.
+ * View class for a list of user schedules.
  */
-class UserschedViewSkins extends JViewLegacy
+class UserschedViewEvents extends JViewLegacy
 {
 	protected $items;
 	protected $pagination;
@@ -38,9 +38,9 @@ class UserschedViewSkins extends JViewLegacy
 	{
 		$canDo	= UserSchedHelper::getActions();
 
-		JToolBarHelper::title(JText::_('COM_USERSCHED_MANAGER_USCHEDS'), 'usersched');
+		JToolBarHelper::title(JText::_('COM_USERSCHED_MANAGER_EVENTS'), 'usersched');
 
-		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_MANAGER_DELETEOK'));
+		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_EVENTS_DELETEOK'), 'events.delete');
 		//JToolBarHelper::trash('usersched.trash');
 
 	//	if ($canDo->get('core.edit.state')) {
@@ -52,7 +52,7 @@ class UserschedViewSkins extends JViewLegacy
 			JToolBarHelper::preferences('com_usersched');
 		}
 		JToolBarHelper::divider();
-		JToolBarHelper::help('user_schedulers', true);
+		JToolBarHelper::help('usersched_events', true);
 	}
 
 	protected function state ($vari, $set=false, $val='', $glb=false)

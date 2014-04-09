@@ -21,20 +21,24 @@ class UserSchedController extends JControllerLegacy
 
 	function doConfig ()
 	{
-		//$doc = JFactory::getDocument();
-		//$doc->addStyleSheet(JURI::root().'components/com_usersched/static/config.css');
-//		$app = JFactory::getApplication();
-//		$app->input->set('layout', 'default_config');
-//		parent::display();
-		$this->setRedirect(JRoute::_('index.php?view=config', false));
+		$jinput = JFactory::getApplication()->input;
+		$calid = $jinput->getBase64('calid');
+		$jinput->set('view','config');
+		$m = $this->getModel();
+		$m->setState('calid', base64_decode($calid));
+		$this->display();
+		
+//		$jinput = JFactory::getApplication()->input;
+//		$calid = $jinput->getBase64('calid');
+//		$this->setRedirect(JRoute::_('index.php?option=com_usersched&view=config&calid='.urlencode($calid), false));
 	}
 
 	function setcfg ()
 	{
 		JSession::checkToken();
-		$m = &$this->getModel();
+		$m = $this->getModel();
 		$m->saveConfig(JFactory::getApplication()->input->post);
-		$this->setRedirect(JRoute::_('index.php', false), 'Configuration saved');
+		$this->setRedirect(JRoute::_('index.php?option=com_usersched', false), 'Configuration saved');
 	}
 
 	function impical ()
@@ -50,13 +54,13 @@ class UserSchedController extends JControllerLegacy
 			$fbk = 'error';
 		}
 		JFactory::getApplication()->enqueueMessage($msg, $fbk);
-		$this->setRedirect(JRoute::_('index.php', false));
+		$this->setRedirect(JRoute::_('index.php?option=com_usersched', false));
 	}
 
 	function exp2ical ()
 	{
 		JSession::checkToken();
-		$m = &$this->getModel();
+		$m = $this->getModel();
 		$m->export2ical();
 		jexit();
 	}

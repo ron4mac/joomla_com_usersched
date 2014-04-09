@@ -1,7 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 
-class UserSchedController extends JControllerLegacy
+class UserschedController extends JControllerLegacy
 {
 
 	public function display ($cachable=false, $urlparams=false)
@@ -10,7 +10,7 @@ class UserSchedController extends JControllerLegacy
 
 		// Load the submenu.
 		$jinput = JFactory::getApplication()->input;
-		UserSchedHelper::addSubmenu($jinput->get('view', 'usersched'));
+		UserschedHelper::addSubmenu($jinput->get('view', 'usersched'));
 
 		parent::display();
 	}

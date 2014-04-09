@@ -4,7 +4,7 @@ defined('_JEXEC') or die;
 /**
  * View class for a list of user schedules.
  */
-class UserSchedViewConfigs extends JViewLegacy
+class UserschedViewConfigs extends JViewLegacy
 {
 	protected $items;
 	protected $pagination;
@@ -16,7 +16,7 @@ class UserSchedViewConfigs extends JViewLegacy
 	public function display($tpl = null)
 	{
 		jimport('joomla.html.pagination');
-		$this->items = UserSchedHelper::getUserScheds();
+		$this->items = UserschedHelper::getUserScheds();
 		$this->pagination = new JPagination(count($this->items), 0, 20);
 		$this->state		= $this->get('State');
 
@@ -35,7 +35,7 @@ class UserSchedViewConfigs extends JViewLegacy
 	 */
 	protected function addToolbar()
 	{
-		$canDo	= UserSchedHelper::getActions();
+		$canDo	= UserschedHelper::getActions();
 
 		JToolBarHelper::title(JText::_('COM_USERSCHED_MANAGER_SCHEDS'), 'usersched.png');
 
@@ -53,14 +53,15 @@ class UserSchedViewConfigs extends JViewLegacy
 		JToolBarHelper::help('JHELP_COMPONENTS_USERSCHED');
 	}
 
-	protected function state($vari, $set=false, $val='0', $glb=false)
+	protected function state ($vari, $set=false, $val='', $glb=false)
 	{
+		$stvar = ($glb?'':'com_usersched.').$vari;
 		$app = JFactory::getApplication();
 		if ($set) {
-			$app->setUserState($option.'_'.$vari, $val);
+			$app->setUserState($stvar, $val);
 			return;
 		}
-		return $app->getUserState(($glb ? '' : "{$option}_").$vari, '0');
+		return $app->getUserState($stvar, '');
 	}
 
 }

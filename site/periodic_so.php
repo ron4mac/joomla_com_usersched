@@ -46,3 +46,5 @@ function sendSmsAlert ($ausrs, $mail, $alertees) {
 }
 
 include 'periodic.php';
+echo 'HALT';jexit();
+?>

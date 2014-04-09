@@ -44,6 +44,7 @@ $this->config = array(
 	'templates_username' => false,
 	);
 
-echo '<p>'.JText::_('COM_USERSCHED_NEWGRPCAL').'</p>';
+$gtitle = UserSchedHelper::groupTitle($this->grpId);
+echo '<p>'.JText::sprintf('COM_USERSCHED_NEWGRPCAL',$gtitle).'</p>';
 echo $this->loadTemplate('tform');
 ?>

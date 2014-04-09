@@ -1,6 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 
+require_once JPATH_COMPONENT.'/helpers/usersched.php';
 jimport('rjuserdata.userdata');
 
 class UserSchedModelUserSched extends JModelLegacy
@@ -158,7 +159,7 @@ class UserSchedModelUserSched extends JModelLegacy
 			'templates_endhour',
 			'templates_agendatime'
 			);
-		$params = $this->state->get('parameters.menu');
+//		$params = $this->state->get('parameters.menu');
 		foreach ($cbxs as $cbx) {
 			if ($data->get($cbx)) $blank[$cbx] = true;
 		}
@@ -169,7 +170,8 @@ class UserSchedModelUserSched extends JModelLegacy
 			if ($data->get($int)) $blank[$int] = $data->getInt($int);
 		}
 		//echo'<xmp>';var_dump($params,$blank);jexit();
-		$db =& $this->getUserDatabase($params);
+		$calid = UserSchedHelper::uState('calid');
+		$db = $this->getUserDatabase($calid);
 		if ($db->dataExists()) {
 			$db->getDbase()->db_connect();
 			$q = $db->getDbase()->_update('options',array('value'=>"'".$db->getDbase()->escape_str(serialize($blank))."'"),array('name = "config"'));
@@ -185,8 +187,9 @@ class UserSchedModelUserSched extends JModelLegacy
 
 	function importical ()
 	{
-		$params = $this->state->get('parameters.menu');
-		$db =& $this->getUserDatabase($params);
+//		$params = $this->state->get('parameters.menu');
+		$calid = UserSchedHelper::uState('calid');
+		$db = $this->getUserDatabase($calid);
 		if (!$db->dataExists()) return false;
 		$db->getDbase()->db_connect();	// cause it to open read/write
 		if ($icalfile = JFactory::getApplication()->input->files->get('ical_file', null)) {
@@ -202,8 +205,9 @@ class UserSchedModelUserSched extends JModelLegacy
 	{
 		require_once JPATH_COMPONENT . '/helpers/ical.php';
 		$exporter = new ICalExporter();
-		$params = $this->state->get('parameters.menu');
-		$db =& $this->getUserDatabase($params);
+//		$params = $this->state->get('parameters.menu');
+		$calid = UserSchedHelper::uState('calid');
+		$db = $this->getUserDatabase($calid);
 		if ($db->dataExists()) {
 			$evts = $db->getTable('events','',true);
 			$ical = $exporter->toICal($evts);
@@ -213,15 +217,16 @@ class UserSchedModelUserSched extends JModelLegacy
 		}
 	}
 
-	private function getUserDatabase ($params)
+	private function getUserDatabase ($calid)
 	{
+		list($calType,$ids) = explode(':',$calid);
 		$db = null;
-		switch ($params->get('cal_type')) {
+		switch ($calType) {
 			case 0:
 				$db = new RJUserData('sched');
 				break;
 			case 1:
-				$db = new RJUserData('sched',false,$params->get('group_auth'),true);
+				$db = new RJUserData('sched',false,$ids,true);
 				break;
 			case 2:
 				$db = new RJUserData('sched',false,0,true);

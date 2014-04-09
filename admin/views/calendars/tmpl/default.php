@@ -19,7 +19,7 @@ $canDo = UserSchedHelper::getActions();
 		<thead>
 			<tr>
 				<th width="1%"></th>
-				<th width="1%"><?php echo JHtml::_('grid.checkall'); ?></th>
+				<th width="1%"><?php echo JHtml::_('myGrid.checkall'); ?></th>
 				<th class="title">
 					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_GROUPNAME', 'a.name', $listDirn, $listOrder); ?>
 				</th>

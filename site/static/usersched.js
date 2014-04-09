@@ -35,7 +35,7 @@ window.addEvent("domready",function() {
 	if (true) sections.push({name:"category", height:20, type:"select", options:scheduler.__categories, map_to:"category"});
 	if (true) sections.push({name:"alerts", height:42, map_to:"text", type:"alerts_editor", button:"shide"});
 	if (true) sections.push({name:"recurring", type:"recurring", map_to:"rec_type", button:"recurring"});
-	if (true) sections.push({name:"time", height:72, type:"calendar_time", map_to:"auto"});
+	if (true) sections.push({name:"time", height:72, type:"time", map_to:"auto"});
 	scheduler.config.lightbox.sections = sections;
 
 //	if (typeof(sched_extend) == 'function') sched_extend();
@@ -52,9 +52,9 @@ window.addEvent("domready",function() {
 		return true;
 	});
 
-	scheduler.init('scheduler_here', new Date(), "month");
+	scheduler.init('scheduler_here', new Date(), usched_mode);
 	
-	scheduler.setLoadMode("month");
+	scheduler.setLoadMode(usched_mode);
 	scheduler.load(userschedlurl);
 
 	var dp = new dataProcessor(userschedlurl);
@@ -71,7 +71,7 @@ function mergeObjects (obj1, obj2) {
 function configScheduler () {
 	var uid = scheduler.uid();
 	var d = document.createElement("div");
-	d.innerHTML = '<form id="' + uid + '" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded"><input type="hidden" name="task" value="doConfig" /></form>';
+	d.innerHTML = '<form id="' + uid + '" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded"><input type="hidden" name="calid" value="'+ jus_calid +'" /><input type="hidden" name="task" value="doConfig" /></form>';
 	d.firstChild.submit();
 }
 

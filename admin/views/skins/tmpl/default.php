@@ -10,7 +10,7 @@ $script = '
     var c = document.adminForm, d = c[row];
     if (d) {
     	skin = encodeURIComponent(d.value);
-    	window.open("'.JUri::root().'components/com_usersched/preview/skinPreview.php?skin="+skin,"_blank","menubar=0,scrollbar=0,toolbar=0,status=0,location=0,titlebar=0,height=675,width=900")
+    	window.open("'.JUri::root().'components/com_usersched/prevskin/skinPreview.php?skin="+skin,"_blank","menubar=0,scrollbar=0,toolbar=0,status=0,location=0,titlebar=0,height=675,width=900")
         //alert(skin);
 		}
 	}
@@ -30,7 +30,7 @@ $unselIcon = 'unselected.png';
 		<thead>
 			<tr>
 				<th width="1%"></th>
-				<th width="1%"><?php echo JHtml::_('grid.checkall'); ?></th>
+				<th width="1%"><?php echo JHtml::_('myGrid.checkall'); ?></th>
 				<th width="15%">
 					<?php echo JText::_('COM_USERSCHED_SKIN_NAME'); ?>
 				</th>

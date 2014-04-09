@@ -8,35 +8,32 @@ JHtml::_('behavior.multiselect');
 
 //var_dump('vdf',$this);jexit();
 
-$listOrder = $this->state('list.ordering');
-$listDirn = $this->state('list.direction');
-$canDo = UserSchedHelper::getActions();
+$listOrder	= $this->state('list.ordering');
+$listDirn	= $this->state('list.direction');
+$canDo		= UserSchedHelper::getActions();
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_usersched&view=configs'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_usersched&view=events'); ?>" method="post" name="adminForm" id="adminForm">
 	<div class="clr"> </div>
 
-	<table  class="table table-striped">
+	<table class="table table-striped">
 		<thead>
 			<tr>
 				<th width="1%"></th>
 				<th width="1%"><?php echo JHtml::_('myGrid.checkall'); ?></th>
-				<th class="title">
-					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_HEADING_NAME', 'a.search_term', $listDirn, $listOrder); ?>
+				<th width="20%">
+					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_EV_START', 'startdate', $listDirn, $listOrder); ?>
 				</th>
-				<th width="15%">
-					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_HEADING_UNAME', 'a.hits', $listDirn, $listOrder); ?>
+				<th width="10%">
+					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_EV_RECTYPE', 'rectype', $listDirn, $listOrder); ?>
 				</th>
-				<th width="15%">
-					<?php echo JText::_('COM_USERSCHED_HEADING_UID'); ?>
-				</th>
-				<th width="30%">
-					&#160;
+				<th width="50%">
+					<?php echo JText::_('COM_USERSCHED_EV_TEXT'); ?>
 				</th>
 			</tr>
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="6">
+				<td colspan="5">
 					<?php echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
@@ -48,29 +45,27 @@ $canDo = UserSchedHelper::getActions();
 					<?php echo $i + 1 + $this->pagination->limitstart; ?>
 				</td>
 				<td>
-					<?php echo JHtml::_('grid.id', $i, $item['uid']); ?>
+					<?php echo JHtml::_('grid.id', $i, $item['event_id']); ?>
 				</td>
 				<td>
-					<?php echo $item['name']; ?>
+					<?php $date= new DateTime($item['start_date']); echo $date->format(JText::_('DATE_FORMAT_LC2')); ?>
 				</td>
 				<td>
-					<?php echo $item['uname']; ?>
+					<?php echo $item['rec_type'] ?>
 				</td>
 				<td>
-					<?php echo $item['uid'] ?>
-				</td>
-				<td>
-					&#160;
+					<?php echo str_replace(array("\r\n", "\r", "\n"), "<br />", $item['text']) ?>
 				</td>
 			</tr>
 		<?php endforeach; ?>
 		</tbody>
 	</table>
 
-
 	<div>
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="boxchecked" value="0" />
+		<input type="hidden" name="uid" value="<?php echo $this->state->get('usched_uid'); ?>" />
+		<input type="hidden" name="isGrp" value="<?php echo $this->state->get('usched_isgrp'); ?>" />
 		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
 		<?php echo JHtml::_('form.token'); ?>

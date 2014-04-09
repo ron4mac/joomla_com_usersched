@@ -4,7 +4,7 @@ defined('_JEXEC') or die;
 /**
  * View class for a list of group schedulers.
  */
-class UserSchedViewCalendars extends JViewLegacy
+class UserschedViewCalendars extends JViewLegacy
 {
 	protected $items;
 	protected $pagination;
@@ -49,14 +49,15 @@ class UserSchedViewCalendars extends JViewLegacy
 		JToolBarHelper::help('JHELP_COMPONENTS_USERSCHED');
 	}
 
-	protected function state ($vari, $set=false, $val='0', $glb=false)
+	protected function state ($vari, $set=false, $val='', $glb=false)
 	{
+		$stvar = ($glb?'':'com_usersched.').$vari;
 		$app = JFactory::getApplication();
 		if ($set) {
-			$app->setUserState($option.'_'.$vari, $val);
+			$app->setUserState($stvar, $val);
 			return;
 		}
-		return $app->getUserState(($glb ? '' : "{$option}_").$vari, '0');
+		return $app->getUserState($stvar, '');
 	}
 
 }

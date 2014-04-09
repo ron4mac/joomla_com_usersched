@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="2.5" method="upgrade">
+<extension type="component" version="2.5" client="site" method="upgrade">
 	<name>com_usersched</name>
 	<author>Ron Crans</author>
-	<creationDate>March 2013</creationDate>
+	<creationDate>March 2014</creationDate>
 	<copyright>(C) 2013 Ron Crans.</copyright>
 	<license>GNU General Public License version 2 or later</license>
 	<authorEmail>ron@rjconline.net</authorEmail>
 	<authorUrl>rjconline.net</authorUrl>
-	<version>0.8.7dev</version>
+	<version>0.8.8dev</version>
 	<description>COM_USERSCHED_XML_DESCRIPTION</description>
 	<scriptfile>script.php</scriptfile>
 	<files folder="site">
 		<filename>controller.php</filename>
 		<filename>index.html</filename>
-		<filename>router.php</filename>
 		<filename>usersched.php</filename>
 		<filename>bdayajax.php</filename>
 		<filename>js.php</filename>
@@ -21,14 +20,13 @@
 		<filename>periodic_sn.php</filename>
 		<filename>periodic_so.php</filename>
 		<filename>periodic_sonj.php</filename>
-		<filename>dhtmlxscheduler_recurring.js</filename>
 		<folder>models</folder>
 		<folder>views</folder>
 		<folder>helpers</folder>
 		<folder>skins</folder>
 		<folder>static</folder>
 		<folder>pdf</folder>
-		<folder>preview</folder>
+		<folder>prevskin</folder>
 		<folder>scheduler</folder>
 	</files>
 	<languages folder="site">

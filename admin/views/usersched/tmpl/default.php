@@ -19,7 +19,7 @@ $canDo		= UserSchedHelper::getActions();
 		<thead>
 			<tr>
 				<th width="1%"></th>
-				<th width="1%"><?php echo JHtml::_('grid.checkall'); ?></th>
+				<th width="1%"><?php echo JHtml::_('myGrid.checkall'); ?></th>
 				<th width="15%">
 					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_USERNAME', 'username', $listDirn, $listOrder); ?>
 				</th>
@@ -52,6 +52,7 @@ $canDo		= UserSchedHelper::getActions();
 					</td>
 					<td>
 						<?php echo $item['uname']; ?>
+						<a href="<?php echo JRoute::_('index.php?option=com_usersched&view=events&uid=').$item['uid']; ?>">view</a>
 					</td>
 					<td>
 						<?php echo $item['name']; ?>

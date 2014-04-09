@@ -1,9 +1,10 @@
 <?php
 defined('_JEXEC') or die;
 
+//require_once JPATH_COMPONENT.'/helpers/usersched.php';
+require_once JPATH_COMPONENT.'/helpers/events.php';
 jimport('rjuserdata.userdata');
 
-require_once JPATH_COMPONENT . '/helpers/events.php';
 
 class UserschedViewDaterange extends JViewLegacy
 {
@@ -122,7 +123,7 @@ class UserschedViewDaterange extends JViewLegacy
 		}
 		return $css;
 	}
-
+/*
 	protected function state ($vari, $set=false, $val='0', $glb=false)
 	{
 		$app = JFactory::getApplication();
@@ -132,5 +133,5 @@ class UserschedViewDaterange extends JViewLegacy
 		}
 		return $app->getUserState(($glb ? '' : "{$option}_").$vari, '0');
 	}
-
+*/
 }

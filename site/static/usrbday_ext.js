@@ -1,18 +1,19 @@
 scheduler.bdayYrs = [];
-scheduler.attachEvent("onViewChange", function (new_mode, new_date){
+scheduler.attachEvent("onViewChange", function (new_mode, new_date) {
+	var ny;
 	getBdays(new_date.getFullYear());
 	switch (new_mode) {
 		case "day":
 			break;
 		case "week":
-			var ny = new Date(new_date);
+			ny = new Date(new_date);
 			ny.setDate(ny.getDate()-7);
 			getBdays(ny.getFullYear());
 			ny.setDate(ny.getDate()+14);
 			getBdays(ny.getFullYear());
 			break;
 		case "month":
-			var ny = new Date(new_date);
+			ny = new Date(new_date);
 			ny.setMonth(ny.getMonth()-1);
 			getBdays(ny.getFullYear());
 			ny.setMonth(ny.getMonth()+2);

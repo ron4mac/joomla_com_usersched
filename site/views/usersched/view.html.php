@@ -1,6 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 
+require_once JPATH_COMPONENT.'/helpers/usersched.php';
 jimport('rjuserdata.userdata');
 
 class UserschedViewUsersched extends JViewLegacy
@@ -63,41 +64,42 @@ class UserschedViewUsersched extends JViewLegacy
 	function display ($tpl = null)
 	{
 		$app = JFactory::getApplication();
-		$this->params = $app->getParams();	//var_dump($this->params);jexit();
-		$this->user = JFactory::getUser();
+		$this->params = $app->getParams();	//echo'<xmp>';var_dump($this->params);jexit();
 		$this->cal_type = $this->params->get('cal_type');
 		$this->canCfg = false;
+		$user = JFactory::getUser();
 
 		switch ($this->cal_type) {
 			case 0:		// user
-				if ($this->user->id <= 0) return;
-				$this->jID = array($this->user->id);
+				if ($user->id <= 0) return;
+				$jID = array($user->id);
 				$this->canCfg = true;
 				$caldb = new RJUserData('sched');
 				break;
 			case 1:		// group
-				$this->jID = $this->params->get('group_auth');
-				$gauth = $this->jID;
+				$jID = $this->params->get('group_auth');
+				$gauth = $jID;
 				if (!is_array($gauth)) $gauth = array($gauth);
-				if (array_intersect($this->user->groups,$gauth)) {
+				if (array_intersect($user->groups, $gauth)) {
 					$this->canCfg = true;
 				}
-				$caldb = new RJUserData('sched',false,$this->jID,true);
+				$caldb = new RJUserData('sched', false, $jID, true);
 				break;
 			case 2:		// site
-				$this->jID = $this->params->get('site_auth');
-				$sauth = $this->jID;
+				$jID = $this->params->get('site_auth');
+				$sauth = $jID;
 				if (!is_array($sauth)) $sauth = array($sauth);
-				if (array_intersect($this->user->groups,$sauth)) {
+				if (array_intersect($user->groups, $sauth)) {
 					$this->canCfg = true;
 				}
-				$caldb = new RJUserData('sched',false,0,true);
+				$caldb = new RJUserData('sched', false, 0, true);
 				break;
 		}
 
 		// store the caltype and user in the session
-		if (!is_array($this->jID)) $this->jID = array($this->jID);
-		$this->state('calid', true, $this->cal_type.':'.implode(',', $this->jID));
+		if (!is_array($jID)) $jID = array($jID);
+		//$this->state('calid', true, $this->cal_type.':'.implode(',', $jID));
+		UserSchedHelper::uState('calid', true, $this->cal_type.':'.implode(',', $jID));
 
 		if ($caldb->dataExists()) {
 			$this->alertees = $caldb->getTable('alertees','',true); $this->alertees = $this->alertees ?: array();	//if (!$this->alertees) $this->alertees = array();
@@ -111,72 +113,21 @@ class UserschedViewUsersched extends JViewLegacy
 				parent::display($tpl);
 			}
 		} else {
-		//	JHtml::script('components/com_usersched/static/config.js',true);
-		//	JHtml::script('components/com_usersched/static/color-picker.js');
-		//	JHtml::stylesheet('components/com_usersched/static/config.css');
-		//	$this->skinOptions = $this->getSkinOptions();
-		//	parent::display($start);
-			$app->redirect(JRoute::_('index.php?view=config', false)); 
-		//	$this->setRedirect(JRoute::_('index.php?view=config', false));
+			$app->redirect(JRoute::_('index.php?option=com_usersched&view=config', false)); 
 		}
+	}
 
-/*
-		switch ($this->cal_type) {
-			case 0:
-				$this->jID = $this->user->id;																			//////
-				$userdb = new RJUserData('sched');																		//////
-				if ($userdb->dataExists()) {
-					$this->alertees = $userdb->getTable('alertees','',true);
-					$cfg = $userdb->getTable('options','name = "config"');
-					if ($cfg) {
-						$this->settings = unserialize($cfg['value']);
-						$this->applyCfg($cfg['value']);
-						$this->cfgcfg = json_encode($this->config);
-						$this->canCfg = true;																			//////
-						parent::display($tpl);
-					}
-				} else {
-					parent::display('start');
-				}
-				break;
-			case 1:
-				$this->jID = $this->params->get('group_auth');															//////
-				$gauth = $this->jID;
-				if (!is_array($gauth)) $gauth = array($gauth);
-				$grpdb = new RJUserData('sched',false,$this->params->get('group_auth'),true);							//////
-				if ($grpdb->dataExists()) {
-					$cfg = $grpdb->getTable('options','name = "config"');
-					if ($cfg) {
-						$this->settings = unserialize($cfg['value']);
-						$this->applyCfg($cfg['value']);
-						$this->cfgcfg = json_encode($this->config);
-						if (array_intersect($this->user->groups,$gauth)) $this->canCfg = true;	//////
-						parent::display($tpl);
-					}
-				} else {
-					if (array_intersect($this->user->groups,$gauth)) {
-						parent::display('gstart');
-					} else {
-						parent::display('nope');
-					}
-				}
-				break;
-			case 2:
-				//$this->xmlObj = simplexml_load_file(JPATH_COMPONENT.'/default.xml');
-				//$this->settings = $this->xmlObj->settings;
-				//$this->templates = $this->xmlObj->templates;
-				//$model= $this->getModel();
-				//$ray = $this->get('Config');
-				if (array_intersect($this->user->groups,$this->params->get('site_auth'))) {
-					$this->cfgcfg = json_encode($this->config);
-					parent::display('gstart');
-				} else {
-					parent::display('nope');
-				}
-				break;
+	protected function getCalInfo ()
+	{
+		//$calid = $this->state('calid');
+		$calid = UserSchedHelper::uState('calid');
+		if ($calid) {
+			list($this->cal_type, $this->cal_owner) = explode(':', $calid);
+		} else {
+		$app = JFactory::getApplication();
+		$this->params = $app->getParams();	//echo'<xmp>';var_dump($this->params);jexit();
+		$this->user = JFactory::getUser();
 		}
-*/
-
 	}
 
 	protected function applyCfg ($cfg)
@@ -247,15 +198,16 @@ class UserschedViewUsersched extends JViewLegacy
 		}
 		return $css;
 	}
-
-	protected function state ($vari, $set=false, $val='0', $glb=false)
+/*
+	protected function state ($vari, $set=false, $val='', $glb=false)
 	{
+		$stvar = ($glb?'':'com_usersched.').$vari;
 		$app = JFactory::getApplication();
 		if ($set) {
-			$app->setUserState($option.'_'.$vari, $val);
+			$app->setUserState($stvar, $val);
 			return;
 		}
-		return $app->getUserState(($glb ? '' : "{$option}_").$vari, '0');
+		return $app->getUserState($stvar, '');
 	}
-
+*/
 }

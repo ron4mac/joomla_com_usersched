@@ -55,14 +55,15 @@ class UserschedViewUsersched extends JViewLegacy
 		JToolBarHelper::help('user_schedulers', true);
 	}
 
-	protected function state($vari, $set=false, $val='0', $glb=false)
+	protected function state ($vari, $set=false, $val='', $glb=false)
 	{
+		$stvar = ($glb?'':'com_usersched.').$vari;
 		$app = JFactory::getApplication();
 		if ($set) {
-			$app->setUserState($option.'_'.$vari, $val);
+			$app->setUserState($stvar, $val);
 			return;
 		}
-		return $app->getUserState(($glb ? '' : "{$option}_").$vari, '0');
+		return $app->getUserState($stvar, '');
 	}
 
 }

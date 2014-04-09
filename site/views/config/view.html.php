@@ -1,6 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 
+require_once JPATH_COMPONENT.'/helpers/usersched.php';
 jimport('rjuserdata.userdata');
 
 class UserschedViewConfig extends JViewLegacy
@@ -65,10 +66,10 @@ class UserschedViewConfig extends JViewLegacy
 		$app = JFactory::getApplication();
 		$this->params = JComponentHelper::getParams('com_usersched');
 		$this->user = JFactory::getUser();
-		$calid = $this->state('calid');
+		$calid = UserSchedHelper::uState('calid');
 		//var_dump($calid);jexit();
 		list($this->cal_type, $auth) = explode(':', $calid);
-		$authids = explode(',', $auth);
+		$authids = (strpos($auth,',')) ? explode(',', $auth) : $auth;
 		$this->canCfg = false;
 		$this->canSkin = false;
 		$this->canAlert = false;
@@ -76,7 +77,7 @@ class UserschedViewConfig extends JViewLegacy
 		switch ($this->cal_type) {
 			case 0:		// user
 				if ($this->user->id <= 0) return;
-				if (!in_array($this->user->id, $authids)) return;
+				if ($this->user->id != $authids) return;
 				$start = 'start';
 				$this->canCfg = true;
 				$this->canSkin = $this->params->get('user_canskin');
@@ -85,8 +86,9 @@ class UserschedViewConfig extends JViewLegacy
 				break;
 			case 1:		// group
 				$start = 'gstart';
-				if (array_intersect($this->user->groups,$authids)) {
+				if (in_array($authids, $this->user->groups)) {
 					$this->canCfg = true;
+					$this->grpId = $authids;
 					$this->canSkin = $this->params->get('grp_canskin');
 					$this->canAlert = $this->params->get('grp_canalert');
 				} else {
@@ -195,15 +197,16 @@ class UserschedViewConfig extends JViewLegacy
 		}
 		return $css;
 	}
-
+/*
 	protected function state ($vari, $set=false, $val='0', $glb=false)
 	{
+		$stvar = ($glb?'':'com_usersched.').$vari;
 		$app = JFactory::getApplication();
 		if ($set) {
-			$app->setUserState($option.'_'.$vari, $val);
+			$app->setUserState($stvar, $val);
 			return;
 		}
-		return $app->getUserState(($glb ? '' : "{$option}_").$vari, '0');
+		return $app->getUserState($stvar, '0');
 	}
-
+*/
 }

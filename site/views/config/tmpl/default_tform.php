@@ -1,13 +1,6 @@
 <?php
 defined('_JEXEC') or die;
 ?>
-<div id="ical-inout">
-	<a href="index.php?option=com_usersched&view=ical">Import/Export iCalendar events</a>
-	<!-- <a href="index.php?option=com_usersched&view=ical&task=in">Import events from ICAL</a> -->
-	<!-- <a href="index.php?option=com_usersched&view=ical&task=out">Export events to ICAL</a> -->
-	<!-- <a href="<?php JRoute::_('index.php?view=ical', false); ?>">Import events from ICAL</a> -->
-	<!-- <a href="<?php JRoute::_('index.php?view=ical', false); ?>">Export events to ICAL</a> -->
-</div>
 <form id="configform" method="post" enctype="multipart/form-data">
 <input type="submit" name="saves" value="Save settings" onclick="this.form.task.value='setcfg'" />
 <div id="formtabs" class="stabber">
@@ -83,6 +76,7 @@ defined('_JEXEC') or die;
 	<input type="text" name="templates_agendatime" id="templates_agendatime" class="numer" value="<?=$this->config['templates_agendatime']?>" />
 </div>
 <div class="stabbertab" title="Date formats">
+	<a href="http://php.net/manual/function.date.php" target="_blank">php.net date format manual</a>
 	<label for="templates_defaultdate">Default date</label>
 	<input type="text" name="templates_defaultdate" id="templates_defaultdate" value="<?=$this->config['templates_defaultdate']?>" />
 	<label for="templates_monthdate">Month date</label>
@@ -100,12 +94,12 @@ defined('_JEXEC') or die;
 	<p><span class="col1">Name</span><span class="col2">Text color</span><span class="col3">Background</span><span class="col4">&nbsp;Delete!</span></p>
 	<?php foreach ($this->categories as $cat) :?>
 	<p>
-		<input type="hidden" name="category_id[]" value="<?=$cat[id]?>" />
-		<span class="col1"><input type="text" name="category_name[]" value="<?=$cat[name]?>" class="ecname" /></span>
-		<span class="col2"><input type="text" name="category_txcolor[]" value="<?=$cat[txcolor]?>" class="ectcolr" /></span>
-		<span class="col3"><input type="text" name="category_bgcolor[]" value="<?=$cat[bgcolor]?>" class="ecbcolr" /></span>
-		<span class="col4"><input type="checkbox" name="category_dele[]" value="<?=$cat[id]?>" class="ecdele" /></span>
-		<span class="catsamp" style="color:<?=$cat[txcolor]?>;background-color:<?=$cat[bgcolor]?>"><?=$cat[name]?></span>
+		<input type="hidden" name="category_id[]" value="<?=$cat['id']?>" />
+		<span class="col1"><input type="text" name="category_name[]" value="<?=$cat['name']?>" class="ecname" /></span>
+		<span class="col2"><input type="text" name="category_txcolor[]" value="<?=$cat['txcolor']?>" class="ectcolr" /></span>
+		<span class="col3"><input type="text" name="category_bgcolor[]" value="<?=$cat['bgcolor']?>" class="ecbcolr" /></span>
+		<span class="col4"><input type="checkbox" name="category_dele[]" value="<?=$cat['id']?>" class="ecdele" /></span>
+		<span class="catsamp" style="color:<?=$cat['txcolor']?>;background-color:<?=$cat['bgcolor']?>"><?=$cat['name']?></span>
 	</p>
 	<?php endforeach;?>
 	<!-- <div class="clr">&nbsp;</div> -->
@@ -117,11 +111,11 @@ defined('_JEXEC') or die;
 	<!-- <a href="http://wikipedia.org/wiki/List_of_SMS_gateways" target="_blank" style="float:right">SMS gateways</a> -->
 	<?php foreach ($this->alertees as $ae) :?>
 	<p>
-		<input type="hidden" name="alertee_id[]" value="<?=$ae[id]?>" />
-		<span class="col1"><input type="text" name="alertee_name[]" value="<?=$ae[name]?>" class="aename" /></span>
-		<span class="col2"><input type="text" name="alertee_email[]" value="<?=$ae[email]?>" class="aeemail" /></span>
-		<span class="col3"><input type="text" name="alertee_sms[]" value="<?=$ae[sms]?>" class="aesms" /></span>
-		<span class="col4"><input type="checkbox" name="alertee_dele[]" value="<?=$ae[id]?>" class="aedele" /></span>
+		<input type="hidden" name="alertee_id[]" value="<?=$ae['id']?>" />
+		<span class="col1"><input type="text" name="alertee_name[]" value="<?=$ae['name']?>" class="aename" /></span>
+		<span class="col2"><input type="text" name="alertee_email[]" value="<?=$ae['email']?>" class="aeemail" /></span>
+		<span class="col3"><input type="text" name="alertee_sms[]" value="<?=$ae['sms']?>" class="aesms" /></span>
+		<span class="col4"><input type="checkbox" name="alertee_dele[]" value="<?=$ae['id']?>" class="aedele" /></span>
 	</p>
 	<?php endforeach;?>
 	<!-- <div class="clr">&nbsp;</div> -->
@@ -130,7 +124,6 @@ defined('_JEXEC') or die;
 <?php endif; ?>
 </div>
 <input type="hidden" name="cal_type" value="<?=$this->cal_type?>" />
-<input type="hidden" name="jID" value="<?=$this->jID?>" />
 <input type="hidden" name="task" value="setcfg" />
 <input type="hidden" name="<?php echo JSession::getFormToken() ?>" value="1">
 </form>

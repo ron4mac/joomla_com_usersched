@@ -20,7 +20,6 @@ JHtml::stylesheet('components/com_usersched/static/config.css');
 	</fieldset>
 </div>
 <input type="hidden" name="cal_type" value="<?=$this->cal_type?>" />
-<input type="hidden" name="jID" value="<?=$this->jID?>" />
 <input type="hidden" name="task" value="" />
 <input type="hidden" name="<?php echo JSession::getFormToken() ?>" value="1" />
 </form>

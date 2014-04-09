@@ -152,7 +152,7 @@ function sched_getAlert(elem,evt) {
 }
 
 function sched_setAutoEnd () {
-	var old_setValue = scheduler.form_blocks.time.set_value;	console.log(old_setValue.e);
+	var old_setValue = scheduler.form_blocks.time.set_value;	//console.log(old_setValue.e);
 	scheduler.form_blocks.time.set_value = function(node,value,ev,config){
 			//console.log(ev);
 			var is_fd = (scheduler.date.time_part(ev.start_date)===0 && scheduler.date.time_part(ev.end_date)===0);
@@ -194,7 +194,7 @@ function sched_setAutoEnd () {
 			scheduler.config.event_duration = 60;
 			scheduler.config.auto_end_date = true;
 //			oldc_setValue.apply(this, arguments);
-			console.log(evLen,inputs,selects,val,evt);
+			//console.log(evLen,inputs,selects,val,evt);
 
 
 			function _update_minical_select() {

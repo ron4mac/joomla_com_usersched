@@ -11,6 +11,7 @@
 	$opt_file = 'scheduler/sources/locale/locale_'.$lcl.'.js';
 	if ($lcl && file_exists($opt_file)) readfile($opt_file);
 	if (strpos($codes,'Y') !== false) readfile('scheduler/codebase/ext/dhtmlxscheduler_year_view.js');
+	if (strpos($codes,'G') !== false) readfile('scheduler/codebase/ext/dhtmlxscheduler_agenda_view.js');
 	if (strpos($codes,'R') !== false) {
 		readfile('scheduler/codebase/ext/dhtmlxscheduler_recurring.js');
 		$opt_file = 'scheduler/sources/locale/recurring/locale_recurring_'.$lcl.'.js';

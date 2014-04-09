@@ -1,9 +1,9 @@
 <?php
 defined('_JEXEC') or die;
 
+require_once JPATH_COMPONENT.'/helpers/usersched.php';
+require_once JPATH_COMPONENT.'/helpers/ical.php';
 jimport('rjuserdata.userdata');
-
-require_once JPATH_COMPONENT . '/helpers/ical.php';
 
 class UserschedViewIcal extends JViewLegacy
 {
@@ -14,7 +14,7 @@ class UserschedViewIcal extends JViewLegacy
 		$app = JFactory::getApplication();
 		$this->params = $app->getParams();	//var_dump($this->params);jexit();
 		$this->user = JFactory::getUser();
-		$calid = $this->state('calid');
+		$calid = UserSchedHelper::uState('calid');
 		list($this->cal_type, $this->jID) = explode(':',$calid);
 
 		switch ($this->cal_type) {
@@ -87,15 +87,16 @@ class UserschedViewIcal extends JViewLegacy
 		}
 		return $css;
 	}
-
+/*
 	protected function state ($vari, $set=false, $val='0', $glb=false)
 	{
+		$stvar = ($glb?'':'com_usersched.').$vari;
 		$app = JFactory::getApplication();
 		if ($set) {
-			$app->setUserState($option.'_'.$vari, $val);
+			$app->setUserState($stvar, $val);
 			return;
 		}
-		return $app->getUserState(($glb ? '' : "{$option}_").$vari, '0');
+		return $app->getUserState($stvar, '0');
 	}
-
+*/
 }

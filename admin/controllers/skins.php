@@ -1,21 +1,21 @@
 <?php
 defined('_JEXEC') or die;
 
-class UserSchedControllerSkins extends JControllerLegacy
+class UserschedControllerSkins extends JControllerLegacy
 {
 	
-/*
+
 	public function display ($cachable=false, $urlparams=false)
 	{
 		require_once JPATH_COMPONENT.'/helpers/usersched.php';
-
+echo '@@@@@@@@@@@@@@@++++++++++++++++++++++++@@@@@@@@@@@@@@';exit();
 		// Load the submenu.
 		$jinput = JFactory::getApplication()->input;
-		UserSchedHelper::addSubmenu($jinput->get('view', 'usersched'));
+		UserschedHelper::addSubmenu($jinput->get('view', 'usersched'));
 
 		parent::display();
 	}
-*/
+
 
 	public function makeDfltU ()
 	{

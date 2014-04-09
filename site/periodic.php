@@ -10,7 +10,7 @@ function bugout ($msg, $vars='') {
 	} else echo'<br />';
 }
 
-function markAlerted ($id, $atime, $db) {
+function markAlerted ($id, $atime, $db) {	//return;
 	global $simulate, $alertRay;
 	if ($simulate) {
 		$alertRay[$id] = $atime;
@@ -34,12 +34,13 @@ function clearOldMarks ($atime, $db) {
 bugout(date('Y/m/d H:i'));
 
 if ($simulate) {
-	$rangt = 15724800;	//+-6mo
-	$tbase = (int)(time() / 1800) * 1800;
+	$rangt = 172800;	//+-2 days
+	$granu = 900;	// granularity 15 min
+	$tbase = (int)(time() / $granu) * $granu;
 	$stime = $tbase - $rangt;
 	while ($stime < ($tbase+$rangt)) {
 		processAlerts(0, $stime);
-		$stime += 1800;
+		$stime += $granu;
 	}
 	exit();
 }
@@ -49,6 +50,9 @@ processAlerts(0, time());
 
 function processAlerts ($id, $tt) {
 	global $simulate;
+
+	bugout('@@'.date('Y/m/d H:i D',$tt));
+
 	$caldb = new RJUserData('sched',false,0,true,'com_usersched');
 	if (!$caldb->dataExists()) return;
 
@@ -100,6 +104,7 @@ function wasAlerted ($id, $stray) {
 }
 
 function recursNow (&$evt, $atime) {
+	bugout($evt['rec_type'].' '.$evt['start_date']);
 	list($rec_pattern, $xtra) = explode('#', $evt['rec_type']);
 	list($type,$count,$day,$count2,$daysl) = explode('_', $rec_pattern);
 //	bugout('',array($type,$count,$day,$count2,$daysl,$xtra));
@@ -123,7 +128,7 @@ function recursNow (&$evt, $atime) {
 			break;
 		case 'month':
 			$tyc = 'M';
-			$cdt = new R_DateTime(date('Y-m-d H:i',$atime + $evt['alert_lead']));
+			$cdt = new R_DateTime(date('Y-m-d H:i',$atime /*+ $evt['alert_lead']*/));
 			$dim = ($cdt->getFullYear() - $dt->getFullYear()) * 12;
 			$dim += $cdt->getMonth() - $dt->getMonth();
 			$nop = (int) ($dim / $count);
@@ -131,7 +136,7 @@ function recursNow (&$evt, $atime) {
 			break;
 		case 'year':
 			$tyc = 'Y';
-			$cdt = new R_DateTime(date('Y-m-d H:i',$atime + $evt['alert_lead']));
+			$cdt = new R_DateTime(date('Y-m-d H:i',$atime /*+ $evt['alert_lead']*/));
 			$diy = $cdt->getFullYear() - $dt->getFullYear();
 			$nop = (int) ($diy / $count);
 			$dt->add(new DateInterval('P'.($nop*$count).$tyc));
@@ -155,22 +160,33 @@ function recursNow (&$evt, $atime) {
 		$nday = $day * 1 + $wk - $cday + 1;
 		//echo " > $wk $cday $nday";
 		$dt->setDay2($nday <= $wk ? ($nday + 7) : $nday);
+		bugout( ' * '. $dt->format('Y-m-d H:i D') );
 	}
 //	bugout( $dt->format('Y-m-d H:i D') );
 	if ($daysl) {
 		$sd = clone $dt;
-		$wdys = split(',', $daysl);
+		//echo $dt->format('Y-m-d H:i D');
+		$wdys = explode(',', $daysl);
 		//set to beginning of week
 		$sd->sub(new DateInterval('P'.$sd->getDow().'D'));
 		$bow = $sd->getDay();
 		foreach ($wdys as $wdy) {
 			$sd->setDay2($bow+$wdy);
-//			bugout( ' - '. $sd->format('Y-m-d H:i D') );
+			$closetime = $sd->getTimestamp();
+			$diffr = $atime - $closetime + $evt['alert_lead'];
+			if (($diffr<0) || ($diffr>86400)) {
+				bugout( ' - '. $sd->format('Y-m-d H:i D') );
+				continue;
+			}
+			bugout( ' = '. $sd->format('Y-m-d H:i D') );
+			$dt = $sd;
+			break;
+//			echo $dt->format('Y-m-d H:i D');
 		}
 	}
 
 	$closetime = $dt->getTimestamp();
-	$diffr = $atime-$closetime;
+	$diffr = $atime - $closetime + $evt['alert_lead'];
 	if (($diffr<0) || ($diffr>86400)) {
 		return false;
 	}
@@ -233,6 +249,7 @@ class R_DateTime extends DateTime {
 	public function __toString() {
 		return $this->format('Y-m-d H:i:s');
 	}
+/*
 	public function diff($now = 'NOW') {
 		if(!($now instanceOf DateTime)) {
 			$now = new DateTime($now);
@@ -242,6 +259,7 @@ class R_DateTime extends DateTime {
 	public function getAge($now = 'NOW') {
 		return $this->diff($now)->format('%y');
 	}
+*/
 	public function setDay2($day) {
 		$new = preg_match('/^(\d\d\d\d)\-(\d\d)/', $this->format('Y-m-d'), $m);	//var_dump($m);
 		$this->setDate($m[1],$m[2],$day);
@@ -284,3 +302,4 @@ class R_DateTime extends DateTime {
 		return $ndate;
 	}
 }
+?>

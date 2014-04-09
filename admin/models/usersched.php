@@ -35,10 +35,9 @@ class UserschedModelUsersched extends JModelList
 				//$user = JFactory::getUser($userid);
 				$user = JUser::getInstance($userid);
 				$scheds[] = array('name'=>$user->name,'uname'=>$user->username,'uid'=>$userid);
-				$this->_total++;
 			}
 		}
-	//	return $scheds;
+		$this->_total = count($scheds);
 
 		$start = $this->getState('list.start');
 		$limit = $this->getState('list.limit');
@@ -52,6 +51,7 @@ class UserschedModelUsersched extends JModelList
 			$uid[$key] = $row['uid'];
 		}
 		
+		if ($this->_total)
 		// Sort the data with volume descending, edition ascending
 		// Add $data as the last parameter, to sort by the common key
 		switch ($listOrder) {

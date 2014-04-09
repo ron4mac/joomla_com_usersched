@@ -30,10 +30,9 @@ class UserschedModelCalendars extends JModelList
 				if (!$group) $group = "&lt; group {$gid} &gt;";
 				$members = JAccess::getUsersByGroup($gid);
 				$scheds[] = array('name'=>$group,'members'=>count($members),'gid'=>$gid);
-				$this->_total++;
 			}
 		}
-	//	return $scheds;
+		$this->_total = count($scheds);
 
 		$start = $this->getState('list.start');
 		$limit = $this->getState('list.limit');

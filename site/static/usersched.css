@@ -100,14 +100,22 @@ div.sched_alrtatr #alertlead_mul {
 	border: 1px solid #CCC;
 	cursor: default;
 }
+.dhx_agenda_line.isHoliday div.dhx_event_icon.icon_details {
+	background:url(hday.png) no-repeat;
+	background-position: 4px 2px;
+}
 /* and our Joomla sourced user birthday display */
 .dhx_cal_event.isBrthday div, .dhx_cal_event_line.isBrthday {
 	background-color: transparent;
-	background-image: url('bdaybg.png');
+	background-image: url(bdaybg.png);
 	color: #333 !important;
 	border: 1px solid #CCC;
 	border-radius: 3px;
 	cursor: default;
+}
+.dhx_agenda_line.isBrthday div.dhx_event_icon.icon_details {
+	background:url(cake.png) no-repeat;
+	background-position: 4px 2px;
 }
 
 /* tweaking the dhtmlx css*/

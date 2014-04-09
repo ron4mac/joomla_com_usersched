@@ -26,12 +26,6 @@ class UserSchedHelper
 			'index.php?option=com_usersched&view=skins',
 			$vName == 'skins'
 		);
-
-		if ($vName=='configs') {
-			JToolBarHelper::title(
-				JText::sprintf('COM_CATEGORIES_CATEGORIES_TITLE', JText::_('com_contact')),
-				'contact-categories');
-		}
 	}
 
 	public static function getActions ()
@@ -54,7 +48,7 @@ class UserSchedHelper
 	{
 		// Get a storage key.
 //		$store = $this->getStoreId('getPagination');
-		$store = UserSchedHelper::getStoreId('getPagination');
+		$store = UserschedHelper::getStoreId('getPagination');
 
 		// Try to load the data from internal storage.
 		if (isset($this->cache[$store]))
@@ -91,6 +85,7 @@ class UserSchedHelper
 		jimport('joomla.filesystem.folder');
 		$scheds = array();
 		$spath = JPATH_SITE . '/userstor/';
+		if (!file_exists($spath)) return $scheds;
 		$folds = JFolder::folders($spath);
 		foreach ($folds as $fold) {
 			if (file_exists($spath.$fold.'/com_usersched/sched.sql3')) {
@@ -104,7 +99,7 @@ class UserSchedHelper
 					case '_':
 						if (!$g) break;
 						$gid = (int)substr($fold,1);
-						$group = UserSchedHelper::getGroupTitle($gid);
+						$group = UserschedHelper::getGroupTitle($gid);
 						$scheds[] = array('name'=>'GROUP','uname'=>$group,'uid'=>$gid);
 						break;
 				}
