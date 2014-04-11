@@ -46,7 +46,7 @@ class UserschedViewCalendars extends JViewLegacy
 			JToolBarHelper::preferences('com_usersched');
 		}
 		JToolBarHelper::divider();
-		JToolBarHelper::help('JHELP_COMPONENTS_USERSCHED');
+		JToolBarHelper::help('group_schedulers', true);
 	}
 
 	protected function state ($vari, $set=false, $val='', $glb=false)

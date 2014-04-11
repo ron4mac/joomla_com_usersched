@@ -93,7 +93,7 @@ class UserSchedModelEvents extends JModelList
 
 		$input = JFactory::getApplication()->input;
 		$uid = $input->getInt('uid');
-		if ($uid) $this->setState('usched_uid',$uid);
+		if (isset($uid)) $this->setState('usched_uid',$uid);
 		$isGrp = $input->getBool('isgrp');
 		if ($isGrp) $this->setState('usched_isgrp',$isGrp);
 	}

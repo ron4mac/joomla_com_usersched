@@ -38,7 +38,16 @@ class UserschedViewEvents extends JViewLegacy
 	{
 		$canDo	= UserSchedHelper::getActions();
 
-		JToolBarHelper::title(JText::_('COM_USERSCHED_MANAGER_EVENTS'), 'usersched');
+		$uid = $this->state->get('usched_uid');
+
+		if ($this->state->get('usched_isgrp')) {
+			$name = UserSchedHelper::getGroupTitle($uid);
+		} else {
+			$user = JUser::getInstance($uid);
+			$name = $user->name;
+		}
+
+		JToolBarHelper::title(JText::_('COM_USERSCHED_MANAGER_EVENTS').' :: '.$name, 'usersched');
 
 		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_EVENTS_DELETEOK'), 'events.delete');
 		//JToolBarHelper::trash('usersched.trash');

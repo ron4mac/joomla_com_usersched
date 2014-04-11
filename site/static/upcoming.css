@@ -3,7 +3,7 @@ table.ev_table tr, table.ev_table td {
 }
 table.ev_table td {
 	background-color: #FFE;
-	border-width: 0 0 1px 4px;
+	border-width: 0 0 1px 5px;
 	border-color: #C7D6DC;
 	border-style: solid;
 }

@@ -52,7 +52,7 @@ class UserschedViewSkins extends JViewLegacy
 			JToolBarHelper::preferences('com_usersched');
 		}
 		JToolBarHelper::divider();
-		JToolBarHelper::help('Calendar_skins', true);
+		JToolBarHelper::help('calendar_skins', true);
 	}
 
 	protected function state ($vari, $set=false, $val='', $glb=false)

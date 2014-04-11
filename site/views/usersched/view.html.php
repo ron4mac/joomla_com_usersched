@@ -155,6 +155,7 @@ class UserschedViewUsersched extends JViewLegacy
 
 		$this->config['first_hour'] = $s['templates_starthour'];
 		$this->config['last_hour'] = $s['templates_endhour'];
+		$this->config['agenda_end'] = $s['templates_agendatime'];
 //		$this->config['dblclick_create'] = $s['settings_singleclick'];
 	}
 

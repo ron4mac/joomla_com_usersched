@@ -1,4 +1,4 @@
-window.usersched = { version: '0.8.9dev' };
+window.usersched = { version: '0.9b' };
 
 window.addEvent("domready",function() {
 
@@ -10,9 +10,14 @@ window.addEvent("domready",function() {
 	if (scheduler.cfg_cfg) {
 		//console.log(scheduler.config);console.log(scheduler.cfg_cfg);
 		mergeCfgObjects(scheduler.config, scheduler.cfg_cfg);
+		if (scheduler.cfg_cfg.agenda_end) {
+			var d = new Date();
+			scheduler.config.agenda_end = new Date(d.getTime()+(scheduler.cfg_cfg.agenda_end*86400000));
+		}
 		//delete(scheduler.cfg_cfg);
-		//console.log(scheduler.config);
 	}
+
+	scheduler.xy.bar_height = 18;
 
 	scheduler.config.xml_date = "%Y-%m-%d %H:%i";
 	scheduler.config.prevent_cache = true;

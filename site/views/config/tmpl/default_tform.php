@@ -32,7 +32,7 @@ defined('_JEXEC') or die;
 	<input type="checkbox" name="settings_minical" id="settings_minical"<?=$this->config['settings_minical']?' checked="checked"':''?> />
 	<label for="settings_minical"><?= JText::_('COM_USERSCHED_CFG_MINICAL') ?></label>
 	<label for="settings_eventnumber"><?=JText::_('COM_USERSCHED_CFG_MAXEVENT')?></label>
-	<input type="number" name="settings_eventnumber" id="settings_eventnumber" value="<?= $this->config['settings_eventnumber'] ?>" />
+	<input type="number" name="settings_eventnumber" id="settings_eventnumber" class="numer" value="<?= $this->config['settings_eventnumber'] ?>" />
 </div>
 <div class="stabbertab" title="<?=JText::_('COM_USERSCHED_CFG_MODES')?>">
 	<input type="checkbox" name="settings_day" id="settings_day"<?=$this->config['settings_day']?' checked="checked"':''?> />
@@ -45,9 +45,9 @@ defined('_JEXEC') or die;
 	<label for="settings_year"><?= JText::_('COM_USERSCHED_CFG_YEAR') ?></label>
 	<input type="checkbox" name="settings_agenda" id="settings_agenda"<?=$this->config['settings_agenda']?' checked="checked"':''?> />
 	<label for="settings_agenda"><?= JText::_('COM_USERSCHED_CFG_AGENDA') ?></label>
+<?php if (false): ?>
 	<input type="checkbox" name="settings_week_agenda" id="settings_week_agenda"<?=$this->config['settings_week_agenda']?' checked="checked"':''?> />
 	<label for="settings_week_agenda"><?= JText::_('COM_USERSCHED_CFG_WAGENDA') ?></label>
-<?php if (false): ?>
 	<input type="checkbox" name="settings_map" id="settings_map"<?=$this->config['settings_map']?' checked="checked"':''?> />
 	<label for="settings_map"><?= JText::_('COM_USERSCHED_CFG_MAP') ?></label>
 <?php endif; ?>
@@ -71,15 +71,15 @@ defined('_JEXEC') or die;
 </div>
 <div class="stabbertab" title="<?=JText::_('COM_USERSCHED_CFG_SCALES')?>">
 	<label for="templates_minmin"><?=JText::_('COM_USERSCHED_CFG_MINSTEP')?></label>
-	<input type="text" name="templates_minmin" id="templates_minmin" class="numer" value="<?=$this->config['templates_minmin']?>" />
+	<input type="number" min="5" max="60" name="templates_minmin" id="templates_minmin" class="numer" value="<?=$this->config['templates_minmin']?>" />
 	<label for="templates_hourheight"><?=JText::_('COM_USERSCHED_CFG_HIHOUR')?></label>
-	<input type="text" name="templates_hourheight" id="templates_hourheight" class="numer" value="<?=$this->config['templates_hourheight']?>" />
+	<input type="number" min="20" name="templates_hourheight" id="templates_hourheight" class="numer" value="<?=$this->config['templates_hourheight']?>" />
 	<label for="templates_starthour"><?=JText::_('COM_USERSCHED_CFG_TIMSTART')?></label>
-	<input type="text" name="templates_starthour" id="templates_starthour" class="numer" value="<?=$this->config['templates_starthour']?>" />
+	<input type="number" min="0" max="23" name="templates_starthour" id="templates_starthour" class="numer" value="<?=$this->config['templates_starthour']?>" />
 	<label for="templates_endhour"><?=JText::_('COM_USERSCHED_CFG_TIMEND')?></label>
-	<input type="text" name="templates_endhour" id="templates_endhour" class="numer" value="<?=$this->config['templates_endhour']?>" />
+	<input type="number" min="1" max="24" name="templates_endhour" id="templates_endhour" class="numer" value="<?=$this->config['templates_endhour']?>" />
 	<label for="templates_agendatime"><?=JText::_('COM_USERSCHED_CFG_TPERIOD')?></label>
-	<input type="text" name="templates_agendatime" id="templates_agendatime" class="numer" value="<?=$this->config['templates_agendatime']?>" />
+	<input type="number" min="1" name="templates_agendatime" id="templates_agendatime" class="numer" value="<?=$this->config['templates_agendatime']?>" />
 </div>
 <div class="stabbertab" title="<?=JText::_('COM_USERSCHED_CFG_DATEFORM')?>">
 	<a href="http://php.net/manual/function.date.php" target="_blank">php.net date format manual</a>

@@ -9,6 +9,8 @@ jimport('rjuserdata.userdata');
 class UserschedViewDaterange extends JViewLegacy
 {
 	protected $cal_type;
+	protected $rBeg;
+	protected $rEnd;
 
 	function display ($tpl = null)
 	{
@@ -52,17 +54,17 @@ class UserschedViewDaterange extends JViewLegacy
 			$cfg = $caldb->getTable('options','name = "config"');
 			// get event range
 			$curTime = time();
-			$rBeg = $curTime - 86400;
-			$rEnd = $curTime + 7776000;
+			$this->rBeg = $curTime + $this->params->get('relstart');
+			$this->rEnd = $curTime + $this->params->get('relend');
 		//	$fields = 'strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, text, category';
 	//		$fields = 'strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, *';
 			$fields = 'strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, *';
-			$where = 'category NOT IN ('.implode(',',$private).') AND (t_start>'.$rBeg.' OR end_date LIKE \'9999%\' OR t_end>'.$rBeg.') AND t_start<'.$rEnd.' ORDER BY t_start';
+			$where = 'category NOT IN ('.implode(',',$private).') AND (t_start>'.$this->rBeg.' OR end_date LIKE \'9999%\' OR t_end>'.$this->rBeg.') AND t_start<'.$this->rEnd.' ORDER BY t_start';
 			$evts = $caldb->getTable('events',$where,true,$fields);
 			bugout('[-]'.$where,$evts);
 			foreach ($evts as $k=>$evt) {
 				if ($evt['rec_type']) {
-					if (recursNow($evt, $rBeg, $rEnd, false)) {
+					if (recursNow($evt, $this->rBeg, $this->rEnd, false)) {
 						// adjust end to reflect event length
 						$evt['t_end'] = $evt['t_start'] + $evt['event_length'];
 						//replace with adjusted event

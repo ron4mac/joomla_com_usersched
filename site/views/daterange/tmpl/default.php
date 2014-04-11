@@ -2,10 +2,11 @@
 defined('_JEXEC') or die('Restricted access');
 $data = $this->data;	//echo'<pre>';var_dump($data); //jexit();
 JFactory::getDocument()->addStyleDeclaration($this->categoriesCSS());
+echo '<p style="font-size:1.2em">Events in the range: '.$this->formattedDateTime($this->rBeg, $this->rEnd).'</p>';
 ?>
 <table align="center" width="100%" cellspacing="10" cellpadding="5" class="ev_table">
 <?php
-    $num_events = count($data['rows']);
+    $num_events = count($data);
     foreach ($data as $row): ;
 ?>
 	<tr>

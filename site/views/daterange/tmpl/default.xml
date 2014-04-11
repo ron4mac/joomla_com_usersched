@@ -12,7 +12,7 @@
 	<fields name="params">
 
 		<!-- Basic options. -->
-		<fieldset name="basic" label="COM_MENUS_BASIC_FIELDSET_LABEL" addfieldpath="administrator/components/com_usersched/fields">
+		<fieldset name="basic" label="COM_MENUS_BASIC_FIELDSET_LABEL"  addfieldpath="administrator/components/com_usersched/models/fields">
 
 			<field name="cal_type" type="radio"
 				default="0"
@@ -33,8 +33,8 @@
 				<option value="strtotime">strtotime</option>
 			</field>
 
-			<field name='relstart' type='text' default="-1w" label='START_RELATIVE_TO_TODAY'  description="JEV_RELSTART_DESC" />
-			<field name='relend' type='text' default="+1m" label='END_RELATIVE_TO_TODAY'  description="JEV_RELEND_DESC" />
+			<field name='relstart' type='tperiod' default="-1w" label='START_RELATIVE_TO_TODAY'  description="JEV_RELSTART_DESC" />
+			<field name='relend' type='tperiod' default="+1m" label='END_RELATIVE_TO_TODAY'  description="JEV_RELEND_DESC" />
 
 			<field name="site_auth" id="site_auth" type="jsboot" mask="2"
 				multiple="true"

@@ -53,6 +53,7 @@ $canDo = UserSchedHelper::getActions();
 				</td>
 				<td>
 					<?php echo $item['name']; ?>
+					<a href="<?php echo JRoute::_('index.php?option=com_usersched&view=events&isgrp=true&uid=').$item['gid']; ?>">view</a>
 				</td>
 				<td class="center">
 					<?php echo $item['members']; ?>

@@ -4,7 +4,7 @@ div.dhx_cal_container {
 }
 
 div.dhx_cal_data {
-	overflow: hidden;
+/*	overflow: hidden;*/
 	cursor: default;
 }
 div.dhx_cal_data table {
@@ -68,7 +68,7 @@ div.dhx_custom_button_shide {
 }
 
 div.userschedver, div.schedulerver {
-	color: #BBB;
+	color: #999;
 	font-size: 0.6em;
 	line-height: 1;
 }
