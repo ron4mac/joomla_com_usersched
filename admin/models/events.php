@@ -11,7 +11,7 @@ class UserSchedModelEvents extends JModelList
 
 	public function __construct($config = array())
 	{
-		$config['filter_fields'] = array('startdate','rectype');
+		$config['filter_fields'] = array('startdate','category','rectype');
 		parent::__construct($config);
 	}
 
@@ -38,7 +38,14 @@ class UserSchedModelEvents extends JModelList
 
 		$events = array();
 		$db = new RJUserData('sched', false, $this->getState('usched_uid'), $this->getState('usched_isgrp'));
-		$events = $db->getTable('events','',true);
+		//$events = $db->getTable('events','',true);
+		//SELECT * FROM  events LEFT OUTER JOIN categories ON events.category = categories.id
+		$db3 = $db->getDbase();
+		$rslt = $db3->query('SELECT e.*,c.name AS catname FROM events AS e LEFT OUTER JOIN categories AS c ON e.category = c.id');
+				if ($rslt) {
+						while ($row = $rslt->fetchArray(SQLITE3_ASSOC))
+							$events[] = $row;
+				}
 		$this->_total = count($events);
 
 		$start = $this->getState('list.start');
@@ -48,6 +55,7 @@ class UserSchedModelEvents extends JModelList
 
 		foreach ($events as $key => $row) {
 			$sdate[$key] = $row['start_date'];
+			$evcat[$key] = $row['catname'];
 			$rtype[$key]  = $row['rec_type'];
 		}
 
@@ -56,10 +64,13 @@ class UserSchedModelEvents extends JModelList
 		// Add $data as the last parameter, to sort by the common key
 		switch ($listOrder) {
 			case 'startdate':
-				array_multisort($sdate, SORT_ASC, $rtype, SORT_ASC, $events);
+				array_multisort($sdate, SORT_ASC, $evcat, SORT_ASC, $rtype, SORT_ASC, $events);
+				break;
+			case 'category':
+				array_multisort($evcat, SORT_ASC, $sdate, SORT_ASC, $rtype, SORT_ASC, $events);
 				break;
 			case 'rectype':
-				array_multisort($rtype, SORT_ASC, $sdate, SORT_ASC, $events);
+				array_multisort($rtype, SORT_ASC, $sdate, SORT_ASC, $evcat, SORT_ASC, $events);
 				break;
 		}
 

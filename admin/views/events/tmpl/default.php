@@ -8,6 +8,7 @@ JHtml::_('behavior.multiselect');
 
 //var_dump('vdf',$this);jexit();
 
+$dtimeformat = 'D, j M Y g:ia';	//JText::_('DATE_FORMAT_LC2');
 $listOrder	= $this->state('list.ordering');
 $listDirn	= $this->state('list.direction');
 $canDo		= UserSchedHelper::getActions();
@@ -20,8 +21,11 @@ $canDo		= UserSchedHelper::getActions();
 			<tr>
 				<th width="1%"></th>
 				<th width="1%"><?php echo JHtml::_('myGrid.checkall'); ?></th>
-				<th width="20%">
+				<th width="15%">
 					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_EV_START', 'startdate', $listDirn, $listOrder); ?>
+				</th>
+				<th width="10%">
+					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_EV_CAT', 'category', $listDirn, $listOrder); ?>
 				</th>
 				<th width="10%">
 					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_EV_RECTYPE', 'rectype', $listDirn, $listOrder); ?>
@@ -33,7 +37,7 @@ $canDo		= UserSchedHelper::getActions();
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="5">
+				<td colspan="6">
 					<?php echo $this->pagination->getListFooter(); ?>
 				</td>
 			</tr>
@@ -48,7 +52,10 @@ $canDo		= UserSchedHelper::getActions();
 					<?php echo JHtml::_('grid.id', $i, $item['event_id']); ?>
 				</td>
 				<td>
-					<?php $date= new DateTime($item['start_date']); echo $date->format(JText::_('DATE_FORMAT_LC2')); ?>
+					<?php $date= new DateTime($item['start_date']); echo $date->format($dtimeformat); ?>
+				</td>
+				<td>
+					<?php echo $item['catname'] ?>
 				</td>
 				<td>
 					<?php echo $item['rec_type'] ?>

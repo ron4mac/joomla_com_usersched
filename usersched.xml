@@ -3,11 +3,11 @@
 	<name>com_usersched</name>
 	<author>Ron Crans</author>
 	<creationDate>March 2014</creationDate>
-	<copyright>(C) 2013 Ron Crans.</copyright>
+	<copyright>(C) 2014 Ron Crans.</copyright>
 	<license>GNU General Public License version 2 or later</license>
 	<authorEmail>ron@rjconline.net</authorEmail>
 	<authorUrl>rjconline.net</authorUrl>
-	<version>0.9b</version>
+	<version>0.9.1b</version>
 	<description>COM_USERSCHED_XML_DESCRIPTION</description>
 	<scriptfile>script.php</scriptfile>
 	<files folder="site">

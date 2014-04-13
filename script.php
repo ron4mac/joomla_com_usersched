@@ -7,21 +7,19 @@ class com_userschedInstallerScript
 {
 	function install ($parent) 
 	{
-		$parent->getParent()->setRedirectURL('index.php?option=com_usersched');
 		if (!class_exists('RJUserData',false)) {
 			JError::raiseWarning(null, 'RJUserData library is required (install)');
 			return false;
 		}
+		$parent->getParent()->setRedirectURL('index.php?option=com_usersched');
 	}
 
 	function uninstall ($parent) 
 	{
-		echo '<p>' . JText::_('COM_HELLOWORLD_UNINSTALL_TEXT') . '</p>';
 	}
 
 	function update ($parent) 
 	{
-		echo '<p>' . JText::_('COM_HELLOWORLD_UPDATE_TEXT') . '</p>';
 		if (!class_exists('RJUserData',false)) {
 			JError::raiseWarning(null, 'RJUserData library is required (update)');
 			return false;

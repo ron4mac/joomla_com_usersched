@@ -17,23 +17,15 @@ class UserschedController extends JControllerLegacy
 
 	public function remove ()
 	{
+		jimport('rjuserdata.userdata');
 		$jinput = JFactory::getApplication()->input;
 		$dels = $jinput->get('cid',array(),'array');
 		$view = $jinput->get('view');
-		switch ($view) {
-			case 'usersched':
-				$sc = '@';
-				break;
-			case 'calendars':
-				$sc = '_';
-				break;
-			default:
-				$sc = '-';
-		}
 		foreach ($dels as $del) {
-			JFolder::delete(JPATH_SITE . '/userstor/'.$sc.$del.'/com_usersched');
+			$udb = new RJUserData('sched', false, $del, $view == 'calendars');
+			$udb->destroyDatabase();
 		}
-		$this->setRedirect('index.php?option=com_usersched&view='.$view);
+		$this->setRedirect('index.php?option=com_usersched&view='.$view, JText::_('COM_USERSCHED_MSG_COMPLETE'));
 	}
 
 }

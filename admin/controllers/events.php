@@ -26,7 +26,7 @@ class UserschedControllerEvents extends JControllerLegacy
 		$model = $this->getModel('events');
 		$model->deleteEvents($dels, $uid, $isGrp);
 
-		$this->setRedirect('index.php?option=com_usersched&view='.$view.'&uid='.$uid.($isGrp?('&isGrp='.$isGrp):''),'hhhhhh jjjjjjj');
+		$this->setRedirect('index.php?option=com_usersched&view='.$view.'&uid='.$uid.($isGrp?('&isGrp='.$isGrp):''),JText::_('COM_USERSCHED_MSG_COMPLETE'));
 	}
 
 }

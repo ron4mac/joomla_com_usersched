@@ -1,4 +1,4 @@
-window.usersched = { version: '0.9b' };
+window.usersched = { version: '0.9.1b' };
 
 window.addEvent("domready",function() {
 
