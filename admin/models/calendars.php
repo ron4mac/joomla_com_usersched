@@ -19,18 +19,15 @@ class UserschedModelCalendars extends JModelList
 			return $this->cache[$store];
 		}
 
+		jimport('rjuserdata.userdata');
 		$scheds = array();
-		$spath = JPATH_SITE . '/userstor/';
-		if (!file_exists($spath)) return $scheds;
-		$folds = JFolder::folders($spath);
+		$folds = RJUserDbs::getDbPaths('g','sched');
 		foreach ($folds as $fold) {
-			if (($fold[0]=='_') && file_exists($spath.$fold.'/com_usersched/sched.sql3')) {
-				$gid = (int)substr($fold,1);
-				$group = UserSchedHelper::getGroupTitle($gid);
-				if (!$group) $group = "&lt; group {$gid} &gt;";
-				$members = JAccess::getUsersByGroup($gid);
-				$scheds[] = array('name'=>$group,'members'=>count($members),'gid'=>$gid);
-			}
+			$gid = (int)substr($fold,1);
+			$group = UserSchedHelper::getGroupTitle($gid);
+			if (!$group) $group = "&lt; group {$gid} &gt;";
+			$members = JAccess::getUsersByGroup($gid);
+			$scheds[] = array('name'=>$group,'members'=>count($members),'gid'=>$gid);
 		}
 		$this->_total = count($scheds);
 

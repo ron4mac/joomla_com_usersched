@@ -25,17 +25,13 @@ class UserschedModelUsersched extends JModelList
 			return $this->cache[$store];
 		}
 
+		jimport('rjuserdata.userdata');
 		$scheds = array();
-		$spath = JPATH_SITE . '/userstor/';
-		if (!file_exists($spath)) return $scheds;
-		$folds = JFolder::folders($spath);
+		$folds = RJUserDbs::getDbPaths('u','sched');
 		foreach ($folds as $fold) {
-			if (($fold[0]=='@') && file_exists($spath.$fold.'/com_usersched/sched.sql3')) {
-				$userid = (int)substr($fold,1);
-				//$user = JFactory::getUser($userid);
-				$user = JUser::getInstance($userid);
-				$scheds[] = array('name'=>$user->name,'uname'=>$user->username,'uid'=>$userid);
-			}
+			$userid = (int)substr($fold,1);
+			$user = JUser::getInstance($userid);
+			$scheds[] = array('name'=>$user->name,'uname'=>$user->username,'uid'=>$userid);
 		}
 		$this->_total = count($scheds);
 

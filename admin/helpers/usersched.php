@@ -79,7 +79,7 @@ class UserSchedHelper
 	}
 */
 //		$params = JComponentHelper::getParams('com_search');
-
+/*
 	public static function getUserScheds ($u=true,$g=false,$s=false)
 	{
 		jimport('joomla.filesystem.folder');
@@ -107,7 +107,7 @@ class UserSchedHelper
 		}
 		return $scheds;
 	}
-
+*/
 	public static function getGroupTitle ($gid)
 	{
 		// Get the title of the group.

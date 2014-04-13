@@ -18,7 +18,7 @@ class UserschedViewConfigs extends JViewLegacy
 		jimport('joomla.html.pagination');
 		$this->items = UserschedHelper::getUserScheds();
 		$this->pagination = new JPagination(count($this->items), 0, 20);
-		$this->state		= $this->get('State');
+		$this->state = $this->get('State');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
