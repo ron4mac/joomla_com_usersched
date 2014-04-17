@@ -35,9 +35,9 @@
 	padding: 0 8px;
 	margin:0;
 	width:auto;
-	height:1.2em;
-	font-size:1.2em;
-	line-height:1.2em;
+	height:1.1em;
+	font-size:1.1em;
+	line-height:1.1em;
 }
 
 #formtabs {
@@ -87,7 +87,7 @@
 	margin-left: 10px;
 	width: 16px;
 	height: 16px;
-	background:#eee url(../static/plusbut.png) no-repeat;}
+	background:#eee url(../static/plusbut.png) no-repeat;
 	cursor: pointer;
 }
 
@@ -151,7 +151,7 @@
 	margin-left: 10px;
 	width: 16px;
 	height: 16px;
-	background:#eee url(../static/plusbut.png) no-repeat;}
+	background:#eee url(../static/plusbut.png) no-repeat;
 	cursor: pointer;
 }
 
@@ -194,3 +194,10 @@ ul.stabbernav li.stabberinactive {background:none;padding:0;margin:0;}
 .stabberlive .stabbertab {text-align:left;margin:2px 0 0!important;padding:8px;border:1px solid #bbb;border-radius:2px;background:#fff;}
 .stabberlive .stabbertab h2.sheading,
 .stabberlive .stabbertabhide {display:none;}
+
+div.userschedver {
+	color: #999;
+	font-size: 0.6em;
+	line-height: 1;
+	padding-top: 2px;
+}

@@ -67,7 +67,7 @@ function tabberObj (argsObj) {
 	this.REclassTab = new RegExp('\\b' + this.classTab + '\\b', 'gi');
 	this.REclassTabDefault = new RegExp('\\b' + this.classTabDefault + '\\b', 'gi');
 	this.REclassTabHide = new RegExp('\\b' + this.classTabHide + '\\b', 'gi');
-	this.tabs = new Array();
+	this.tabs = [];
 	if (this.div) {
 		this.init(this.div);
 		this.div = null;
@@ -87,7 +87,7 @@ tabberObj.prototype.init = function(e) {
 	childNodes = e.childNodes;
 	for (i = 0; i < childNodes.length; i++) {
 		if (childNodes[i].className && childNodes[i].className.match(this.REclassTab)) {
-			t = new Object();
+			t = {};
 			t.div = childNodes[i];
 			this.tabs[this.tabs.length] = t;
 			if (childNodes[i].className.match(this.REclassTabDefault)) {
@@ -262,7 +262,7 @@ function tabberAutomaticOnLoad (tabberArgs) {
 if (typeof tabberOptions == 'undefined') {
 	tabberAutomaticOnLoad();
 } else {
-	if (!tabberOptions['manualStartup']) {
+	if (!tabberOptions.manualStartup) {
 		tabberAutomaticOnLoad(tabberOptions);
 	}
 }

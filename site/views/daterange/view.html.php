@@ -1,40 +1,20 @@
 <?php
 defined('_JEXEC') or die;
 
-//require_once JPATH_COMPONENT.'/helpers/usersched.php';
 require_once JPATH_COMPONENT.'/helpers/events.php';
-jimport('rjuserdata.userdata');
+require_once JPATH_COMPONENT.'/views/uschedview.php';
 
-
-class UserschedViewDaterange extends JViewLegacy
+class UserschedViewDaterange extends UserschedView
 {
-	protected $cal_type;
 	protected $rBeg;
 	protected $rEnd;
 
 	function display ($tpl = null)
 	{
-		$app = JFactory::getApplication();
-		$this->params = $app->getParams();	//var_dump($this->params);jexit();
-		$this->user = JFactory::getUser();
-		$this->cal_type = $this->params->get('cal_type');
-		$this->canCfg = false;
+		$this->message = $this->params->get('message');
 
-		switch ($this->cal_type) {
-			case 0:		// user
-				$this->jID = $this->user->id;
-				if ($this->jID <= 0) return;
-				$caldb = new RJUserData('sched');
-				break;
-			case 1:		// group
-				$this->jID = $this->params->get('group_auth');
-				$caldb = new RJUserData('sched',false,$this->jID,true);
-				break;
-			case 2:		// site
-				$this->jID = $this->params->get('site_auth');
-				$caldb = new RJUserData('sched',false,0,true);
-				break;
-		}
+		$caldb = parent::getUserDatabase();
+		if (!$caldb) return;
 
 		JHtml::stylesheet('components/com_usersched/static/upcoming.css');
 		if ($caldb->dataExists()) {
@@ -80,7 +60,7 @@ class UserschedViewDaterange extends JViewLegacy
 		}
 	}
 
-	function formattedDateTime ($from, $to=0)
+	protected function formattedDateTime ($from, $to=0)
 	{
 		if ($to-$from == 86400) {
 			return date('D j F Y', $from);
@@ -100,21 +80,12 @@ class UserschedViewDaterange extends JViewLegacy
 		return $fdt;
 	}
 
-	function formattedText ($txt)
+	protected function formattedText ($txt)
 	{
 		$lines = explode("\n",rtrim($txt));
 		$ft = '<b style="line-height:2em">'.array_shift($lines).'</b><br />';
 		$ft .= implode('<br />',$lines);
 		return $ft;
-	}
-
-	protected function categoriesJSON ()
-	{
-		$jsn = array('{key:"",label:"[ none ]"}');
-		foreach ($this->categories as $cat) {
-			$jsn[] = json_encode(array('key'=>$cat['id'], 'label'=>$cat['name']));
-		}
-		return $jsn;
 	}
 
 	protected function categoriesCSS ()
@@ -125,15 +96,5 @@ class UserschedViewDaterange extends JViewLegacy
 		}
 		return $css;
 	}
-/*
-	protected function state ($vari, $set=false, $val='0', $glb=false)
-	{
-		$app = JFactory::getApplication();
-		if ($set) {
-			$app->setUserState($option.'_'.$vari, $val);
-			return;
-		}
-		return $app->getUserState(($glb ? '' : "{$option}_").$vari, '0');
-	}
-*/
+
 }

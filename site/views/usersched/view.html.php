@@ -2,10 +2,9 @@
 defined('_JEXEC') or die;
 
 require_once JPATH_COMPONENT.'/helpers/usersched.php';
-jimport('joomla.application.component.helper');
-jimport('rjuserdata.userdata');
+require_once JPATH_COMPONENT.'/views/uschedview.php';
 
-class UserschedViewUsersched extends JViewLegacy
+class UserschedViewUsersched extends UserschedView
 {
 	protected $config = array(
 	'default_date' => '%j %M %Y',
@@ -61,12 +60,8 @@ class UserschedViewUsersched extends JViewLegacy
 	'left_border' => true
 	);
 
-	protected $cal_type;
-
-	function display ($tpl = null)
+	function display ($tpl=null)
 	{
-		$app = JFactory::getApplication();
-		$this->params = $app->getParams();	//echo'<xmp>';var_dump($this->params);jexit();
 		$this->cal_type = $this->params->get('cal_type');
 		$this->canCfg = false;
 		$user = JFactory::getUser();
@@ -107,29 +102,14 @@ class UserschedViewUsersched extends JViewLegacy
 			$this->alertees = $caldb->getTable('alertees','',true); $this->alertees = $this->alertees ?: array();	//if (!$this->alertees) $this->alertees = array();
 			$this->categories = $caldb->getTable('categories','',true); $this->categories = $this->categories ?: array();	//if (!$this->categories) $this->categories = array();
 			$cfg = $caldb->getTable('options','name = "config"');
-			$this->show_versions = JComponentHelper::getParams('com_usersched')->get('show_versions', true);
 			if ($cfg) {
 				$this->settings = unserialize($cfg['value']);
 				$this->applyCfg($cfg['value']);
 				$this->cfgcfg = json_encode($this->config);
-				$this->skinOptions = $this->getSkinOptions();
 				parent::display($tpl);
 			}
 		} else {
-			$app->redirect(JRoute::_('index.php?option=com_usersched&view=config', false)); 
-		}
-	}
-
-	protected function getCalInfo ()
-	{
-		//$calid = $this->state('calid');
-		$calid = UserSchedHelper::uState('calid');
-		if ($calid) {
-			list($this->cal_type, $this->cal_owner) = explode(':', $calid);
-		} else {
-		$app = JFactory::getApplication();
-		$this->params = $app->getParams();	//echo'<xmp>';var_dump($this->params);jexit();
-		$this->user = JFactory::getUser();
+			JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_usersched&view=config', false)); 
 		}
 	}
 
@@ -156,36 +136,6 @@ class UserschedViewUsersched extends JViewLegacy
 		$this->config['first_hour'] = $s['templates_starthour'];
 		$this->config['last_hour'] = $s['templates_endhour'];
 		$this->config['agenda_end'] = $s['templates_agendatime'];
-//		$this->config['dblclick_create'] = $s['settings_singleclick'];
-	}
-
-	protected function getConfig ()
-	{
-		return $this->default_cfg;
-	}
-
-	protected function getSkinOptions ()
-	{
-		jimport('joomla.filesystem.folder');
-
-		// Initialize variables.
-		$options = array();
-		$path = JPATH_SITE . '/components/com_usersched/skins';
-
-		// Prepend some default options
-		$options[] = JHtml::_('select.option', '', JText::_('JOPTION_USE_DEFAULT'));
-
-		// Get a list of folders in the search path with the given filter.
-		$folders = JFolder::folders($path);
-
-		// Build the options list from the list of folders.
-		if (is_array($folders)) {
-			foreach ($folders as $folder) {
-				$options[] = JHtml::_('select.option', $folder, $folder);
-			}
-		}
-
-		return $options;
 	}
 
 	protected function categoriesJSON ()
@@ -213,16 +163,5 @@ class UserschedViewUsersched extends JViewLegacy
 		}
 		return $css;
 	}
-/*
-	protected function state ($vari, $set=false, $val='', $glb=false)
-	{
-		$stvar = ($glb?'':'com_usersched.').$vari;
-		$app = JFactory::getApplication();
-		if ($set) {
-			$app->setUserState($stvar, $val);
-			return;
-		}
-		return $app->getUserState($stvar, '');
-	}
-*/
+
 }

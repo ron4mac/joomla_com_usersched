@@ -2,8 +2,11 @@
 defined('_JEXEC') or die('Restricted access');
 $data = $this->data;	//echo'<pre>';var_dump($data); //jexit();
 JFactory::getDocument()->addStyleDeclaration($this->categoriesCSS());
-echo '<p style="font-size:1.2em">Events in the range: '.$this->formattedDateTime($this->rBeg, $this->rEnd).'</p>';
+if ($this->params->get('show_page_heading', 1)) {
+	echo '<div class="page-header"><h3>'.$this->escape($this->params->get('page_heading')).'</h3></div>';
+}
 ?>
+<p style="font-size:1.2em"><?php echo JText::sprintf($this->message ? $this->message : 'COM_USERSCHED_RANGE_MESSAGE', $this->formattedDateTime($this->rBeg, $this->rEnd)) ?></p>
 <table align="center" width="100%" cellspacing="10" cellpadding="5" class="ev_table">
 <?php
     $num_events = count($data);
@@ -23,3 +26,6 @@ echo '<p style="font-size:1.2em">Events in the range: '.$this->formattedDateTime
 	endforeach;
 ?>
 </table>
+<?php if ($this->show_versions) :?>
+<div id="versionbar" class="userschedver">UserSched <span id="userschedver"><?php echo $this->version ?></span></div>
+<?php endif; ?>

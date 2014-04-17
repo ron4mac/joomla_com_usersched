@@ -21,7 +21,8 @@ function show_hide (val) {
 window.addEvent("domready",function() {
 	var us_trange_submit = Joomla.submitbutton;
 	Joomla.submitbutton = function (bval,btyp) {
-		var elms = $$('#attrib-basic .tpni');
+		var elms = $$('#item-form .tpni');
+		if (!elms.length) alert('Warning: cannot set period values. Defaults will be used.');
 		for (var n=0; n<elms.length; n++) {
 			var ni = $(elms[n]);
 			var en = ni.get('name').split('_')[1];

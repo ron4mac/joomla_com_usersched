@@ -32,7 +32,7 @@ class UserschedViewCalendars extends JViewLegacy
 	{
 		$canDo	= UserSchedHelper::getActions();
 
-		JToolBarHelper::title(JText::_('COM_USERSCHED_MANAGER_GSCHEDS'), 'usersched');
+		JToolBarHelper::title(JText::_('COM_USERSCHED_MENU').' : '.JText::_('COM_USERSCHED_MANAGER_GSCHEDS'), 'calendar usersched');
 
 		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_MANAGER_DELETEOK'));
 		//JToolBarHelper::trash('usersched.trash');

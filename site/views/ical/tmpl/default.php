@@ -3,8 +3,11 @@ defined('_JEXEC') or die('Restricted access');
 $data = $this->data;	//echo'<pre>';var_dump($data); //jexit();
 JHtml::script('components/com_usersched/static/config.js',true);
 JHtml::stylesheet('components/com_usersched/static/config.css');
+if ($this->params->get('show_page_heading', 1)) {
+	echo '<div class="page-header"><h3>'.$this->escape($this->params->get('page_heading')).'</h3></div>';
+}
 ?>
-<form id="configform" method="post" enctype="multipart/form-data">
+<form id="configform" method="post" enctype="multipart/form-data" style="margin:0">
 <div class="stabbertab" title="iCalendar">
 	<fieldset>
 		<legend>Import from iCalender</legend>
@@ -23,3 +26,6 @@ JHtml::stylesheet('components/com_usersched/static/config.css');
 <input type="hidden" name="task" value="" />
 <input type="hidden" name="<?php echo JSession::getFormToken() ?>" value="1" />
 </form>
+<?php if ($this->show_versions) :?>
+<div id="versionbar" class="userschedver">UserSched <span id="userschedver"><?php echo $this->version ?></span></div>
+<?php endif; ?>

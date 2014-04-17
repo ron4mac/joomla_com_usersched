@@ -58,8 +58,11 @@ $icns_left = -17;
 $icns_leftx = 20;
 $tabs_right = -42;
 $tabs_rightx = 64;
-?>
 
+if ($this->params->get('show_page_heading', 1)) {
+	echo '<div class="page-header"><h3>'.$this->escape($this->params->get('page_heading')).'</h3></div>';
+}
+?>
 <div id="scheduler_here" class="dhx_cal_container" style='width:auto; height:646px;'>
 <?php if ($this->canCfg) :?>
 	<img src="components/com_usersched/static/cfg16.png" title="Configure calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="configScheduler()" />
@@ -90,7 +93,7 @@ $tabs_rightx = 64;
 	<div class="dhx_cal_data"></div>
 </div>
 <?php if ($this->show_versions) :?>
-<div id="versionbar" class="userschedver">UserSched <span id="userschedver">x.x.x</span></div><div class="schedulerver">Scheduler <span id="schedulerver">x.x.x</span></div>
+<div id="versionbar" class="userschedver">UserSched <span id="userschedver"><?php echo $this->version ?></span></div><div class="schedulerver">Scheduler <span id="schedulerver">x.x.x</span></div>
 <?php endif; ?>
 <?php
 	//echo'<xmp>';var_dump($this);echo'</xmp>';

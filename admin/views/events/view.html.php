@@ -47,7 +47,7 @@ class UserschedViewEvents extends JViewLegacy
 			$name = $user->name;
 		}
 
-		JToolBarHelper::title(JText::_('COM_USERSCHED_MANAGER_EVENTS').' :: '.$name, 'usersched');
+		JToolBarHelper::title(JText::_('COM_USERSCHED_MENU').' : '.JText::_('COM_USERSCHED_MANAGER_EVENTS').' : '.$name, 'calendar usersched');
 
 		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_EVENTS_DELETEOK'), 'events.delete');
 		//JToolBarHelper::trash('usersched.trash');

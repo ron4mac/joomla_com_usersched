@@ -156,17 +156,6 @@ class R_DateTime extends DateTime {
 	public function __toString() {
 		return $this->format('Y-m-d H:i:s');
 	}
-/*
-	public function diff($now = 'NOW') {
-		if(!($now instanceOf DateTime)) {
-			$now = new DateTime($now);
-		}
-		return parent::diff($now);
-	}
-	public function getAge($now = 'NOW') {
-		return $this->diff($now)->format('%y');
-	}
-*/
 	public function setDay2($day) {
 		$new = preg_match('/^(\d\d\d\d)\-(\d\d)/', $this->format('Y-m-d'), $m);	//var_dump($m);
 		$this->setDate($m[1],$m[2],$day);

@@ -71,6 +71,7 @@ div.userschedver, div.schedulerver {
 	color: #999;
 	font-size: 0.6em;
 	line-height: 1;
+	padding-top: 1px;
 }
 div.userschedver {
 	float: left;
@@ -91,6 +92,13 @@ div.sched_alrtatr .alrt_lead {
 }
 div.sched_alrtatr #alertlead_mul {
 	vertical-align: text-bottom;
+}
+.dhx_loading{
+	position:absolute;
+	width:66px;
+	height:66px;
+	background-image:url(cal-loading.gif);
+	z-index:9999;
 }
 
 /* for our Google sourced holiday display */

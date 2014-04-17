@@ -38,7 +38,7 @@ class UserschedViewSkins extends JViewLegacy
 	{
 		$canDo	= UserSchedHelper::getActions();
 
-		JToolBarHelper::title(JText::_('COM_USERSCHED_MANAGER_SKINS'), 'usersched');
+		JToolBarHelper::title(JText::_('COM_USERSCHED_MENU').' : '.JText::_('COM_USERSCHED_MANAGER_SKINS'), 'calendar usersched');
 
 		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_MANAGER_DELETEOK'));
 		//JToolBarHelper::trash('usersched.trash');

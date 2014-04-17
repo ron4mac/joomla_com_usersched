@@ -2,9 +2,9 @@
 defined('_JEXEC') or die;
 
 require_once JPATH_COMPONENT.'/helpers/usersched.php';
-jimport('rjuserdata.userdata');
+require_once JPATH_COMPONENT.'/views/uschedview.php';
 
-class UserschedViewConfig extends JViewLegacy
+class UserschedViewConfig extends UserschedView
 {
 	protected $config = array (
 	'default_date' => '%j %M %Y',
@@ -60,17 +60,9 @@ class UserschedViewConfig extends JViewLegacy
 	'left_border' => true
 	);
 
-	protected $cal_type;
-
-	function display ($tpl = null)
+	function display ($tpl=null)
 	{
-		$app = JFactory::getApplication();
-		$this->params = JComponentHelper::getParams('com_usersched');
-		$this->user = JFactory::getUser();
-		$calid = UserSchedHelper::uState('calid');
-		//var_dump($calid);jexit();
-		list($this->cal_type, $auth) = explode(':', $calid);
-		$authids = (strpos($auth,',')) ? explode(',', $auth) : $auth;
+		$authids = (strpos($this->auth,',')) ? explode(',', $this->auth) : $this->auth;
 		$this->canCfg = false;
 		$this->canSkin = false;
 		$this->canAlert = false;
@@ -81,8 +73,8 @@ class UserschedViewConfig extends JViewLegacy
 				if ($this->user->id != $authids) return;
 				$start = 'start';
 				$this->canCfg = true;
-				$this->canSkin = $this->params->get('user_canskin');
-				$this->canAlert = $this->params->get('user_canalert');
+				$this->canSkin = $this->cOpts->get('user_canskin');
+				$this->canAlert = $this->cOpts->get('user_canalert');
 				$caldb = new RJUserData('sched');
 				break;
 			case 1:		// group
@@ -90,8 +82,8 @@ class UserschedViewConfig extends JViewLegacy
 				if (in_array($authids, $this->user->groups)) {
 					$this->canCfg = true;
 					$this->grpId = $authids;
-					$this->canSkin = $this->params->get('grp_canskin');
-					$this->canAlert = $this->params->get('grp_canalert');
+					$this->canSkin = $this->cOpts->get('grp_canskin');
+					$this->canAlert = $this->cOpts->get('grp_canalert');
 				} else {
 					$start = 'nope';
 				}
@@ -149,12 +141,6 @@ class UserschedViewConfig extends JViewLegacy
 		$this->config['start_on_monday'] = $s['settings_firstday'];
 		$this->config['first_hour'] = $s['templates_starthour'];
 		$this->config['last_hour'] = $s['templates_endhour'];
-//		$this->config['dblclick_create'] = $s['settings_singleclick'];
-	}
-
-	protected function getConfig ()
-	{
-		return $this->default_cfg;
 	}
 
 	protected function getSkinOptions ()
@@ -181,34 +167,4 @@ class UserschedViewConfig extends JViewLegacy
 		return $options;
 	}
 
-	protected function categoriesJSON ()
-	{
-		$jsn = array('{key:"",label:"[ none ]"}');
-		foreach ($this->categories as $cat) {
-			$jsn[] = json_encode(array('key'=>$cat['id'], 'label'=>$cat['name']));
-		}
-		return $jsn;
-	}
-
-	protected function categoriesCSS ()
-	{
-		$css = '';
-		foreach ($this->categories as $cat) {
-//			$css .= '.dhx_cal_event.evCat'.$cat['id'].' div.dhx_title, .dhx_cal_event_line.evCat'.$cat['id'].' {background-color: '.$cat['bgcolor'].' !important;background-image: none;color: '.$cat['txcolor'].' !important;}'."\n";
-			$css .= '.dhx_cal_event div.evCat'.$cat['id'].', .dhx_cal_event_line.evCat'.$cat['id'].', .dhx_cal_event_clear.evCat'.$cat['id'].' {background-color: '.$cat['bgcolor'].' !important;background-image: none;color: '.$cat['txcolor'].' !important;}'."\n";
-		}
-		return $css;
-	}
-/*
-	protected function state ($vari, $set=false, $val='0', $glb=false)
-	{
-		$stvar = ($glb?'':'com_usersched.').$vari;
-		$app = JFactory::getApplication();
-		if ($set) {
-			$app->setUserState($stvar, $val);
-			return;
-		}
-		return $app->getUserState($stvar, '0');
-	}
-*/
 }

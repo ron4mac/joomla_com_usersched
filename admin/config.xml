@@ -91,24 +91,21 @@
 			directory="components/com_usersched/skins"
 			hide_none="1"
 			label="COM_USERSCHED_USKIN_DEFAULT_LABEL"
-			description="COM_USERSCHED_SKIN_DEFAULT_DESC">
-		</field>
+			description="COM_USERSCHED_SKIN_DEFAULT_DESC" />
 		<field
 			name="group_default_skin"
 			type="folderlist"
 			directory="components/com_usersched/skins"
 			hide_none="1"
 			label="COM_USERSCHED_GSKIN_DEFAULT_LABEL"
-			description="COM_USERSCHED_SKIN_DEFAULT_DESC">
-		</field>
+			description="COM_USERSCHED_SKIN_DEFAULT_DESC" />
 		<field
 			name="site_default_skin"
 			type="folderlist"
 			directory="components/com_usersched/skins"
 			hide_none="1"
 			label="COM_USERSCHED_SSKIN_DEFAULT_LABEL"
-			description="COM_USERSCHED_SKIN_DEFAULT_DESC">
-		</field>
+			description="COM_USERSCHED_SKIN_DEFAULT_DESC" />
 		<field
 			name="show_versions"
 			type="radio"
@@ -120,13 +117,10 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
+		<field name="version" type="hidden" default="x.x.x" />
 	</fieldset>
 
-	<fieldset
-		name="permissions"
-		label="JCONFIG_PERMISSIONS_LABEL"
-		description="JCONFIG_PERMISSIONS_DESC"
-		>
+	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
 		<field
 			name="rules"
 			type="rules"

@@ -1,7 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 ?>
-<form id="configform" method="post" enctype="multipart/form-data">
+<form id="configform" method="post" enctype="multipart/form-data" style="margin:0">
 <input type="submit" name="saves" value="<?=JText::_('COM_USERSCHED_CFG_SAVE')?>" onclick="this.form.task.value='setcfg'" />
 <div id="formtabs" class="stabber">
 <div class="stabbertab" title="<?=JText::_('COM_USERSCHED_CFG_GENERAL')?>">
@@ -132,4 +132,6 @@ defined('_JEXEC') or die;
 <input type="hidden" name="task" value="setcfg" />
 <input type="hidden" name="<?php echo JSession::getFormToken() ?>" value="1">
 </form>
-<div class="clr">&nbsp;</div>
+<?php if ($this->show_versions) :?>
+<div id="versionbar" class="userschedver">UserSched <span id="userschedver"><?php echo $this->version ?></span></div>
+<?php endif; ?>

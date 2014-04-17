@@ -1,9 +1,7 @@
-window.usersched = { version: '0.9.2b' };
 
 window.addEvent("domready",function() {
 
 	if (document.getElementById("versionbar")) {
-		document.getElementById("userschedver").innerHTML = window.usersched.version;
 		document.getElementById("schedulerver").innerHTML = scheduler.version;
 	}
 
@@ -17,6 +15,7 @@ window.addEvent("domready",function() {
 		//delete(scheduler.cfg_cfg);
 	}
 
+	scheduler.config.show_loading = true;
 	scheduler.xy.bar_height = 18;
 
 	scheduler.config.xml_date = "%Y-%m-%d %H:%i";
@@ -62,6 +61,19 @@ window.addEvent("domready",function() {
 			ev.end_date = dev.end_date;
 		}
 		return true;
+	});
+
+	// replace the 'loading' locator function with ours
+	scheduler.detachEvent("ev_onxls:0");
+	scheduler.attachEvent("onXLS", function() {
+		if (this.config.show_loading === true) {
+			var t;
+			t = this.config.show_loading = document.createElement("DIV");
+			t.className = 'dhx_loading';
+			t.style.left = Math.round((this._x - 66) / 2) + "px";
+			t.style.top = 60 + "px";
+			this._obj.appendChild(t);
+		}
 	});
 
 	scheduler.init('scheduler_here', new Date(), usched_mode);

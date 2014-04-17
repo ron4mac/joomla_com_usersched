@@ -2,12 +2,12 @@
 <extension type="component" version="2.5" client="site" method="upgrade">
 	<name>com_usersched</name>
 	<author>Ron Crans</author>
-	<creationDate>March 2014</creationDate>
+	<creationDate>April 2014</creationDate>
 	<copyright>(C) 2014 Ron Crans.</copyright>
 	<license>GNU General Public License version 2 or later</license>
 	<authorEmail>ron@rjconline.net</authorEmail>
 	<authorUrl>rjconline.net</authorUrl>
-	<version>0.9.2b</version>
+	<version>0.9.3b</version>
 	<description>COM_USERSCHED_XML_DESCRIPTION</description>
 	<scriptfile>script.php</scriptfile>
 	<files folder="site">
@@ -28,12 +28,15 @@
 		<folder>pdf</folder>
 		<folder>prevskin</folder>
 		<folder>scheduler</folder>
+		<folder>language</folder>
 	</files>
-	<languages folder="site">
-		<language tag="en-GB">language/en-GB.com_usersched.ini</language>
-	</languages>
 	<administration>
-		<menu link="option=com_usersched" img="components/com_usersched/static/usersched16.png">COM_USERSCHED_MENU</menu>
+		<menu img="components/com_usersched/static/usersched16.png">COM_USERSCHED_MENU</menu>
+		<submenu>
+			<menu view="usersched" img="components/com_usersched/static/user16.png" alt="Usersched/Userscheds">COM_USERSCHED_MANAGER_USCHEDS</menu>
+			<menu view="calendars" img="components/com_usersched/static/group16.png" alt="Usersched/Calendars">COM_USERSCHED_MANAGER_GSCHEDS</menu>
+			<menu view="skins" img="components/com_usersched/static/skins16.png" alt="Usersched/Skins">COM_USERSCHED_MANAGER_SKINS</menu>
+		</submenu>
 		<files folder="admin">
 			<filename>access.xml</filename>
 			<filename>config.xml</filename>
@@ -44,12 +47,9 @@
 			<folder>controllers</folder>
 			<folder>models</folder>
 			<folder>views</folder>
+			<folder>language</folder>
 			<folder>static</folder>
 			<folder>help</folder>
 		</files>
-		<languages folder="admin">
-			<language tag="en-GB">language/en-GB.com_usersched.ini</language>
-			<language tag="en-GB">language/en-GB.com_usersched.sys.ini</language>
-		</languages>
 	</administration>
 </extension>
