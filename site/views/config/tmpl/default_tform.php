@@ -72,8 +72,6 @@ defined('_JEXEC') or die;
 <div class="stabbertab" title="<?=JText::_('COM_USERSCHED_CFG_SCALES')?>">
 	<label for="templates_minmin"><?=JText::_('COM_USERSCHED_CFG_MINSTEP')?></label>
 	<input type="number" min="5" max="60" name="templates_minmin" id="templates_minmin" class="numer" value="<?=$this->config['templates_minmin']?>" />
-	<label for="templates_hourheight"><?=JText::_('COM_USERSCHED_CFG_HIHOUR')?></label>
-	<input type="number" min="20" name="templates_hourheight" id="templates_hourheight" class="numer" value="<?=$this->config['templates_hourheight']?>" />
 	<label for="templates_starthour"><?=JText::_('COM_USERSCHED_CFG_TIMSTART')?></label>
 	<input type="number" min="0" max="23" name="templates_starthour" id="templates_starthour" class="numer" value="<?=$this->config['templates_starthour']?>" />
 	<label for="templates_endhour"><?=JText::_('COM_USERSCHED_CFG_TIMEND')?></label>

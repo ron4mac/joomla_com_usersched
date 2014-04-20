@@ -24,9 +24,14 @@ class UserschedViewSkins extends JViewLegacy
 		//			JError::raiseError(500, implode("\n", $errors));
 		//			return false;
 		//		}
-
-		$this->addToolbar();
-		parent::display($tpl);
+		if (isset($this->state->task)) {
+			$tpl = $this->state->task;
+			parent::display($tpl);
+			JFactory::getApplication()->input->setVar('hidemainmenu', true);
+		} else {
+			$this->addToolbar();
+			parent::display($tpl);
+		}
 	}
 
 	/**
@@ -40,7 +45,19 @@ class UserschedViewSkins extends JViewLegacy
 
 		JToolBarHelper::title(JText::_('COM_USERSCHED_MENU').' : '.JText::_('COM_USERSCHED_MANAGER_SKINS'), 'calendar usersched');
 
-		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_MANAGER_DELETEOK'));
+		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_SKINS_DELETEOK'),"skins.delete");
+
+		// Add a modal upload button.
+		$jV = new JVersion();
+		if (version_compare('3.0',$jV->RELEASE) === 1) {
+			$icon = '<span class="icon-32-upload"></span>';
+		} else {
+			$icon = '<i class="icon-upload"></i>';
+		}
+		$bar = JToolBar::getInstance('toolbar');
+		$upbut = '<a class="modal btn btn-small" href="#upload_div" rel="{size: {x: 375, y: 225}}">'.$icon.' Upload</a>';
+		$bar->appendButton('Custom', $upbut, 'skin-upload');
+
 		//JToolBarHelper::trash('usersched.trash');
 
 	//	if ($canDo->get('core.edit.state')) {

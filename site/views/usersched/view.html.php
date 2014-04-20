@@ -12,15 +12,15 @@ class UserschedViewUsersched extends UserschedView
 	'load_date' => '%Y-%m-%d',
 	'week_date' => '%l',
 	'day_date' => '%D, %F %j',
-	'hour_date' => '%H:%i',
-	'month_day' => '%d',
+	'hour_date' => '%g:%i%a',
+	'month_day' => '%j',
 
-	'hour_size_px' => 42,
-	'time_step' => 5,
+//	'hour_size_px' => 42,
+	'time_step' => 15,
 
 	'start_on_monday' => 1,
-	'first_hour' => 0,
-	'last_hour' => 24,
+	'first_hour' => 8,
+	'last_hour' => 22,
 	'readonly' => false,
 	'drag_resize' => 1,
 	'drag_move' => 1,
@@ -127,7 +127,7 @@ class UserschedViewUsersched extends UserschedView
 		$this->config['hour_date'] = $s['templates_hourdate'];
 		$this->config['month_day'] = $s['templates_monthday'];
 
-		$this->config['hour_size_px'] = $s['templates_hourheight'];
+//		$this->config['hour_size_px'] = $s['templates_hourheight'];
 		$this->config['time_step'] = $s['templates_minmin'];
 
 		$this->config['start_on_monday'] = $s['settings_firstday'];

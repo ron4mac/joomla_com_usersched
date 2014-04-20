@@ -7,10 +7,6 @@ class com_userschedInstallerScript
 {
 	function install ($parent) 
 	{
-		if (!class_exists('RJUserData',false)) {
-			JError::raiseWarning(null, 'RJUserData library is required (install)');
-			return false;
-		}
 		$parent->getParent()->setRedirectURL('index.php?option=com_usersched');
 	}
 
@@ -20,18 +16,17 @@ class com_userschedInstallerScript
 
 	function update ($parent) 
 	{
-		if (!class_exists('RJUserData',false)) {
-			JError::raiseWarning(null, 'RJUserData library is required (update)');
-			return false;
-		}
 	}
 
 	function preflight ($type, $parent) 
 	{
+		echo 'Checking for RJUserData library - ';
 		if (!class_exists('RJUserData',false)) {
-			JError::raiseWarning(null, 'RJUserData library is required (pre-flight)');
+			echo '<span style="color:red">Fail</span>';
+			JError::raiseWarning(null, 'RJUserData library is required');
 			return false;
 		}
+		echo '<span style="color:green">Okay</span>';
 		$this->release = $parent->get('manifest')->version;
 	}
 

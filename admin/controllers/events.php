@@ -7,21 +7,18 @@ defined('_JEXEC') or die;
 class UserschedControllerEvents extends JControllerLegacy
 {
 
-/*
 	public function __construct($config = array())
 	{
-		var_dump($config,'hhjjkk');jexit();
 		parent::__construct($config);
+		if (!isset($this->input)) $this->input = JFactory::getApplication()->input;		//J2.x
 	}
-*/
 
 	public function delete ()
 	{
-		$jinput = JFactory::getApplication()->input;
-		$dels = $jinput->get('cid',array(),'array');
-		$view = $jinput->get('view');
-		$uid = $jinput->getInt('uid',-1);
-		$isGrp = $jinput->getBool('isGrp',false);
+		$dels = $this->input->get('cid',array(),'array');
+		$view = $this->input->get('view');
+		$uid = $this->input->getInt('uid',-1);
+		$isGrp = $this->input->getBool('isGrp',false);
 
 		$model = $this->getModel('events');
 		$model->deleteEvents($dels, $uid, $isGrp);

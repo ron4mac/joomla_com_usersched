@@ -15,7 +15,7 @@ $canDo		= UserSchedHelper::getActions();
 <form action="<?php echo JRoute::_('index.php?option=com_usersched&view=usersched'); ?>" method="post" name="adminForm" id="adminForm">
 	<div class="clr"> </div>
 
-	<table class="table table-striped">
+	<table class="table table-striped adminlist">
 		<thead>
 			<tr>
 				<th width="1%"></th>

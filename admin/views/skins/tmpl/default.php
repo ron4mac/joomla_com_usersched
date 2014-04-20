@@ -4,6 +4,8 @@ defined('_JEXEC') or die;
 // Include the component HTML helpers.
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
+JHTML::_('behavior.modal');
+JHTML::_('behavior.formvalidation');
 
 $script = '
 	function previewSkin (row) {
@@ -26,7 +28,7 @@ $unselIcon = 'unselected.png';
 <form action="<?php echo JRoute::_('index.php?option=com_usersched&view=skins'); ?>" method="post" name="adminForm" id="adminForm">
 	<div class="clr"> </div>
 
-	<table class="table table-striped">
+	<table class="table table-striped adminlist">
 		<thead>
 			<tr>
 				<th width="1%"></th>
@@ -91,3 +93,17 @@ $unselIcon = 'unselected.png';
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>
+<div style="display:none">
+<div id="upload_div" style="width:auto;height:100%;border:1px solid #CCC;padding:10px;display:inline-table">
+	<form action="<?php echo JRoute::_('index.php?option=com_usersched&view=skins'); ?>" class="form-validate" onsubmit=" return document.formvalidator.isValid(this)" enctype="multipart/form-data" method="post" name="upldForm" id="upldForm">
+		<div>
+			<p><?php echo JText::_('COM_USERSCHED_UPLOAD_MSG') ?></p>
+			<p><label><?php echo JText::_('COM_USERSCHED_UPLOAD_LABEL') ?></label><input type="text" name="skin_name" class="required validate-string" required /></p>
+			<p><input type="file" name="skinfile" accept="application/zip" class="required validate-string" /></p>
+			<p><button type="submit" class="validate"><?php echo JText::_('COM_USERSCHED_UPLOAD_SUBMIT') ?></button></p>
+			<input type="hidden" name="task" value="skins.addSkin" />
+			<?php echo JHtml::_('form.token'); ?>
+		</div>
+	</form>
+</div>
+</div>

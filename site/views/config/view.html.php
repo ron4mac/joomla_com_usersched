@@ -15,7 +15,6 @@ class UserschedViewConfig extends UserschedView
 	'hour_date' => '%H:%i',
 	'month_day' => '%d',
 
-	'hour_size_px' => 42,
 	'time_step' => 5,
 
 	'start_on_monday' => 1,
@@ -135,7 +134,6 @@ class UserschedViewConfig extends UserschedView
 		$this->config['hour_date'] = $s['templates_hourdate'];
 		$this->config['month_day'] = $s['templates_monthday'];
 
-		$this->config['hour_size_px'] = $s['templates_hourheight'];
 		$this->config['time_step'] = $s['templates_minmin'];
 
 		$this->config['start_on_monday'] = $s['settings_firstday'];

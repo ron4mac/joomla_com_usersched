@@ -15,6 +15,28 @@ class UserschedModelSkins extends JModelList
 		parent::__construct($config);
 	}
 */
+
+	public function deleteSkins ($skins)
+	{
+		$spath = JPATH_COMPONENT_SITE . '/skins/';
+		foreach ($skins as $skin) {
+			JFolder::delete($spath.$skin);
+		}
+	}
+
+	public function addSkin($fref, $skinName='new_skin')
+	{
+		$zip = new ZipArchive();
+		if ($zip->open($fref) !== true) return 1;
+		$spath = JPATH_COMPONENT_SITE . '/skins/'.$skinName.'/';
+		for($i = 0; $i < $zip->numFiles; $i++) {
+			$entry = $zip->getNameIndex($i);
+			if ($zip->extractTo($spath, $entry) !== true) return 2;
+		}
+		@rename($spath.'dhtmlxscheduler.css',$spath.'dhtmlxscheduler_custom.css');
+		return 0;
+	}
+
 	public function getItems ()
 	{	//return array();
 		// Get a storage key.

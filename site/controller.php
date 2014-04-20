@@ -8,36 +8,24 @@ class UserSchedController extends JControllerLegacy
 	function __construct ($default=array())
 	{
 		parent::__construct($default);
+		if (!isset($this->input)) $this->input = JFactory::getApplication()->input;		//J2.x
 		$this->userid = JFactory::getUser()->id;
 	}
 
-/*
-	function display ($cachable = false, $urlparams = false)
-	{
-		parent::display($cachable, $urlparams);
-		var_dump($cachable,$urlparams);
-	}
-*/
-
 	function doConfig ()
 	{
-		$jinput = JFactory::getApplication()->input;
-		$calid = $jinput->getBase64('calid');
-		$jinput->set('view','config');
+		$calid = $this->input->getBase64('calid');
+		$this->input->set('view','config');
 		$m = $this->getModel();
 		$m->setState('calid', base64_decode($calid));
 		$this->display();
-		
-//		$jinput = JFactory::getApplication()->input;
-//		$calid = $jinput->getBase64('calid');
-//		$this->setRedirect(JRoute::_('index.php?option=com_usersched&view=config&calid='.urlencode($calid), false));
 	}
 
 	function setcfg ()
 	{
 		JSession::checkToken();
 		$m = $this->getModel();
-		$m->saveConfig(JFactory::getApplication()->input->post);
+		$m->saveConfig($this->input->post);
 		$this->setRedirect(JRoute::_('index.php?option=com_usersched', false), 'Configuration saved');
 	}
 

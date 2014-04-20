@@ -1,4 +1,3 @@
-
 window.addEvent("domready",function() {
 
 	if (document.getElementById("versionbar")) {
@@ -6,7 +5,6 @@ window.addEvent("domready",function() {
 	}
 
 	if (scheduler.cfg_cfg) {
-		//console.log(scheduler.config);console.log(scheduler.cfg_cfg);
 		mergeCfgObjects(scheduler.config, scheduler.cfg_cfg);
 		if (scheduler.cfg_cfg.agenda_end) {
 			var d = new Date();
@@ -31,16 +29,8 @@ window.addEvent("domready",function() {
 	scheduler.config.left_border = true;
 	scheduler.keys.edit_save = -1;	//keep enter/return key from saving event
 
-//            console.log(scheduler.__categories);
-            scheduler.locale.labels.section_category = "Category";
-
-//	scheduler.config.lightbox.sections = [
-//		{name:"description", height:73, map_to:"text", type:"textarea", focus:true},
-//		{name:"category", height:20, type:"select", options:scheduler.__categories, map_to:"category"},
-//		{name:"alerts", height:42, map_to:"text", type:"alerts_editor", button:"shide"},
-//		{name:"recurring", type:"recurring", map_to:"rec_type", button:"recurring"},
-//		{name:"time", height:72, type:"calendar_time", map_to:"auto"}
-//	];
+//	console.log(scheduler.__categories);
+	scheduler.locale.labels.section_category = "Category";
 
 	var sections = [ {name:"description", height:73, map_to:"text", type:"textarea", focus:true} ];
 	if (true) sections.push({name:"category", height:20, type:"select", options:scheduler.__categories, map_to:"category"});
@@ -48,8 +38,6 @@ window.addEvent("domready",function() {
 	if (true) sections.push({name:"recurring", type:"recurring", map_to:"rec_type", button:"recurring"});
 	if (true) sections.push({name:"time", height:72, type:"time", map_to:"auto"});
 	scheduler.config.lightbox.sections = sections;
-
-//	if (typeof(sched_extend) == 'function') sched_extend();
 
 	scheduler.attachEvent("onBeforeEventChanged",function(dev){
 		var parts = this._drag_id.toString().split("#");
@@ -83,6 +71,11 @@ window.addEvent("domready",function() {
 
 	var dp = new dataProcessor(userschedlurl);
 	dp.init(scheduler);
+
+	// need some template overrides here (after scheduler init) mostly to combat terrace skin
+	scheduler.templates.event_bar_date = function(start,end,event) {
+		return '';
+	};
 
 	// force the event tooltip to hide when the mouse leaves the calendar area
 	var dhxcaldatahere = document.getElementById('scheduler_here');
@@ -197,9 +190,6 @@ scheduler.render_event_bar = function (ev) {
 	parent.appendChild(d.firstChild);
 };
 
-scheduler.templates.event_bar_date = function(start,end,event) {
-	return '';
-};
 scheduler.templates.event_text = function(start,end,event) {
 	var parts = event.text.split(/[\r\n]+/);
 	return parts[0];

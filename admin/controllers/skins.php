@@ -3,19 +3,40 @@ defined('_JEXEC') or die;
 
 class UserschedControllerSkins extends JControllerLegacy
 {
-	
 
-	public function display ($cachable=false, $urlparams=false)
+	public function __construct($config = array())
 	{
-		require_once JPATH_COMPONENT.'/helpers/usersched.php';
-echo '@@@@@@@@@@@@@@@++++++++++++++++++++++++@@@@@@@@@@@@@@';exit();
-		// Load the submenu.
-		$jinput = JFactory::getApplication()->input;
-		UserschedHelper::addSubmenu($jinput->get('view', 'usersched'));
-
-		parent::display();
+		parent::__construct($config);
+		if (!isset($this->input)) $this->input = JFactory::getApplication()->input;		//J2.x
 	}
 
+	public function delete ()
+	{
+		$dels = $this->input->get('cid',array(),'array');
+		$view = $this->input->get('view');
+
+		$model = $this->getModel('skins');
+		$model->deleteSkins($dels);
+
+		$this->setRedirect('index.php?option=com_usersched&view='.$view, JText::_('COM_USERSCHED_MSG_COMPLETE'));
+	}
+
+	public function addSkin ()
+	{
+		$errmsg = '';
+		$upfile = $_FILES['skinfile'];
+		if ($upfile['error']) {
+			$errmsg = JText::_('COM_USERSCHED_UPLDERR_'.$upfile['error']);
+		} else {
+			$rslt = $this->getModel('skins')->addSkin($upfile['tmp_name'], $this->input->get('skin_name'));
+			if ($rslt) $errmsg = JText::_('COM_USERSCHED_UPLDERRZ_'.$rslt);
+		}
+		if ($errmsg) {
+			$this->setRedirect('index.php?option=com_usersched&view=skins', $errmsg, 'error');
+		} else {
+			$this->setRedirect('index.php?option=com_usersched&view=skins', JText::_('COM_USERSCHED_UPLDOK'));
+		}
+	}
 
 	public function makeDfltU ()
 	{
@@ -32,9 +53,8 @@ echo '@@@@@@@@@@@@@@@++++++++++++++++++++++++@@@@@@@@@@@@@@';exit();
 
 	private function setDefaultSkin ($which)
 	{
-		$jinput = JFactory::getApplication()->input;
-		$rows = $jinput->get('cid',array(),'array');
-		$view = $jinput->get('view','skins');
+		$rows = $this->input->get('cid',array(),'array');
+		$view = $this->input->get('view','skins');
 		$this->setCompParam($which, $rows[0]);
 		$this->setRedirect('index.php?option=com_usersched&view='.$view);
 	}

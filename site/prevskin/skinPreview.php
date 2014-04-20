@@ -1,11 +1,24 @@
 <?php
-$css = isset($_GET['skin']) ? ('../skins/'.$_GET['skin'].'/dhtmlxscheduler_custom.css') : '';
+$skin = '';
+$css = '';
+if (isset($_GET['skin'])) {
+	$skin = $_GET['skin'];
+	$csp = '../skins/'.$skin;
+	$fls = scandir($csp);
+	foreach($fls as $fl) {
+		if (preg_match('/^dhtmlxscheduler.+\.css$/', $fl)) {
+			$css = $csp.'/'.$fl;
+			break;
+		}
+	$css = 'no-valid.css';
+	}
+}
 $cssPath = $css ? $css : '../scheduler/codebase/dhtmlxscheduler.css';
 ?>
 <!doctype html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<title>Skin Preview</title>
+	<title>Skin Preview - <?php echo $skin; ?></title>
 
 	<script src="../scheduler/codebase/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
 	<link rel="stylesheet" href="<?php echo $cssPath; ?>" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -20,6 +33,7 @@ $cssPath = $css ? $css : '../scheduler/codebase/dhtmlxscheduler.css';
 			height: 100%;
 			overflow: hidden;
 		}
+		.dhx_cal_cover { opacity:0 }
 	</style>
 
 	<script type="text/javascript" charset="utf-8">
@@ -44,7 +58,7 @@ $cssPath = $css ? $css : '../scheduler/codebase/dhtmlxscheduler.css';
 			//	{ name: "select", height: 21, map_to: "type", type: "select", options: pizza_size },
 			//	{ name: "template", height: 21, map_to: "text", type: "template" },
 				{ name: "recurring", type: "recurring", map_to: "rec_type", button: "recurring"},
-				{ name: "time", height: 72, type: "calendar_time", map_to: "auto" },
+			//	{ name: "time", height: 72, type: "calendar_time", map_to: "auto" },
 				{ name: "time", height: 72, type: "time", map_to: "auto"}
 			];
 

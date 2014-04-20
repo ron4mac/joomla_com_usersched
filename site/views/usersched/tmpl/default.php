@@ -44,10 +44,19 @@ JFactory::getDocument()->addScript('components/com_usersched/js.php?'.$jscodes);
 JFactory::getDocument()->addScriptDeclaration($script);
 JFactory::getDocument()->addStyleDeclaration($this->categoriesCSS());
 
+$is_terrace = false;
 $skin = $this->params->get('default_skin');
 if ($this->settings['settings_skin']) $skin = $this->settings['settings_skin'];
 if ($skin) {
-	JHtml::stylesheet('components/com_usersched/skins/'.$skin.'/dhtmlxscheduler_custom.css');
+	jimport('joomla.filesystem.folder');
+	$spath = 'components/com_usersched/skins/'.$skin;
+	if (file_exists($spath.'/skin.js')) JFactory::getDocument()->addScript($spath.'/skin.js');
+	$csss = JFolder::files($spath,'\.css$');
+//	var_dump($csss);jexit();
+	foreach($csss as $cssf) {
+		JHtml::stylesheet($spath.'/'.$cssf);
+		if (preg_match('/terrace\.css$/', $cssf)) $is_terrace = true;
+	}
 } else {
 	JHtml::stylesheet('components/com_usersched/scheduler/codebase/dhtmlxscheduler_glossy.css');	//scheduler4.0
 }
@@ -63,15 +72,21 @@ if ($this->params->get('show_page_heading', 1)) {
 	echo '<div class="page-header"><h3>'.$this->escape($this->params->get('page_heading')).'</h3></div>';
 }
 ?>
-<div id="scheduler_here" class="dhx_cal_container" style='width:auto; height:646px;'>
+<div id="scheduler_here" class="dhx_cal_container" style='width:auto; height:647px;'>
 <?php if ($this->canCfg) :?>
 	<img src="components/com_usersched/static/cfg16.png" title="Configure calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="configScheduler()" />
 <?php endif; ?>
 	<img src="components/com_usersched/static/printer.png" title="Print calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="scheduler.toPDF('<?=JURI::base()?>components/com_usersched/pdf/generate.php','fullcolor')" />
 	<div class="dhx_cal_navline">
+<?php if ($is_terrace) :?>
+		<div class="dhx_cal_prev_button" style="left:50px">&nbsp;</div>
+		<div class="dhx_cal_next_button" style="left:97px">&nbsp;</div>
+		<div class="dhx_cal_today_button" style="left:148px"></div>
+<?php else: ?>
 		<div class="dhx_cal_prev_button">&nbsp;</div>
 		<div class="dhx_cal_next_button">&nbsp;</div>
 		<div class="dhx_cal_today_button"></div>
+<?php endif; ?>
 		<div class="dhx_cal_date"></div>
 		<?php if ($this->settings['settings_year']): ?>
 		<div class="dhx_cal_tab" name="year_tab" style="right:<?=$tabs_right+=$tabs_rightx?>px;"></div>

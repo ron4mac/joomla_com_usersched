@@ -35,7 +35,6 @@ abstract class UserSchedHelper {
 		'templates_hourdate' => '%g:%i%a',
 		'templates_monthday' => '%j',
 		'templates_minmin' => 15,
-		'templates_hourheight' => 42,
 		'templates_starthour' => 8,
 		'templates_endhour' => 22,
 		'templates_agendatime' => 30,
