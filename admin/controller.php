@@ -1,4 +1,5 @@
 <?php
+// License: GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
 defined('_JEXEC') or die;
 
 class UserschedController extends JControllerLegacy

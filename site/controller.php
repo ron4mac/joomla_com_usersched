@@ -50,7 +50,7 @@ class UserSchedController extends JControllerLegacy
 		JSession::checkToken();
 		$m = $this->getModel();
 		$m->export2ical();
-		jexit();
+	//	jexit();
 	}
 
 	function periodic ()
@@ -64,37 +64,14 @@ class UserSchedController extends JControllerLegacy
 		require_once('scheduler/codebase/connector/scheduler_connector.php');
 		require_once('scheduler/codebase/connector/db_sqlite3.php');
 
-		if (get_magic_quotes_gpc()) {
-
-			function stripslashes_array(&$arr) {
-				foreach ($arr as $k => &$v) {
-					$nk = stripslashes($k);
-					if ($nk != $k) {
-						$arr[$nk] = &$v;
-						unset($arr[$k]);
-					}
-					if (is_array($v)) {
-						stripslashes_array($v);
-					} else {
-						$arr[$nk] = stripslashes($v);
-					}
-				}
-			}
-
-			stripslashes_array($_POST);
-			//stripslashes_array($_GET);
-			//stripslashes_array($_REQUEST);
-			//stripslashes_array($_COOKIE);
-		}
-
-		if (RJC_DEV>0) {
+		if (defined('RJC_DEV')) {
 			JLog::addLogger(array('text_file' => 'usersched.log.php'), JLog::INFO, 'usersched');
 			$l = print_r($_GET,true).print_r($_POST,true);
 			JLog::add($l, JLog::INFO, 'usersched');
 		}
 
 		$dbtype = "SQLite3";
-		list($caltyp,$jid) = explode(':',base64_decode($_GET['calid']));
+		list($caltyp,$jid) = explode(':',base64_decode($this->input->get('calid')));
 		switch ($caltyp) {
 			case 0:
 				//$usrid = JFactory::getUser()->get('id');
@@ -111,12 +88,12 @@ class UserSchedController extends JControllerLegacy
 		$res = new SQLite3($dbpath);
 
 		$this->scheduler = new schedulerConnector($res, $dbtype);
-		if (RJC_DEV>0) $this->scheduler->enable_log(JPATH_SITE.'/userstor/userschedconnlog.txt');
+		if (defined('RJC_DEV')) $this->scheduler->enable_log(JPATH_SITE.'/userstor/userschedconnlog.txt');
 		$this->scheduler->event->attach('beforeProcessing',array($this,'delete_related'));
 		$this->scheduler->event->attach('afterProcessing',array($this,'insert_related'));
 		$this->scheduler->event->attach("beforeProcessing",array($this, "set_event_user"));
 		$this->scheduler->event->attach("afterProcessing",array($this, "after_set_event_user"));
-		$this->scheduler->render_table('events','event_id','start_date,end_date,text,category,rec_type,event_pid,event_length,user'./*,lat,lng*/',alert_lead,alert_user,alert_meth');
+		$this->scheduler->render_table('events','event_id','start_date,end_date,text,category,rec_type,event_pid,event_length,user,alert_lead,alert_user,alert_meth');
 	}
 
 /*	below are callbacks for the scheduler connector */

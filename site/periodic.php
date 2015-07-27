@@ -1,111 +1,144 @@
 <?php
-defined('_JEXEC') or die;
 
-function bugout ($msg, $vars='') {
+function bugout ($msg, $vars='', $bufr=0) {
 	global $isDevel;
+
 	if (!$isDevel) return;
+
+//	if ($bufr&1) {
+//		@ob_end_clean();
+//		ob_start();
+//	}
+
 	echo $msg;
 	if ($vars) {
 		echo'<pre>';var_dump($vars);echo'</pre>';
 	} else echo'<br />';
+
+//	if ($bufr&2) {
+//		ob_end_flush();
+//		ob_start();
+//	}
 }
 
-function markAlerted ($id, $atime, $db) {	//return;
-	global $simulate, $alertRay;
-	if ($simulate) {
-		$alertRay[$id] = $atime;
-	} else {
-		$db->query('INSERT INTO alerted (eid,atime) VALUES ('.$id.','.$atime.')');
-	}
-}
-
-// remove expired sentinals (> 1 day)
-function clearOldMarks ($atime, $db) {
-	global $simulate, $alertRay;
-	if ($simulate) {
-		foreach ($alertRay as $id=>$last) {
-			if ($last < ($atime-86400)) unset($alertRay[$id]);
+function getTable ($db, $table, $where='', $all=false, $values='*')
+{
+	if ($db) {
+		$rslt = $db->query('SELECT '.$values.' FROM ' . $table . ($where ? (' WHERE '.$where) : ''));
+		if ($rslt) {
+			if ($all) {
+				$rows = array();
+				while ($row = $rslt->fetchArray(SQLITE3_ASSOC))
+					$rows[] = $row;
+			} else {
+				$rows = $rslt->fetchArray(SQLITE3_ASSOC);
+			}
+			$rslt->finalize();
+			return $rows;
 		}
+	}
+	return null;
+}
+
+// mark (for a day) that an alert was triggered
+function markAlerted ($id, $lead, $atime, $db) {	//return;
+	global $isDevel, $simulate, $alertRay;
+	if ($lead < 86400) $lead = 86400;
+	if ($isDevel || $simulate) {
+		$alertRay[$id] = array($atime, $lead);
 	} else {
-		$db->query('DELETE FROM alerted WHERE atime < '.($atime-86400));
+		$db->execute('INSERT INTO alerted (eid,atime,lead) VALUES ('.$id.','.$atime.','.$lead.')');
 	}
 }
 
-bugout(date('Y/m/d H:i'));
-
-if ($simulate) {
-	$rangt = 172800;	//+-2 days
-	$granu = 900;	// granularity 15 min
-	$tbase = (int)(time() / $granu) * $granu;
-	$stime = $tbase - $rangt;
-	while ($stime < ($tbase+$rangt)) {
-		processAlerts(0, $stime);
-		$stime += $granu;
-	}
-	exit();
-}
-
-processAlerts(0, time());
-// possibly go through all user databases here
-
-function processAlerts ($id, $tt) {
-	global $simulate;
-
-	bugout('@@'.date('Y/m/d H:i D',$tt));
-
-	$caldb = new RJUserData('sched',false,0,true,'com_usersched');
-	if (!$caldb->dataExists()) return;
-
-	// open databse r/w
-	$caldb->connect();
-
-	$db = $caldb->getDbase();
-
-	clearOldMarks($tt, $db);
-
-	$alertees = $caldb->getTable('alertees','',true);
-	if (!$alertees) return;	// can't alert if no one to alert
-
-	$alerted = $caldb->getTable('alerted','',true);
-
-	$atime = $tt;
-
-	// get event range
-	$fields = 'event_id,strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end,start_date,end_date,text,rec_type,event_pid,event_length,alert_lead,alert_user,alert_meth';
-//	$where = 'alert_user != \'\' AND t_start > '.($atime-86400);
-	$where = 'alert_user != \'\' AND (t_start - alert_lead) < '.$atime;	//and not more than a day old
-	$evts = $caldb->getTable('events', $where, true, $fields);
-	
-											/// @@@@@@ MIGHT WANT TO GET RECURRING EVENTS SEPARATELY
-	foreach ($evts as $evt) {
-		if (wasAlerted($evt['event_id'], $alerted)) continue;
-		if ($evt['rec_type'] && !recursNow($evt, $atime)) continue;
-
-//		bugout( '&lt;&lt; '. date('Y-m-d H:i D',$atime) );
-
-		if (($atime + $evt['alert_lead']-$evt['t_start'])<0 || ($atime-$evt['t_start'])>86400) continue;
-
-		bugout( '&gt;&gt; '. date('Y-m-d H:i D',$atime) );
-	
-		sendAlerts($evt, $alertees);
-		markAlerted ($evt['event_id'], $atime, $db);
-	}
-}
-
+// see if the event's alert has already been triggered
 function wasAlerted ($id, $stray) {
 //	global $isDevel;
 //	if ($isDevel) return false;
-	global  $simulate, $alertRay;
-	if ($simulate) return isset($alertRay[$id]);
+	global  $isDevel, $simulate, $alertRay;
+	if ($isDevel || $simulate) return isset($alertRay[$id]);
 	foreach ($stray as $st) {
 		if ($st['eid'] == $id) return true;
 	}
 	return false;
 }
 
+// remove expired alerted sentinals (> 1 day)
+function clearOldMarks ($atime, $db) {
+	global $isDevel, $simulate, $alertRay;
+	if ($isDevel || $simulate) {
+		foreach ($alertRay as $id=>$last) {
+			if (($atime - $last[0]) >= $last[1]) unset($alertRay[$id]);
+		}
+	} else {
+		$db->execute('DELETE FROM alerted WHERE ('.$atime.' - `atime`) >= `lead`');
+	}
+}
+
+bugout(date('Y/m/d H:i'), '');
+
+if ($simulate) {
+	$rangt = 259200;	// ±3 days (worth)
+	$granu = 900;	// granularity 15 min
+	if (isset($_GET['date']) && (($tbase = strtotime($_GET['date'])) !== false)) {
+	} else {
+		$tbase = (int)(time() / $granu) * $granu;
+	}
+	$stime = $tbase - $rangt;
+	while ($stime < ($tbase+$rangt)) {
+		processAlerts(0, $stime);
+		$stime += $granu;
+		if (($stime-$tbase)%86400 == 0) bugout('<hr />','',3);
+	}
+	exit();
+}
+
+// processAlerts(0, time());
+// possibly go through all user databases here
+
+function processAlerts ($id, $tt) {
+	global $db, $simulate;
+
+	bugout('@@'.date('Y/m/d H:i D',$tt), '', 1);
+
+	$needLang = 1;
+
+	clearOldMarks($tt, $db);
+
+	$alertees = getTable($db,'alertees','',true);
+	if (!$alertees) return;	// can't alert if no one to alert
+
+	$alerted = getTable($db,'alerted','',true);
+
+	$atime = $tt;
+
+	// get event range
+	$fields = 'event_id,strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end,start_date,end_date,text,rec_type,event_pid,event_length,alert_lead,alert_user,alert_meth';
+	$where = 'alert_user != \'\' AND ((substr(`end_date`,1,5) == \'9999-\')OR(`t_end` > '.$atime.')) AND (t_start - alert_lead) <= ('.$atime.' + 5)';
+	$evts = getTable($db,'events', $where, true, $fields);
+	
+											/// @@@@@@ MIGHT WANT TO GET RECURRING EVENTS SEPARATELY
+	foreach ($evts as $evt) {
+		// skip if was already alerted within timeframe
+		if (wasAlerted($evt['event_id'], $alerted)) continue;
+		bugout($evt['start_date'].' $ '.$evt['rec_type']);
+		// skip if recurring and and no hit
+		if ($evt['rec_type'] && !recursNow($evt, $atime)) continue;
+		// skip if XXXXX or event start was more than a day ago
+		if (/*($atime + $evt['alert_lead']-$evt['t_start'])<0 ||*/ ($atime-$evt['t_start'])>86399) continue;
+
+		bugout( '&gt;&gt; '. date('Y-m-d H:i D',$atime) );
+
+		if ($needLang) {getAlertLang(); $needLang = 0;}
+		sendAlerts($evt, $alertees);
+		markAlerted ($evt['event_id'], $evt['alert_lead'], $atime, $db);
+	}
+}
+
 function recursNow (&$evt, $atime) {
 	bugout($evt['rec_type'].' '.$evt['start_date']);
 	list($rec_pattern, $xtra) = explode('#', $evt['rec_type']);
+	if ($rec_pattern == 'none') return false;
 	list($type,$count,$day,$count2,$daysl) = explode('_', $rec_pattern);
 //	bugout('',array($type,$count,$day,$count2,$daysl,$xtra));
 	$dt = new R_DateTime($evt['start_date']);
@@ -122,9 +155,25 @@ function recursNow (&$evt, $atime) {
 		case 'week':
 			$tyc = 'W';
 			$divsr = $count * 604800;
-			$pdelta = (int)(($atime + $evt['alert_lead'] - $evt['t_start']) / $divsr);
-//			bugout($atime.':'.$evt['t_start'].':'.$pdelta.':'.$count);
-			$dt->add(new DateInterval('P'.($pdelta*$count).$tyc));
+			$edays = explode(',',$daysl);
+			$frstt = $evt['t_start'];
+			$iters = (int)(($atime - $frstt) / $divsr);
+			$frstt += $iters * $divsr;
+			$tgt = 0;
+			while (!$tgt) {
+				foreach ($edays as $eday) {
+					$etim = $frstt + $eday * 86400;
+					bugout('^^&gt;'.date('Y-m-d H:i',$etim));
+					if ($etim >= $atime) {
+						$tgt = $etim;
+						break 2;
+					}
+				}
+				$frstt += $divsr;
+				if (($frstt-$evt['alert_lead'])>$atime) return false;
+			}
+			$dt = new R_DateTime('', null, $tgt);
+			bugout('#=- '.$dt->format('Y-m-d H:i D'));
 			break;
 		case 'month':
 			$tyc = 'M';
@@ -163,7 +212,7 @@ function recursNow (&$evt, $atime) {
 		bugout( ' * '. $dt->format('Y-m-d H:i D') );
 	}
 //	bugout( $dt->format('Y-m-d H:i D') );
-	if ($daysl) {
+/*	if ($daysl) {
 		$sd = clone $dt;
 		//echo $dt->format('Y-m-d H:i D');
 		$wdys = explode(',', $daysl);
@@ -183,7 +232,7 @@ function recursNow (&$evt, $atime) {
 			break;
 //			echo $dt->format('Y-m-d H:i D');
 		}
-	}
+	}*/
 
 	$closetime = $dt->getTimestamp();
 	$diffr = $atime - $closetime + $evt['alert_lead'];
@@ -199,7 +248,7 @@ function recursNow (&$evt, $atime) {
 }
 
 function sendAlerts ($evt, $alertees) {
-	global $isDevel;
+	global $alertLang, $isDevel;
 	$sn = $_SERVER['SCRIPT_NAME'];
 	$surl = getConfig('live_site');
 	$ausrs = explode(',',$evt['alert_user']);
@@ -208,16 +257,26 @@ function sendAlerts ($evt, $alertees) {
 	$mail['from'] = getConfig('mailfrom');
 	$mail['fromname'] = getConfig('fromname');
 	$mail['subject'] = 'Calendar Alert';
-	$mail['body'] = 'This is an automatic message from "'.getConfig('sitename').'".'."\n" . $surl . "\n\n";
+//	$mail['body'] = 'This is an automatic message from "'.getConfig('sitename').'".'."\n" . $surl . "\n\n";
+//	$mail['body'] = 'This is an automatic message from "'.getConfig('sitename').'" sent '.date('D j F Y g:ia').".\n" . $surl ."\n";
+	$lb = "\n";
+	$mail['body'] = sprintf($alertLang->_text('BLURB'), getConfig('sitename'), date('D j F Y g:ia'), $lb, $surl, $lb);
 	$toTime = $evt['rec_type'] ? ($evt['t_start'] + $evt['event_length']) : $evt['t_end'];
-	$mail['body'] .= formattedDateTime($evt['t_start'], $toTime) . "\n";
+	$mail['body'] .= formattedDateTime($evt['t_start'], $toTime) . $lb.$lb;
 	$mail['body'] .= $evt['text'];
 
 	if ($isDevel) {
-		bugout('',$mail);
+		bugout('', $mail, 2);
 	} else {
 		if ($evt['alert_meth'] & 1) sendMailAlert($ausrs, $mail, $alertees);
-		if ($evt['alert_meth'] & 2) sendSmsAlert($ausrs, $mail, $alertees);
+		if ($evt['alert_meth'] & 2) {
+			//abreviate for text
+			$splt = explode("\n",$evt['text'],2);
+			$mail['subject'] .= ' -- '.$splt[0];
+			$mail['body'] = formattedDateTime($evt['t_start'], $toTime) . "\n\n";
+			$mail['body'] .= $splt[1];
+			sendSmsAlert($ausrs, $mail, $alertees);
+		}
 	}
 }
 
@@ -302,4 +361,3 @@ class R_DateTime extends DateTime {
 		return $ndate;
 	}
 }
-?>

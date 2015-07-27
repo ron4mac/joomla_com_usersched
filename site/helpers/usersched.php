@@ -42,6 +42,7 @@ abstract class UserSchedHelper {
 		'templates_eventheader' => 'return scheduler.templates.hour_scale(start) + " - " + scheduler.templates.hour_scale(end);',
 		'templates_eventbartext>' => 'return "<span title=\'"+event.text+"\'>" + event.text + "</span>";',
 		'templates_username' => false,
+		'alert_lang' => 'en_GB'
 	);
 
 	public static function uState ($vari, $set=false, $val='', $glb=false)

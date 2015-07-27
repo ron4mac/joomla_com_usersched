@@ -37,8 +37,12 @@ function recursNow (&$evt, $rBeg, $rEnd, $lasto=true) {
 			$tyc = 'D';
 			$divsr = $count * 86400;
 			$pdelta = (int)(($rBeg - $evt['t_start']) / $divsr);
-//			bugout($rBeg.':'.$evt['t_start'].':'.$pdelta.':'.$count);
-			$dt->add(new DateInterval('P'.($pdelta*$count).$tyc));
+			bugout($rBeg.':'.$evt['t_start'].':'.$pdelta.':'.$count);
+			if ($pdelta<0) {
+				$dt->sub(new DateInterval('P'.-($pdelta*$count).$tyc));
+			} else {
+				$dt->add(new DateInterval('P'.($pdelta*$count).$tyc));
+			}
 			break;
 		case 'week':
 			$tyc = 'W';

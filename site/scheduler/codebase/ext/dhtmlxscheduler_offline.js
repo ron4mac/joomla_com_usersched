@@ -1,8 +1,15 @@
 /*
-This software is allowed to use under GPL or you need to obtain Commercial or Enterise License
-to use it in non-GPL project. Please contact sales@dhtmlx.com for details
+@license
+dhtmlxScheduler v.4.3.1 
+
+This software is covered by GPL license. You also can obtain Commercial or Enterprise license to use it in non-GPL project - please contact sales@dhtmlx.com. Usage without proper license is prohibited.
+
+(c) Dinamenta, UAB.
 */
-scheduler.load=function(a,c,b){if(typeof c=="string")var f=this._process=c,c=b;this._load_url=a;this._after_call=c;a.$proxy?a.load(this,typeof f=="string"?f:null):this._load(a,this._date)};scheduler._dp_init_backup=scheduler._dp_init;
-scheduler._dp_init=function(a){a._sendData=function(c,b){if(c){if(!this.callEvent("onBeforeDataSending",b?[b,this.getState(b),c]:[null,null,c]))return!1;b&&(this._in_progress[b]=(new Date).valueOf());if(this.serverProcessor.$proxy){var a=this._tMode!="POST"?"get":"post",d=[],e;for(e in c)d.push({id:e,data:c[e],operation:this.getState(e)});this.serverProcessor._send(d,a,this)}else{var h=new dtmlXMLLoaderObject(this.afterUpdate,this,!0),g=this.serverProcessor+(this._user?getUrlSymbol(this.serverProcessor)+
-["dhx_user="+this._user,"dhx_version="+this.obj.getUserData(0,"version")].join("&"):"");this._tMode!="POST"?h.loadXML(g+(g.indexOf("?")!=-1?"&":"?")+this.serialize(c,b)):h.loadXML(g,!0,this.serialize(c,b));this._waitMode++}}};a._updatesToParams=function(c){for(var b={},a=0;a<c.length;a++)b[c[a].id]=c[a].data;return this.serialize(b)};a._processResult=function(a,b,f){if(f.status!=200)for(var d in this._in_progress){var e=this.getState(d);this.afterUpdateCallback(d,d,e,null)}else b=new dtmlXMLLoaderObject(function(){},
-this,!0),b.loadXMLString(a),b.xmlDoc=f,this.afterUpdate(this,null,null,null,b)};this._dp_init_backup(a)};if(window.dataProcessor)dataProcessor.prototype.init=function(a){this.init_original(a);a._dataprocessor=this;this.setTransactionMode("POST",!0);this.serverProcessor.$proxy||(this.serverProcessor+=(this.serverProcessor.indexOf("?")!=-1?"&":"?")+"editing=true")};
+scheduler.load=function(e,t){var a;return"string"==typeof t&&(this._process=t,a=t,t=arguments[2]),this._load_url=e,this._after_call=t,e.$proxy?void e.load(this,"string"==typeof a?a:null):void this._load(e,this._date)},scheduler._dp_init_backup=scheduler._dp_init,scheduler._dp_init=function(e){e._sendData=function(e,t){if(e){if(!this.callEvent("onBeforeDataSending",t?[t,this.getState(t),e]:[null,null,e]))return!1;if(t&&(this._in_progress[t]=(new Date).valueOf()),this.serverProcessor.$proxy){var a="POST"!=this._tMode?"get":"post",r=[];
+
+for(var n in e)r.push({id:n,data:e[n],operation:this.getState(n)});return void this.serverProcessor._send(r,a,this)}var i=new dtmlXMLLoaderObject(this.afterUpdate,this,!0),d=this.serverProcessor+(this._user?getUrlSymbol(this.serverProcessor)+["dhx_user="+this._user,"dhx_version="+this.obj.getUserData(0,"version")].join("&"):"");"POST"!=this._tMode?i.loadXML(d+(-1!=d.indexOf("?")?"&":"?")+this.serialize(e,t)):i.loadXML(d,!0,this.serialize(e,t)),this._waitMode++}},e._updatesToParams=function(e){for(var t={},a=0;a<e.length;a++)t[e[a].id]=e[a].data;
+
+return this.serialize(t)},e._processResult=function(e,t,a){if(200==a.status)t=new dtmlXMLLoaderObject(function(){},this,!0),t.loadXMLString(e),t.xmlDoc=a,this.afterUpdate(this,null,null,null,t);else for(var r in this._in_progress){var n=this.getState(r);this.afterUpdateCallback(r,r,n,null)}},this._dp_init_backup(e)},window.dataProcessor&&(dataProcessor.prototype.init=function(e){this.init_original(e),e._dataprocessor=this,this.setTransactionMode("POST",!0),this.serverProcessor.$proxy||(this.serverProcessor+=(-1!=this.serverProcessor.indexOf("?")?"&":"?")+"editing=true");
+
+});

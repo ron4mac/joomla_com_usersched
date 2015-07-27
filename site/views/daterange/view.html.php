@@ -53,6 +53,7 @@ class UserschedViewDaterange extends UserschedView
 					else unset($evts[$k]);
 				}
 			}
+			usort($evts, function ($a,$b) { if ($a['t_start']==$b['t_start']) return 0; return ($a['t_start'] < $b['t_start']) ? -1 : 1; });
 			$this->data = $evts;
 			parent::display($tpl);
 		} else {

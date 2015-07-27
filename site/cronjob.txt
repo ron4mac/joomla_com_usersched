@@ -1,0 +1,3 @@
+/opt/ntphp/php54/bin/php -q -c /home/ronj4mac/cron_php.ini  /home/ronj4mac/public_html/joom3dev/components/com_usersched/periodic_sn.php &>> /home/ronj4mac/cron/usersched.txt
+
+/opt/ntphp/php54/bin/php -q -c /home/ronj4mac/cron_php.ini  /home/ronj4mac/public_html/joom3dev/components/com_usersched/cron.php &>> /home/ronj4mac/cron/cusersched.txt

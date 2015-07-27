@@ -1,4 +1,5 @@
 // adds US holiday events gotten from Google's calendar API
+// Jan 2015 updated for Google API v3
 
 scheduler.gHolyYrs = [];
 scheduler.attachEvent("onViewChange", function (new_mode, new_date){
@@ -30,20 +31,37 @@ scheduler.attachEvent("onViewChange", function (new_mode, new_date){
 	}
 });
 
-function getGoogleHolidays (yr) {	// Mootools specific JSONP request
+function gcal_fetch (url) {
+	var tempscript = null;
+	var callback = function(data) {
+		document.body.removeChild(tempscript);
+		tempscript = null;
+		var gevents = [], items = data.items, ix;
+		for (ix=0; ix<items.length; ix++) {
+			var item = items[ix];
+			gevents.push({text:item.summary,start_date:item.start.date,end_date:item.end.date,xevt:"isHoliday"});
+		}
+		var evs = scheduler.json.parse(gevents);
+		scheduler._process_loading(evs);
+	};
+	var uniqfunc = 'jsonp'+Math.round(Date.now()+Math.random()*1000001);
+	window[uniqfunc] = function (json) {
+		if (json.error) { console.log(uniqfunc+": "+json.error.message); }
+		callback(json);
+		delete window[uniqfunc];
+	};
+	tempscript = document.createElement("script");
+	tempscript.type = "text/javascript";
+//	tempscript.id = "tempscript";
+	tempscript.src = url + "&callback=" + uniqfunc;
+	document.body.appendChild(tempscript);
+}
+
+function getGoogleHolidays (yr) {
 	if (scheduler.gHolyYrs.indexOf(yr)==-1) {
 		scheduler.gHolyYrs.push(yr);
-		var jsonRequest = new Request.JSONP({
-			url: 'http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/full?alt=jsonc&start-min='+yr+'-01-01&start-max='+(yr+1)+'-01-01&max-results=200',
-			onSuccess: function(jsn){
-				//console.log(jsn.data.items);
-				var gevents = [];
-				Array.each(jsn.data.items, function (item,index){
-					gevents.push({text:item.title,start_date:item.when[0].start,end_date:item.when[0].end,xevt:"isHoliday"});
-				});
-				var evs = scheduler.json.parse(gevents);
-				scheduler._process_loading(evs);
-				}
-			}).send();
+		gcurl = 'https://www.googleapis.com/calendar/v3/calendars/usa__en%40holiday.calendar.google.com/events?key=AIzaSyAxlVigwBVLSu-ryKOr1c4mXextZ6nPkyc';
+		gcurl += '&timeMin='+yr+'-01-01T00%3A00%3A00%2B00%3A00&timeMax='+(yr+1)+'-01-01T00%3A00%3A00%2B00%3A00&singelEvents=true';
+		var gcfobj = new gcal_fetch(gcurl);
 	}
 }

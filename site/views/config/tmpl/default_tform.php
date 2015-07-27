@@ -1,5 +1,6 @@
 <?php
 defined('_JEXEC') or die;
+JHtml::_('behavior.colorpicker');
 ?>
 <form id="configform" method="post" enctype="multipart/form-data" style="margin:0">
 <input type="submit" name="saves" value="<?=JText::_('COM_USERSCHED_CFG_SAVE')?>" onclick="this.form.task.value='setcfg'" />
@@ -35,6 +36,7 @@ defined('_JEXEC') or die;
 	<input type="number" name="settings_eventnumber" id="settings_eventnumber" class="numer" value="<?= $this->config['settings_eventnumber'] ?>" />
 </div>
 <div class="stabbertab" title="<?=JText::_('COM_USERSCHED_CFG_MODES')?>">
+	<div class="twocol">
 	<input type="checkbox" name="settings_day" id="settings_day"<?=$this->config['settings_day']?' checked="checked"':''?> />
 	<label for="settings_day"><?= JText::_('COM_USERSCHED_CFG_DAY') ?></label>
 	<input type="checkbox" name="settings_week" id="settings_week"<?=$this->config['settings_week']?' checked="checked"':''?> />
@@ -60,14 +62,24 @@ defined('_JEXEC') or die;
 		<option value="month" locale="month"<?=$defaultmode=='month'?' selected="selected"':''?>><?= JText::_('COM_USERSCHED_CFG_MONTH') ?></option>
 		<option value="year" locale="year"<?=$defaultmode=='year'?' selected="selected"':''?>><?= JText::_('COM_USERSCHED_CFG_YEAR') ?></option>
 		<option value="agenda" locale="agenda"<?=$defaultmode=='agenda'?' selected="selected"':''?>><?= JText::_('COM_USERSCHED_CFG_AGENDA') ?></option>
-		<option value="week_agenda" locale="week_agenda"<?=$defaultmode=='week_agenda'?' selected="selected"':''?>><?= JText::_('COM_USERSCHED_CFG_WAGENDA') ?></option>
-	<!--	<option value="map" locale="map"<?=$defaultmode=='map'?' selected="selected"':''?>><?= JText::_('COM_USERSCHED_CFG_MAP') ?></option> -->
+	<!--	<option value="week_agenda" locale="week_agenda"<?=$defaultmode=='week_agenda'?' selected="selected"':''?>><?= JText::_('COM_USERSCHED_CFG_WAGENDA') ?></option>
+		<option value="map" locale="map"<?=$defaultmode=='map'?' selected="selected"':''?>><?= JText::_('COM_USERSCHED_CFG_MAP') ?></option> -->
 	</select>
 <?php if ($this->canSkin): ?>
 	<div class="clr">&nbsp;</div>
 	<label for="settings_skin"><?= JText::_('COM_USERSCHED_CFG_CALSKIN') ?></label>
 	<?=JHtml::_('select.genericlist', $this->skinOptions, 'settings_skin', '', 'value', 'text', $this->config['settings_skin'], 'settings_skin'); ?>
 <?php endif; ?>
+	</div>
+	<div class="twocol">
+		<p class="subtitl"><?= JText::_('COM_USERSCHED_CFG_EXTEVTS') ?></p>
+		<div style="padding-left:.5em">
+		<input type="checkbox" name="settings_ushol" id="settings_ushol"<?=(isset($this->config['settings_ushol'])&&$this->config['settings_ushol'])?' checked="checked"':''?> />
+		<label for="settings_ushol"><?= JText::_('COM_USERSCHED_CFG_USHOL') ?></label>
+		<input type="checkbox" name="settings_bday" id="settings_bday"<?=(isset($this->config['settings_bday'])&&$this->config['settings_bday'])?' checked="checked"':''?> />
+		<label for="settings_bday"><?= JText::_('COM_USERSCHED_CFG_BDAY') ?></label>
+		</div>
+	</div>
 </div>
 <div class="stabbertab" title="<?=JText::_('COM_USERSCHED_CFG_SCALES')?>">
 	<label for="templates_minmin"><?=JText::_('COM_USERSCHED_CFG_MINSTEP')?></label>
@@ -100,10 +112,12 @@ defined('_JEXEC') or die;
 	<p>
 		<input type="hidden" name="category_id[]" value="<?=$cat['id']?>" />
 		<span class="col1"><input type="text" name="category_name[]" value="<?=$cat['name']?>" class="ecname" /></span>
-		<span class="col2"><input type="text" name="category_txcolor[]" value="<?=$cat['txcolor']?>" class="ectcolr" /></span>
-		<span class="col3"><input type="text" name="category_bgcolor[]" value="<?=$cat['bgcolor']?>" class="ecbcolr" /></span>
+	<!--	<span class="col2"><input type="text" name="category_txcolor[]" data-cid="t.<?=$cat['id']?>" value="<?=$cat['txcolor']?>" class="minicolors" /></span> 
+		<span class="col3"><input type="text" name="category_bgcolor[]" data-cid="b.<?=$cat['id']?>" value="<?=$cat['bgcolor']?>" class="minicolors" /></span> -->
+		<span class="col2"><?=JHtml::_('usersched.colorPicker',$cat['id'],'tx',$cat['txcolor'])?></span>
+		<span class="col3"><?=JHtml::_('usersched.colorPicker',$cat['id'],'bg',$cat['bgcolor'])?></span>
 		<span class="col4"><input type="checkbox" name="category_dele[]" value="<?=$cat['id']?>" class="ecdele" /></span>
-		<span class="catsamp" style="color:<?=$cat['txcolor']?>;background-color:<?=$cat['bgcolor']?>"><?=$cat['name']?></span>
+		<span class="catsamp" id="catsamp_<?=$cat['id']?>" style="color:<?=$cat['txcolor']?>;background-color:<?=$cat['bgcolor']?>"><?=$cat['name']?></span>
 	</p>
 	<?php endforeach;?>
 	<!-- <div class="clr">&nbsp;</div> -->
@@ -132,4 +146,19 @@ defined('_JEXEC') or die;
 </form>
 <?php if ($this->show_versions) :?>
 <div id="versionbar" class="userschedver">UserSched <span id="userschedver"><?php echo $this->version ?></span></div>
+<?php else: ?>
+<!-- UserSched <?php echo $this->version ?> -->
 <?php endif; ?>
+
+<?php
+//	$testabs = array('firstGroupOfFields'=>'firstOne','secondGroupOfFields'=>'secondOne');
+?>
+<!-- normal fieldsets -->
+<div class="width-60 fltlft stabber" title="GooGoo">
+<?php
+//	foreach ($testabs as $fgroup => $ftitle) $this->renderFormSection($fgroup,$ftitle);
+?>
+</div>
+<xmp>
+<?php //var_dump($this->jform) ?>
+</xmp>

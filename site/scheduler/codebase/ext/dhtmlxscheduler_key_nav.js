@@ -1,7 +1,14 @@
 /*
-This software is allowed to use under GPL or you need to obtain Commercial or Enterise License
-to use it in non-GPL project. Please contact sales@dhtmlx.com for details
+@license
+dhtmlxScheduler v.4.3.1 
+
+This software is covered by GPL license. You also can obtain Commercial or Enterprise license to use it in non-GPL project - please contact sales@dhtmlx.com. Usage without proper license is prohibited.
+
+(c) Dinamenta, UAB.
 */
-(scheduler._temp_key_scope=function(){function j(b){delete b.rec_type;delete b.rec_pattern;delete b.event_pid;delete b.event_length}var h=!1,i,f=null;scheduler.attachEvent("onBeforeLightbox",function(){return h=!0});scheduler.attachEvent("onAfterLightbox",function(){h=!1;return!0});scheduler.attachEvent("onMouseMove",function(b,a){i=scheduler.getActionData(a).date});dhtmlxEvent(document,_isOpera?"keypress":"keydown",function(b){b=b||event;if(!h){var a=window.scheduler;if(b.keyCode==37||b.keyCode==
-39){b.cancelBubble=!0;var l=a.date.add(a._date,b.keyCode==37?-1:1,a._mode);a.setCurrentView(l);return!0}var g=a._select_id;if(b.ctrlKey&&b.keyCode==67){if(g)a._buffer_id=g,f=!0,a.callEvent("onEventCopied",[a.getEvent(g)]);return!0}if(b.ctrlKey&&b.keyCode==88&&g){f=!1;a._buffer_id=g;var c=a.getEvent(g);a.updateEvent(c.id);a.callEvent("onEventCut",[c])}if(b.ctrlKey&&b.keyCode==86){if(c=a.getEvent(a._buffer_id)){var k=c.end_date-c.start_date;if(f){var e=a._lame_clone(c);j(e);e.id=a.uid();e.start_date=
-new Date(i);e.end_date=new Date(e.start_date.valueOf()+k);a.addEvent(e);a.callEvent("onEventPasted",[f,e,c])}else{var d=a._lame_copy({},c);j(d);d.start_date=new Date(i);d.end_date=new Date(d.start_date.valueOf()+k);var m=a.callEvent("onBeforeEventChanged",[d,b,!1]);if(m)c.start_date=new Date(d.start_date),c.end_date=new Date(d.end_date),a.render_view_data(),a.callEvent("onEventPasted",[f,c,d]),f=!0}}return!0}}})})();
+scheduler._temp_key_scope=function(){function e(e){delete e.rec_type,delete e.rec_pattern,delete e.event_pid,delete e.event_length}scheduler.config.key_nav=!0;var t,a,i=null;scheduler.attachEvent("onMouseMove",function(e,i){t=scheduler.getActionData(i).date,a=scheduler.getActionData(i).section}),scheduler._make_pasted_event=function(i){var n=i.end_date-i.start_date,r=scheduler._lame_copy({},i);if(e(r),r.start_date=new Date(t),r.end_date=new Date(r.start_date.valueOf()+n),a){var l=scheduler._get_section_property();
+
+scheduler.config.multisection?r[l]=i[l]:r[l]=a}return r},scheduler._do_paste=function(e,t,a){scheduler.addEvent(t),scheduler.callEvent("onEventPasted",[e,t,a])},scheduler._is_key_nav_active=function(){return this._is_initialized()&&!this._is_lightbox_open()&&this.config.key_nav?!0:!1},dhtmlxEvent(document,_isOpera?"keypress":"keydown",function(e){if(!scheduler._is_key_nav_active())return!0;if(e=e||event,37==e.keyCode||39==e.keyCode){e.cancelBubble=!0;var t=scheduler.date.add(scheduler._date,37==e.keyCode?-1:1,scheduler._mode);
+
+return scheduler.setCurrentView(t),!0}var a=scheduler._select_id;if(e.ctrlKey&&67==e.keyCode)return a&&(scheduler._buffer_id=a,i=!0,scheduler.callEvent("onEventCopied",[scheduler.getEvent(a)])),!0;if(e.ctrlKey&&88==e.keyCode&&a){i=!1,scheduler._buffer_id=a;var n=scheduler.getEvent(a);scheduler.updateEvent(n.id),scheduler.callEvent("onEventCut",[n])}if(e.ctrlKey&&86==e.keyCode){var n=scheduler.getEvent(scheduler._buffer_id);if(n){var r=scheduler._make_pasted_event(n);if(i)r.id=scheduler.uid(),scheduler._do_paste(i,r,n);
+else{var l=scheduler.callEvent("onBeforeEventChanged",[r,e,!1,n]);l&&(scheduler._do_paste(i,r,n),i=!0)}}return!0}})},scheduler._temp_key_scope();

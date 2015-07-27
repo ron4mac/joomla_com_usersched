@@ -48,17 +48,20 @@ class UserschedModelSkins extends JModelList
 		}
 
 		$params = JComponentHelper::getParams('com_usersched');
+		$udsk = $params->get('default_skin');
+		$gdsk = $params->get('group_default_skin');
+		$sdsk = $params->get('site_default_skin');
 
-		$skins = array();
+		$skins = array(array('name'=>'','isUdef'=>!$udsk,'isGdef'=>!$gdsk,'isSdef'=>!$sdsk));
 		$spath = JPATH_COMPONENT_SITE . '/skins/';
 		if (!file_exists($spath)) return $skins;
 		$folds = JFolder::folders($spath);
 		foreach ($folds as $fold) {
 			$skins[] = array(
 					'name'=>$fold,
-					'isUdef'=>($fold==$params->get('default_skin')),
-					'isGdef'=>($fold==$params->get('group_default_skin')),
-					'isSdef'=>($fold==$params->get('site_default_skin'))
+					'isUdef'=>($fold == $udsk),
+					'isGdef'=>($fold == $gdsk),
+					'isSdef'=>($fold == $sdsk)
 					);
 			$this->_total++;
 		}

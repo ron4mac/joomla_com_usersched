@@ -1,4 +1,5 @@
 <?php
+// License: GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
 
 class schedulerPDF {
 
@@ -57,9 +58,12 @@ class schedulerPDF {
 				$this->orientation = 'P';
 				$this->printWeekAgenda();
 				break;
+			case 'week':
+				$this->orientation = 'L';
+				$this->printDayWeek();
+				break;
 			case 'day':
 			case 'unit':
-			case 'week':
 			default:
 				$this->orientation = 'P';
 				$this->printDayWeek();
@@ -698,6 +702,3 @@ class Sizes {
 	public $todayFontSize = 11;
 
 }
-
-
-?>

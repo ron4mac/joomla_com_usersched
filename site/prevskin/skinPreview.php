@@ -1,7 +1,7 @@
 <?php
 $skin = '';
 $css = '';
-if (isset($_GET['skin'])) {
+if (isset($_GET['skin']) && $_GET['skin']) {
 	$skin = $_GET['skin'];
 	$csp = '../skins/'.$skin;
 	$fls = scandir($csp);
@@ -10,7 +10,7 @@ if (isset($_GET['skin'])) {
 			$css = $csp.'/'.$fl;
 			break;
 		}
-	$css = 'no-valid.css';
+	$css = '../scheduler/codebase/dhtmlxscheduler_'.$skin.'.css';
 	}
 }
 $cssPath = $css ? $css : '../scheduler/codebase/dhtmlxscheduler.css';
@@ -21,6 +21,7 @@ $cssPath = $css ? $css : '../scheduler/codebase/dhtmlxscheduler.css';
 	<title>Skin Preview - <?php echo $skin; ?></title>
 
 	<script src="../scheduler/codebase/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../skins/<?php echo $skin; ?>/skin.js" type="text/javascript" charset="utf-8"></script>
 	<link rel="stylesheet" href="<?php echo $cssPath; ?>" type="text/css" media="screen" title="no title" charset="utf-8">
 	<script src="../scheduler/codebase/ext/dhtmlxscheduler_editors.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../scheduler/codebase/ext/dhtmlxscheduler_minical.js" type="text/javascript" charset="utf-8"></script>
@@ -63,7 +64,6 @@ $cssPath = $css ? $css : '../scheduler/codebase/dhtmlxscheduler.css';
 			];
 
 			scheduler.config.full_day = true;
-			
 
 			scheduler.config.xml_date = "%Y-%m-%d %H:%i";
 			scheduler.init('scheduler_here', new Date(2010, 1, 2), "month");

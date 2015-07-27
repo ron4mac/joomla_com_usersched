@@ -1,0 +1,39 @@
+/* overrides for the sheduler default skin (dhx-terrace) */
+.dhx_cal_date, .dhx_cal_next_button, .dhx_cal_prev_button, .dhx_cal_tab, .dhx_cal_today_button {
+	height: 22px;
+	line-height: 22px;
+}
+.dhx_cal_navline div {
+	top: 22px;
+}
+.dhx_cal_navline .dhx_cal_date {
+	top: 0;
+}
+.dhx_expand_icon {
+	opacity: 0.5;
+}
+
+/* position nav buttons closer to the sides */
+.dhx_cal_tab.first.flt { margin-left: 2px; }
+.dhx_cal_next_button { right: 2px; }
+.dhx_cal_prev_button { right: 49px; }
+.dhx_cal_today_button { right: 105px; }
+
+/* event lines */
+.dhx_cal_event_line {
+	margin-left: 2px;
+	border-radius:1px;
+	padding-left: 5px;
+	font-size: inherit;
+	font-family: inherit;
+	height: 1.3em;
+	line-height: inherit;
+}
+.dhx_cal_event_line_start {
+	border-top-left-radius: 6px;
+	border-bottom-left-radius: 6px;
+}
+.dhx_cal_event_line_end {
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+}

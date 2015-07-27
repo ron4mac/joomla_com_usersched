@@ -1,5 +1,7 @@
 <?php 
 defined('_JEXEC') or die('Restricted access');
+global $isDevel;
+$isDevel = true;
 $data = $this->data;	//echo'<pre>';var_dump($data); //jexit();
 JFactory::getDocument()->addStyleDeclaration($this->categoriesCSS());
 if ($this->params->get('show_page_heading', 1)) {

@@ -85,6 +85,14 @@
 	</fieldset>
 
 	<fieldset name="component">
+	    <field name="standard_skin" type="list" default=""
+	           label="Standard skin:"
+	           description="The standard skin (as default)">
+	      <option value="">-default-</option>
+	      <option value="_flat">Flat</option>
+	      <option value="_glossy">Glossy</option>
+	      <option value="_classic">Classic</option>
+	    </field>
 		<field
 			name="default_skin"
 			type="folderlist"
@@ -117,6 +125,11 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
+		<field
+			name="alert_replyto"
+			type="text"
+			label="COM_USERSCHED_ALERT_REPLYTO_LABEL"
+			description="COM_USERSCHED_ALERT_REPLYTO_DESC" />
 		<field name="version" type="hidden" default="x.x.x" />
 	</fieldset>
 

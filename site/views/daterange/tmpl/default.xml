@@ -23,10 +23,23 @@
 				description="COM_USERSCHED_CALTYPE_DESC"
 				label="COM_USERSCHED_CALTYPE_LABEL"
 			>
-				<option value="2" onclick="show_hide(this.value)">COM_USERSCHED_SITE_CAL</option>
-				<option value="1" onclick="show_hide(this.value)">COM_USERSCHED_GROUP_CAL</option>
-				<option value="0" onclick="show_hide(this.value)">COM_USERSCHED_USER_CAL</option>
+				<option value="2">COM_USERSCHED_SITE_CAL</option>
+				<option value="1">COM_USERSCHED_GROUP_CAL</option>
+				<option value="0">COM_USERSCHED_USER_CAL</option>
 			</field>
+
+			<field name="site_auth" type="usergrouplist"
+				multiple="true"
+				label="Editable by:"
+				description="Select the group(s) who may edit the calendar"
+				showon="cal_type:2"
+			/>
+
+			<field name="group_auth" type="usergrouplist"
+				label="Owning group:"
+				description="Select the group who owns/edits the calendar"
+				showon="cal_type:1"
+			/>
 
 			<field name="relative" type="radio" default="abs"
 				label="Relative/Absolute Date Range"
@@ -37,18 +50,17 @@
 				<option value="strtotime">strtotime</option>
 			</field>
 
-			<field name='relstart' type='tperiod' default="-172800" label='START_RELATIVE_TO_TODAY'  description="JEV_RELSTART_DESC" />
-			<field name='relend' type='tperiod' default="6048000" label='END_RELATIVE_TO_TODAY'  description="JEV_RELEND_DESC" />
+			<field name='relstart' type='tperiod'
+				default="-172800"
+				label='START_RELATIVE_TO_TODAY'
+				description="JEV_RELSTART_DESC"
+			/>
 
-			<field name="site_auth" id="site_auth" type="jsboot" mask="2"
-				multiple="true"
-				label="Editable by:"
-				description="Select the group(s) who may edit the calendar"
-				></field>
-			<field name="group_auth" id="group_auth" type="jsboot" mask="1"
-				label="Owning group:"
-				description="Select the group who owns/edits the calendar"
-				></field>
+			<field name='relend' type='tperiod'
+				default="6048000"
+				label='END_RELATIVE_TO_TODAY'
+				description="JEV_RELEND_DESC"
+			/>
 
 		</fieldset>
 	</fields>

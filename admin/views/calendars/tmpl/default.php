@@ -49,7 +49,7 @@ $canDo = UserSchedHelper::getActions();
 				</td>
 				<td>
 					<?php echo JHtml::_('grid.id', $i, $item['gid']); ?>
-					<!-- <input type="checkbox" class="ssel" name="scheds[]" value="<?php echo $item['uid'] ?>"> -->
+					<!-- <input type="checkbox" class="ssel" name="scheds[]" value="< ?php echo $item['uid'] ? >"> -->
 				</td>
 				<td>
 					<?php echo $item['name']; ?>

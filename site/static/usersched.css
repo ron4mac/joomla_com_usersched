@@ -1,4 +1,5 @@
 /* help calendar survive the onslaught of Joomla! template css */
+/*#dontuse { */
 div.dhx_cal_container {
 	line-height: normal;
 }
@@ -49,9 +50,33 @@ table.dhx_repeat_days tr, table.dhx_repeat_days td {
 	display: inline;
 	font-size: 1em;
 }
+/*}*/
+
+/* floating tabs (terrace flat) */
+.dhx_cal_tab.flt {
+	position: relative;
+	float: left;
+	width: auto;
+	padding-left: 6px;
+	padding-right: 6px;
+	border-right-width: 0;
+}
+.dhx_cal_tab.first.flt {
+	margin-left: 1em;
+	border-bottom-left-radius: 5px;
+	border-top-left-radius: 5px;
+}
+.dhx_cal_tab.last.flt {
+	border-bottom-right-radius: 5px;
+	border-top-right-radius: 5px;
+	border-right-width: 1px;
+}
+
+/*#dontuse { */
 input.dhx_repeat_radio, input.dhx_repeat_checkbox {
 	margin: 0 4px 3px 0 !important;
 }
+
 
 /* for our additions to the calendar */
 img.usched_act {
@@ -149,6 +174,20 @@ div.sched_alrtatr #alertlead_mul {
 .dhx_tooltip_line {
 	height:auto;
 }
+/*}*/
+
+/*
 .dhx_cal_event_line {
-	border-radius:8px;
+	margin-left: 2px;
+	border-radius:5px;
+	padding-left: 5px;
+	font-size: inherit;
+	font-family: inherit;
+	height: 1.3em;
+	line-height: inherit;
+}
+*/
+
+.dhx_cal_qi_tcontent {
+	font-size: 1.5em;
 }

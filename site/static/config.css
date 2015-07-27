@@ -6,7 +6,7 @@
 	margin-right: 1em;
 }
 #configform input[type="text"] {
-	margin-left: 1em;
+/*	margin-left: 1em;*/
 	margin-bottom: 1em;
 }
 #configform input[type="file"] {
@@ -42,6 +42,18 @@
 
 #formtabs {
 	clear: both;
+}
+
+#configform p.subtitl {
+	font-weight: bold;
+	margin-top: 0;
+	line-height: initial;
+}
+
+#configform div.twocol {
+	display: inline-block;
+	width: 45%;
+	vertical-align: top;
 }
 
 /* alertees configuration */
@@ -112,24 +124,27 @@
 }
 .ectable span {
 	float: left;
-	padding: 0 10px;
+/*	padding: 0 10px;*/
 }
+
 .ectable span.col1 {
-	width: 180px;
+	width: 210px;
 }
 .ectable span.col2 {
-	width: 80px;
+	width: 120px;
 }
 .ectable span.col3 {
-	width: 80px;
+	width: 110px;
 }
 .ectable span.col4 {
 	width: 60px;
 	text-align: center;
 }
+
 .ectable span.col4 input {
 	float: none !important;
-	margin: 0 !important;
+/*	margin: 0 !important;*/
+	margin-left: 10px;
 }
 .ectable span .ecname {
 	width: 180px;
@@ -143,10 +158,14 @@
 	width: 80px;
 	margin-left: 0 !important;
 }
-.ectable span .catsamp {
-	width: 80px;
-	margin-left: 0 !important;
+
+.ectable span.catsamp {
+	width: auto;
+	margin-left: 10px;
+	padding: 4px 8px;
+	white-space: nowrap;
 }
+
 .ectable .addicon {
 	margin-left: 10px;
 	width: 16px;

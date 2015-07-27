@@ -121,7 +121,7 @@ class TreeDataItem extends DataItem{
 	function to_xml_start(){
 		if ($this->skip) return "";
 		
-		$str1="<item id='".$this->get_id()."' text='".$this->xmlentities($this->data[$this->config->text[0]["name"]])."' ";
+		$str1="<item id='".$this->xmlentities($this->get_id())."' text='".$this->xmlentities($this->data[$this->config->text[0]["name"]])."' ";
 		if ($this->has_kids()==true) $str1.="child='".$this->has_kids()."' ";
 		if ($this->im0) $str1.="im0='".$this->im0."' ";
 		if ($this->im1) $str1.="im1='".$this->im1."' ";
@@ -151,6 +151,7 @@ require_once("filesystem_item.php");
 **/
 class TreeConnector extends Connector{
 	protected $parent_name = 'id';
+	public $rootId = "0";
 
 	/*! constructor
 		
@@ -180,7 +181,7 @@ class TreeConnector extends Connector{
 		if (isset($_GET[$this->parent_name]))
 			$this->request->set_relation($_GET[$this->parent_name]);
 		else
-			$this->request->set_relation("0");
+			$this->request->set_relation($this->rootId);
 			
 		$this->request->set_limit(0,0); //netralize default reaction on dyn. loading mode
 	}
@@ -198,7 +199,8 @@ class TreeConnector extends Connector{
 	/*! renders self as  xml, ending part
 	*/
 	public function xml_end(){
-		return "</tree>";
+        $this->fill_collections();
+        return $this->extra_output."</tree>";
 	}
 }
 

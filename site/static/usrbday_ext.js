@@ -29,25 +29,23 @@ scheduler.attachEvent("onViewChange", function (new_mode, new_date) {
 	}
 });
 
-function getBdays (yr) {	// Mootools specific JSONP request
+function getBdays (yr) {
 	var currentURL = window.location;
 	var live_site = currentURL.protocol+'//'+currentURL.host+usched_base;
 	if (scheduler.bdayYrs.indexOf(yr)==-1) {
 		scheduler.bdayYrs.push(yr);
-		var request = new Request({
-			url: live_site+'/components/com_usersched/bdayajax.php',
-			data: 'y='+yr,
-			onSuccess: function(data) {
-				//console.log(data);
-				var gevents = JSON.parse(data);	//[];
-				//console.log(gevents);
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(e) {
+			if (this.readyState < 4) { return; }
+			if (this.status !== 200) {
+				console.log(this.statusText || this.status);
+			} else if (this.status === 200) {
+				var gevents = JSON.parse(this.response);	//[];
 				var evs = scheduler.json.parse(gevents);
 				scheduler._process_loading(evs);
-			},
-			onFailure: function(xhr) {
-				console.log(xhr);
-				alert("failed");
 			}
-			}).send();
+		};
+		xhr.open('GET', live_site+'/components/com_usersched/bdayajax.php?y='+yr);
+		xhr.send();
 	}
 }

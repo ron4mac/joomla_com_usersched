@@ -1,4 +1,5 @@
 <?php
+// License: GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
 
 require_once('./tcpdf/tcpdf.php');
 
@@ -35,5 +36,3 @@ class TCPDFExt extends TCPDF {
 	}
 
 }
-
-?>

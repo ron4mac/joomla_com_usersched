@@ -61,7 +61,7 @@ scheduler.__alerts = {
 		},
 		button_click:function(ix, el, sect, cont){
 			if (cont.style.display=='none') {
-				cont.style.display = "block";
+				cont.style.display = "inline-block";
 				el.nextSibling.innerHTML = scheduler.__alerts.locale.alert_hide;
 			} else {
 				cont.style.display = "none";
@@ -71,7 +71,7 @@ scheduler.__alerts = {
 		}
 	};
 
-	sched_setAutoEnd();
+//	sched_setAutoEnd();
 
 //}
 
@@ -93,13 +93,13 @@ function sched_fillAlert(elem,val,evt) {
 //	elem.alertlead_mul.value = evt.alert_lead;
 	if (evt.alert_lead) {
 		var mlead = evt.alert_lead / 60;
-		if (mlead % 10080 == 0) { //weeks
+		if (mlead % 10080 === 0) { //weeks
 			elem.alertlead_mul.value = 4;
 			elem.alertlead_val.value = mlead / 10080;
-		} else if(mlead % 1440 == 0) { //days
+		} else if(mlead % 1440 === 0) { //days
 			elem.alertlead_mul.value = 3;
 			elem.alertlead_val.value = mlead / 1440;
-		} else if(mlead % 60 == 0) { //hours
+		} else if(mlead % 60 === 0) { //hours
 			elem.alertlead_mul.value = 2;
 			elem.alertlead_val.value = mlead / 60;
 		} else { //minutes
@@ -150,7 +150,7 @@ function sched_getAlert(elem,evt) {
 
 	//console.log(elem);console.log(evt);
 }
-
+/*
 function sched_setAutoEnd () {
 	var old_setValue = scheduler.form_blocks.time.set_value;	//console.log(old_setValue.e);
 	scheduler.form_blocks.time.set_value = function(node,value,ev,config){
@@ -184,7 +184,7 @@ function sched_setAutoEnd () {
 			for(i=4; i<8; i++) {
 				s[i].onchange = function(){_sched_update_evtdiff();};
 			}
-		}
+		};
 	if (scheduler.form_blocks.calendar_time) {
 		var oldc_setValue = scheduler.form_blocks.calendar_time.set_value;
 		scheduler.form_blocks.calendar_time.set_value = function(node,val,evt){
@@ -208,6 +208,7 @@ function sched_setAutoEnd () {
 			}
 
 			oldc_setValue.apply(this, arguments);
-		}
+		};
 	}
 }
+*/

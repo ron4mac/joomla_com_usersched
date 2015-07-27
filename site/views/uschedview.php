@@ -4,9 +4,11 @@ defined('_JEXEC') or die;
  * This is a base view class to (hopefully) avoid duplication of code needed by all views
  */
 
-require_once JPATH_COMPONENT.'/helpers/usersched.php';
 jimport('joomla.application.component.helper');
 jimport('rjuserdata.userdata');
+
+require_once JPATH_COMPONENT.'/helpers/usersched.php';
+JLoader::register('JHtmlUsersched', JPATH_COMPONENT . '/helpers/html/usersched.php');
 
 class UserschedView extends JViewLegacy
 {

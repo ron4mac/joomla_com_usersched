@@ -3,7 +3,7 @@ defined('_JEXEC') or die;
 //echo'<xmp>';var_dump($this);echo'</xmp>';jexit();
 if ($this->canCfg) {
 	JHtml::script('components/com_usersched/static/config.js',true);
-	JHtml::script('components/com_usersched/static/color-picker.js');
+//	JHtml::script('components/com_usersched/static/color-picker.js');
 	JHtml::stylesheet('components/com_usersched/static/config.css');
 	$this->config = $this->settings;
 	if ($this->params->get('show_page_heading', 1)) {
@@ -15,3 +15,12 @@ if ($this->canCfg) {
 	echo 'NOT ALLOWED';
 }
 ?>
+<script>
+//jQuery.minicolors.settings.position = 'bottom';
+//jQuery.minicolors.settings.control = 'wheel';
+jQuery(document).ready(function() {
+	tabberAutomatic(tabberOptions);
+//	attachMiniColorPickers();
+	attachColorPickers();
+});
+</script>

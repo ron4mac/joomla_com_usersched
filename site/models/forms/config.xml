@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<fields name="firstGroupOfFields">
+		<fieldset name="myFieldSet" class="twocol">
+			<field
+				type="text"
+				name="myTextField"
+				id="myTextField"
+				label="MY TEXT FIELD LABEL"
+				description="MY TEXT FIELD DESCRIPTION"
+				maxLength="255" />
+			<field
+				type="radio"
+				name="myRadioField"
+				id="myRadioField"
+				label="MY RADIO FIELD LABEL"
+				description="MY RADIO FIELD DESCRIPTION">
+				<option value="0">JYES</option>
+				<option value="1">JNO</option>
+			</field>
+		</fieldset>
+		<fieldset name="section two" class="twocol">
+			<field
+				type="checkbox"
+				name="cb1cb"
+				id="cb1cb"
+				label="MY CHECKBOX FIELD LABEL"
+				description="MY CHECKBOX FIELD DESCRIPTION" />
+		</fieldset>
+	</fields>
+	<fields name="secondGroupOfFields">
+		<fieldset name="section two B">
+			<field
+				type="checkbox"
+				name="cb1cbB"
+				id="cb1cbB"
+				label="MY CHECKBOX FIELD LABEL"
+				description="MY CHECKBOX FIELD DESCRIPTION" />
+		</fieldset>
+	</fields>
+</form>

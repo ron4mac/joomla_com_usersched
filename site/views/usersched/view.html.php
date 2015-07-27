@@ -85,8 +85,9 @@ class UserschedViewUsersched extends UserschedView
 			case 2:		// site
 				$jID = $this->params->get('site_auth');
 				$sauth = $jID;
-				if (!is_array($sauth)) $sauth = array($sauth);
-				if (array_intersect($user->groups, $sauth)) {
+//				if (!is_array($sauth)) $sauth = array($sauth);
+//				if (array_intersect($user->groups, $sauth)) {
+				if ($user->authorise('core.edit')) {
 					$this->canCfg = true;
 				}
 				$caldb = new RJUserData('sched', false, 0, true);

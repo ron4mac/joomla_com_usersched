@@ -57,7 +57,9 @@ class UserSchedModelUserSched extends JModelLegacy
 	'displayed_event_color' => '#ffc5ab',
 	'displayed_event_text_color' => '#7e2727',
 
-	'left_border' => true
+	'left_border' => true,
+
+	'lang_tag' => 'en-GB'
 	);
 
 	function getDefaultConfig ()
@@ -90,6 +92,8 @@ class UserSchedModelUserSched extends JModelLegacy
 			'settings_week_agenda' => false,
 			'settings_year' => false,
 			'settings_map' => false,
+			'settings_ushol' => false,
+			'settings_bday' => false,
 			'settings_defaultmode' => 'month',
 			'settings_skin' => '',
 			'settings_debug' => false,
@@ -112,7 +116,8 @@ class UserSchedModelUserSched extends JModelLegacy
 			'templates_eventtext' => 'return event.text;',
 			'templates_eventheader' => 'return scheduler.templates.hour_scale(start) + " - " + scheduler.templates.hour_scale(end);',
 			'templates_eventbartext>' => 'return "<span title=\'"+event.text+"\'>" + event.text + "</span>";',
-			'templates_username' => false
+			'templates_username' => false,
+			'alert_lang' => 'en-GB'
 			);
 		$cbxs = array(
 			'settings_posts',
@@ -129,6 +134,8 @@ class UserSchedModelUserSched extends JModelLegacy
 			'settings_week_agenda',
 			'settings_year',
 			'settings_map',
+			'settings_ushol',
+			'settings_bday',
 			'settings_debug',
 			'settings_collision',
 			'settings_expand',
@@ -320,7 +327,7 @@ class UserSchedModelUserSched extends JModelLegacy
 				.'; CREATE TABLE `options` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` varchar(255) NOT NULL, `value` text NOT NULL )'
 				.'; CREATE TABLE `categories` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` varchar(255) NOT NULL, `txcolor` varchar(15), `bgcolor` varchar(15) )'
 				.'; CREATE TABLE `alertees` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `email` TEXT, `sms` TEXT )'
-				.'; CREATE TABLE `alerted` ( `eid` INTEGER NOT NULL, `atime` INTEGER NOT NULL )';
+				.'; CREATE TABLE `alerted` ( `eid` INTEGER NOT NULL, `atime` INTEGER NOT NULL, `lead` INTEGER NOT NULL )';
 		$db->createDatabase($sql);
 		$cfg = $db->getDbase()->escape_str($cfg);
 		$q = $db->getDbase()->_insert('options',array('name','value'),array('\'config\'',"'$cfg'"));

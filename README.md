@@ -1,7 +1,7 @@
 joomla-usersched
 ================
 
-A Joomla! 2.x-3.x component based on the DHX (DHTMLX) Scheduler
+A Joomla! 3.x component based on the DHX (DHTMLX) Scheduler
 
 This is a calendar component that uses the Scheduler product from DHX (http://dhtmlx.com/docs/products/dhtmlxScheduler).
 
