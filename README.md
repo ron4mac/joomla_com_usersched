@@ -10,4 +10,4 @@ An added feature is event alerts (SMS/email) sent to configured alertees. _Cron_
 The component uses SQLite3 databases for calendar information, allowing separate calendars for all users, groups, or site-wide.
 
 **Requires** that the *rjuserdata* library is installed in the Joomla! instance (find separately http://github.com/ron4mac/joomla-lib-rjuserdata).
-To download a single, auto-generated package installer for the latest release versions of both com_usersched and lib_rjuserdata, [click here](http://rnpweb.net/git/usersched/packager/).
+To download a single, auto-generated package installer for the latest release versions of both com_usersched and lib_rjuserdata, [click here](http://rjcrans.net/git/com_usersched/packager/).
