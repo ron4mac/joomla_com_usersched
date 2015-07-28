@@ -108,6 +108,10 @@ class UserschedViewConfig extends UserschedView
 
 //		$this->jform = JForm::getInstance('ushcedcfgform', JPATH_COMPONENT.'/models/forms/config.xml');
 
+		JHtml::stylesheet('components/com_usersched/static/config.css');
+		JHtml::_('behavior.colorpicker');	// also initiates jQuery so the next script works okay
+		JHtml::script('components/com_usersched/static/config.js',true);
+
 		$langTag = JFactory::getLanguage()->getTag();
 		if ($caldb->dataExists()) {
 			$this->alertees = $caldb->getTable('alertees','',true); if (!$this->alertees) $this->alertees = array();
@@ -124,9 +128,6 @@ class UserschedViewConfig extends UserschedView
 		} else {
 			$this->alertees = array();
 			$this->categories = array(); 
-			JHtml::script('components/com_usersched/static/config.js',true);
-//			JHtml::script('components/com_usersched/static/color-picker.js');
-			JHtml::stylesheet('components/com_usersched/static/config.css');
 			$this->skinOptions = $this->getSkinOptions();
 			$this->config = UserSchedHelper::$dfltConfig;
 			parent::display($start);

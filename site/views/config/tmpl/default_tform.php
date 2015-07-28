@@ -1,6 +1,5 @@
 <?php
 defined('_JEXEC') or die;
-JHtml::_('behavior.colorpicker');
 ?>
 <form id="configform" method="post" enctype="multipart/form-data" style="margin:0">
 <input type="submit" name="saves" value="<?=JText::_('COM_USERSCHED_CFG_SAVE')?>" onclick="this.form.task.value='setcfg'" />

@@ -309,7 +309,7 @@ if (typeof tabberOptions == 'undefined') {
 }
 
 // Initiatize everything
-//$(document).ready(function() {
-//	tabberAutomatic(tabberOptions);
-//	attachMiniColorPickers();
-//});
+jQuery(document).ready(function() {
+	tabberAutomatic(tabberOptions);
+	attachColorPickers();
+});

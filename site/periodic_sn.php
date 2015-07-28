@@ -32,7 +32,7 @@ function getAlertLang () {
 	$vals = $rslt->fetchArray(SQLITE3_ASSOC)['value'];
 	$rslt->finalize();
 	$opts = unserialize($vals);
-	$tag = $opts['alert_lang'];
+	$tag = $opts['lang_tag'];
 	$alertLang->extractLang($tag);
 }
 

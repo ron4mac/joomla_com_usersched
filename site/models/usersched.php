@@ -117,7 +117,7 @@ class UserSchedModelUserSched extends JModelLegacy
 			'templates_eventheader' => 'return scheduler.templates.hour_scale(start) + " - " + scheduler.templates.hour_scale(end);',
 			'templates_eventbartext>' => 'return "<span title=\'"+event.text+"\'>" + event.text + "</span>";',
 			'templates_username' => false,
-			'alert_lang' => 'en-GB'
+			'lang_tag' => 'en-GB'
 			);
 		$cbxs = array(
 			'settings_posts',

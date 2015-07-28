@@ -2,12 +2,12 @@
 <extension type="component" version="3.2" client="site" method="upgrade">
 	<name>com_usersched</name>
 	<author>Ron Crans</author>
-	<creationDate>July 2015</creationDate>
+	<creationDate>April 2015</creationDate>
 	<copyright>(C) 2015 Ron Crans.</copyright>
 	<license>GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)</license>
 	<authorEmail>ron@rjconline.net</authorEmail>
 	<authorUrl>rjconline.net</authorUrl>
-	<version>0.9.7b</version>
+	<version>0.9.7</version>
 	<description>COM_USERSCHED_XML_DESCRIPTION</description>
 	<scriptfile>script.php</scriptfile>
 	<files folder="site">
@@ -17,9 +17,11 @@
 		<filename>bdayajax.php</filename>
 		<filename>js.php</filename>
 		<filename>cron.php</filename>alertchk.php
-		<filename>alertchk.php</filename>
+	<!--	<filename>alertchk.php</filename> -->
 		<filename>periodic.php</filename>
 		<filename>periodic_sn.php</filename>
+	<!--	<filename>periodic_so.php</filename>
+		<filename>periodic_sonj.php</filename> -->
 		<filename>cronjob.txt</filename>
 		<folder>models</folder>
 		<folder>views</folder>
