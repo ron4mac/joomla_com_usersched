@@ -51,11 +51,7 @@ function attachColorPickers () {
 function attachMiniColorPicker (ix, elm) {
 	var jqe = jQuery(elm);
 	var acid = jqe.data().cid.split('.');
-//	if (ix<0) {
-//		jqe.data().sampelm = samp;
-//	} else {
-		jqe.data().sampelm = document.getElementById('catsamp_'+acid[1]);
-//	}
+	jqe.data().sampelm = document.getElementById('catsamp_'+acid[1]);
 	if (acid[0]=='tx') {
 		jqe.data().minicolorsSettings.change = setCat_tx;
 	} else {
@@ -307,9 +303,3 @@ if (typeof tabberOptions == 'undefined') {
 		tabberAutomaticOnLoad(tabberOptions);
 	}
 }
-
-// Initiatize everything
-jQuery(document).ready(function() {
-	tabberAutomatic(tabberOptions);
-	attachColorPickers();
-});

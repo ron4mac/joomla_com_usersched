@@ -53,11 +53,6 @@ class UserSchedController extends JControllerLegacy
 	//	jexit();
 	}
 
-	function periodic ()
-	{
-		require_once 'periodic.php';
-	}
-
 /*	ajax call from client scheduler js (setup in view default) */
 	function calXML ()
 	{

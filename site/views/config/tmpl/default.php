@@ -12,12 +12,3 @@ if ($this->canCfg) {
 	echo 'NOT ALLOWED';
 }
 ?>
-<script>
-//jQuery.minicolors.settings.position = 'bottom';
-//jQuery.minicolors.settings.control = 'wheel';
-jQuery(document).ready(function() {
-	tabberAutomatic(tabberOptions);
-//	attachMiniColorPickers();
-	attachColorPickers();
-});
-</script>

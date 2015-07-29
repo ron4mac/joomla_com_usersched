@@ -93,8 +93,6 @@ class UserschedViewConfig extends UserschedView
 			case 2:		// site
 				$start = 'sstart';
 				if (!is_array($authids)) $authids = array($authids);
-//				if (array_intersect($this->user->groups,$authids)) {
-//				if (in_array(7, $this->user->groups)) {
 				if ($this->user->authorise('core.create')) {
 					$this->canCfg = true;
 					$this->canSkin = true;
@@ -106,11 +104,11 @@ class UserschedViewConfig extends UserschedView
 				break;
 		}
 
-//		$this->jform = JForm::getInstance('ushcedcfgform', JPATH_COMPONENT.'/models/forms/config.xml');
-
 		JHtml::stylesheet('components/com_usersched/static/config.css');
 		JHtml::_('behavior.colorpicker');	// also initiates jQuery so the next script works okay
-		JHtml::script('components/com_usersched/static/config.js',true);
+		JHtml::script('components/com_usersched/static/config.js'/*,true*/);
+		$script = 'jQuery(document).ready(function() { tabberAutomatic(tabberOptions); attachColorPickers(); });'."\n";
+		JFactory::getDocument()->addScriptDeclaration($script);
 
 		$langTag = JFactory::getLanguage()->getTag();
 		if ($caldb->dataExists()) {
@@ -133,37 +131,6 @@ class UserschedViewConfig extends UserschedView
 			parent::display($start);
 		}
 	}
-
-/*
-	function renderFormSection ($name, $title)
-	{
-		echo '<div class="stabbertab" title="'.$title.'">';
-		// Iterate through the normal form fieldsets and display each one
-		foreach ($this->jform->getFieldsets($name) as $fieldsets => $fieldset) {
-			$fsc = (isset($fieldset->class) && $fieldset->class)?' '.$fieldset->class:'';
-			echo '<fieldset class="cfgform'.$fsc.'">';
-			echo '<legend>'.JText::_($fieldset->name.'_jform_fieldset_label').'</legend>';
-			echo '<dl>';
-			// Iterate through the fields and display them
-			foreach ($this->jform->getFieldset($fieldset->name) as $field) {
-				// If the field is hidden, only use the input
-				if ($field->hidden) {
-					echo $field->input;
-				} elseif ($field->type == 'Checkbox') {
-					echo '<dt>'.$field->input.'</dt>';
-					echo '<dd>'.$field->label.'</dd>';
-				} else {
-					echo '<dt>'.$field->label.'</dt>';
-					echo '<dd'.(($field->type == 'Editor' || $field->type == 'Textarea') ? ' style="clear: both; margin: 0;">' : '>');
-					echo $field->input.'</dd>';
-				}
-			}
-			echo '</dl>';
-			echo '</fieldset>';
-		}
-		echo '</div>';
-	}
-*/
 
 	protected function applyCfg ($cfg)
 	{

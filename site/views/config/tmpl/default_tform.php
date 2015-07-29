@@ -158,6 +158,3 @@ defined('_JEXEC') or die;
 //	foreach ($testabs as $fgroup => $ftitle) $this->renderFormSection($fgroup,$ftitle);
 ?>
 </div>
-<xmp>
-<?php //var_dump($this->jform) ?>
-</xmp>

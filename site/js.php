@@ -6,6 +6,7 @@
 	J - my ext (alerts & auto end date change)
 	H - holidays (google)
 	B - joomla user birthdays
+	M - Mobile device
 */
 	function readitnl ($fp) {
 		readfile($fp);
