@@ -1,7 +1,7 @@
 <?php
 defined('_JEXEC') or die;
  
-jimport('rjuserdata.userdata');
+//jimport('rjuserdata.userdata');
 
 class com_userschedInstallerScript
 {
@@ -20,12 +20,12 @@ class com_userschedInstallerScript
 
 	function preflight ($type, $parent) 
 	{
-		echo 'Checking for RJUserData library - ';
-		if (!class_exists('RJUserData',false)) {
-			echo '<span style="color:red">Fail</span>';
-			JError::raiseWarning(null, 'RJUserData library is required');
-			return false;
-		}
+	//	echo 'Checking for RJUserData library - ';
+	//	if (!class_exists('RJUserData',false)) {
+	//		echo '<span style="color:red">Fail</span>';
+	//		JError::raiseWarning(null, 'RJUserData library is required');
+	//		return false;
+	//	}
 		echo '<span style="color:green">Okay</span>';
 		$this->release = $parent->get('manifest')->version;
 	}
@@ -42,8 +42,8 @@ class com_userschedInstallerScript
 			$params['grp_canalert'] = '0';
 			$params['grp_recurrevt'] = '0';
 			$params['show_versions'] = '1';
+			$this->setParams($params);
 		}
-		$this->setParams($params);
 	}
 
 	private function setParams ($param_array, $replace=false)
@@ -61,7 +61,7 @@ class com_userschedInstallerScript
 			// store the combined new and existing values back as a JSON string
 			$paramsString = json_encode($params);
 			$db->setQuery('UPDATE #__extensions SET params = ' . $db->quote($paramsString) . ' WHERE name = "com_usersched"');
-			$db->query();
+			$db->execute();
 		}
 	}
 }

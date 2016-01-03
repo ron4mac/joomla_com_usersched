@@ -120,37 +120,6 @@ function recursNow (&$evt, $rBeg, $rEnd, $lasto=true) {
 	return true;
 }
 
-/*
-class UschedEvents {
-
-	protected $events = array();
-	protected $db = null, $db3 = null;
-	protected $where = '';
-
-	public function __construct($dbid, $isGrp=false, $where='') {
-		$this->events = array();
-		$this->where = $where;
-		$this->db = new RJUserData('sched', false, $dbid, $isGrp, 'com_usersched');
-		if ($this->db->dataExists()) {
-			// open database read only
-			$this->db->connect(true);
-			// get the base db object
-			$this->db3 = $this->db->getDbase();
-		//	$this->gatherEvents($rBeg, $rEnd);
-		}
-	}
-
-	public function getEvents ($rBeg, $rEnd, $where='', $useLead=true, $useRecur=true)
-	{
-		return $this->events;
-	}
-
-	private function gatherEvents ($rBeg, $rEnd, $useLead=true, $useRecur=true)
-	{
-	}
-
-}
-*/
 
 class R_DateTime extends DateTime {
 	public function __construct($s='now', $z=null, $t=null) {

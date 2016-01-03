@@ -68,15 +68,15 @@ class UserschedViewConfig extends UserschedView
 		$this->canSkin = false;
 		$this->canAlert = false;
 
-		switch ($this->cal_type) {
+		switch ((int)$this->params->get('cal_type')) {
 			case 0:		// user
-				if ($this->user->id <= 0) return;
-				if ($this->user->id != $authids) return;
+			//	var_dump($this->user,$authids);jexit();
+				if ((int)$this->user->get('id') <= 0) {var_dump($this->user);jexit();return;}
+			//	if ($this->user->id != $authids) return;
 				$start = 'start';
 				$this->canCfg = true;
 				$this->canSkin = $this->cOpts->get('user_canskin') || $this->params->get('can_skin');
 				$this->canAlert = $this->cOpts->get('user_canalert') || $this->params->get('can_alert');
-				$caldb = new RJUserData('sched');
 				break;
 			case 1:		// group
 				$start = 'gstart';
@@ -88,7 +88,6 @@ class UserschedViewConfig extends UserschedView
 				} else {
 					$start = 'nope';
 				}
-				$caldb = new RJUserData('sched',false,$authids,true);
 				break;
 			case 2:		// site
 				$start = 'sstart';
@@ -100,8 +99,9 @@ class UserschedViewConfig extends UserschedView
 				} else {
 					$start = 'nope';
 				}
-				$caldb = new RJUserData('sched',false,0,true);
 				break;
+			default:
+				echo'<xmp>';var_dump($this);echo'</xmp>';jexit();
 		}
 
 		JHtml::stylesheet('components/com_usersched/static/config.css');
@@ -110,16 +110,19 @@ class UserschedViewConfig extends UserschedView
 		$script = 'jQuery(document).ready(function() { tabberAutomatic(tabberOptions); attachColorPickers(); });'."\n";
 		JFactory::getDocument()->addScriptDeclaration($script);
 
-		$langTag = JFactory::getLanguage()->getTag();
-		if ($caldb->dataExists()) {
-			$this->alertees = $caldb->getTable('alertees','',true); if (!$this->alertees) $this->alertees = array();
-			$this->categories = $caldb->getTable('categories','',true); if (!$this->categories) $this->categories = array();
-			$cfg = $caldb->getTable('options','name = "config"');
+		//$langTag = JFactory::getLanguage()->getTag();
+		$this->config['lang_tag'] = JFactory::getLanguage()->getTag();
+
+		if (UschedHelper::userDataExists('sched.sql3')) {
+			$m = $this->getModel();
+			$this->alertees = $m->getUdTable('alertees'); if (!$this->alertees) $this->alertees = array();
+			$this->categories = $m->getUdTable('categories'); if (!$this->categories) $this->categories = array();
+			$cfg = $m->getUdTable('options','name = "config"',false);
 			if ($cfg) {
 				$this->settings = unserialize($cfg['value']);
 				$this->applyCfg($cfg['value']);
 				$this->cfgcfg = json_encode($this->config);
-				$this->cfgcfg['lang_tag'] = $langTag;
+				//$this->cfgcfg['lang_tag'] = $langTag;
 				$this->skinOptions = $this->getSkinOptions();
 				parent::display($tpl);
 			}

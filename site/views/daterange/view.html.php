@@ -13,13 +13,12 @@ class UserschedViewDaterange extends UserschedView
 	{
 		$this->message = $this->params->get('message');
 
-		$caldb = parent::getUserDatabase();
-		if (!$caldb) return;
+		$m = $this->getModel();
 
 		JHtml::stylesheet('components/com_usersched/static/upcoming.css');
-		if ($caldb->dataExists()) {
-			//$this->alertees = $caldb->getTable('alertees','',true);
-			$this->categories = $caldb->getTable('categories','',true);
+		if ($m->hasData()) {
+			//$this->alertees = $m->getUdTable('alertees','',true);
+			$this->categories = $m->getUdTable('categories');
 			// if not registered, hide private categories
 			$private = array(-1);
 			if ($this->user->id == 0) {
@@ -31,7 +30,7 @@ class UserschedViewDaterange extends UserschedView
 				}
 				//var_dump($private);
 			}
-			$cfg = $caldb->getTable('options','name = "config"');
+			$cfg = $m->getUdTable('options','name = "config"',false);
 			// get event range
 			$curTime = time();
 			$this->rBeg = $curTime + $this->params->get('relstart');
@@ -40,7 +39,7 @@ class UserschedViewDaterange extends UserschedView
 	//		$fields = 'strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, *';
 			$fields = 'strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, *';
 			$where = 'category NOT IN ('.implode(',',$private).') AND (t_start>'.$this->rBeg.' OR end_date LIKE \'9999%\' OR t_end>'.$this->rBeg.') AND t_start<'.$this->rEnd.' ORDER BY t_start';
-			$evts = $caldb->getTable('events',$where,true,$fields);
+			$evts = $m->getUdTable('events',$where,true,$fields);
 			bugout('[-]'.$where,$evts);
 			foreach ($evts as $k=>$evt) {
 				if ($evt['rec_type']) {

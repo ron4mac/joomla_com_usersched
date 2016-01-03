@@ -19,6 +19,7 @@ class ICalExporter {
 	function getConvertDay($i, $mode=false) {
 		$a = array ("SU","MO","TU","WE","TH","FR","SA");
 		if ($mode) {
+			$i = trim($i);
 			for ($y=0;$y<sizeof($a);$y++){
 				if ($a[$y] == $i) {
 					return $y;
@@ -29,10 +30,11 @@ class ICalExporter {
 		}
 	}
 
-	//returns the appropriate line 
+	//returns the appropriate line
 	function getConvertType($i, $mode=false) {
 		$a = array ('day' => "DAILY",'week' => "WEEKLY",'month' => "MONTHLY",'year' => "YEARLY");
 		if ($mode) {
+			$i = trim($i);
 			foreach ($a as $key => $value) {
 				if ($i == $value) {
 					return $key;
@@ -98,7 +100,7 @@ class ICalExporter {
 	//get date in icalendater format
 	function getStartTimeEvent($event) {
 		$mas = explode("#",$event['rec_type']);
-		$a = explode("_", $mas[0]);		
+		$a = explode("_", $mas[0]);
 		switch($a[0]) {
 			case "day":
 				return $this->getTime($event['start_date']);
@@ -106,7 +108,7 @@ class ICalExporter {
 
 			case "week":
 				$diff = explode(",",$a[4]);
-				if ($diff[0] == 0) { 
+				if ($diff[0] == 0) {
 					$n = 7;
 				} else {
 					$n = $diff[0];
@@ -138,7 +140,7 @@ class ICalExporter {
 
 	function getTime($date) {
 		$mas = explode('-',$date);
-		if ($mas[0] == 9999) { 
+		if ($mas[0] == 9999) {
 			return "99990201T000000";
 		} else {
 			return date("Ymd\THis",strtotime($date));
@@ -202,7 +204,7 @@ class ICalExporter {
 				$str .= "END:VEVENT\n";
 			}
 		}
-		$str .= "END:VCALENDAR";	
+		$str .= "END:VCALENDAR";
 		return $str;
 	}
 
@@ -233,7 +235,7 @@ class ICalExporter {
 		$arr = explode("BEGIN:VEVENT",$str);
 		for ($x=1; $x<sizeof($arr); $x++) {
 			$arr2 = explode("\n", trim($arr[$x]));
-			for ($y=1; $y<sizeof($arr2); $y++) {		
+			for ($y=1; $y<sizeof($arr2); $y++) {
 				$mas = explode(":", trim($arr2[$y]));
 				$mas_ = explode(";", trim($mas[0]));
 				if (isset($mas_[0])){
@@ -255,7 +257,7 @@ class ICalExporter {
 							$rrule_n = explode("=", trim($rrule[$z]));
 							switch($rrule_n[0]) {
 								case "FREQ":
-									$arr_n[$x]['type'] = $this->getConvertType(trim($rrule_n[1]), true);
+									$arr_n[$x]['type'] = $this->getConvertType($rrule_n[1], true);
 									break;
 
 								case "INTERVAL":
@@ -304,7 +306,7 @@ class ICalExporter {
 						}
 						break;
 
-					case "RECURRENCE-ID":	
+					case "RECURRENCE-ID":
 						$arr_n[$x]['rec_id'] = $this->getMySQLDate($mas[1]);
 						break;
 
@@ -389,7 +391,7 @@ class ICalExporter {
 							$arr_n[sizeof($arr_p)+$id]['event_id'] = $arr_p[$i]['event_id'];
 							$arr_n[sizeof($arr_p)+$id]['start_date'] = $arr_p[$i]['exdate'][$ni];
 							$arr_n[sizeof($arr_p)+$id]['end_date'] = date("Y-m-d H:i:s", strtotime($arr_p[$i]['exdate'][$ni])
-								+(strtotime($arr_p[$i]['end_date']) - strtotime($arr_p[$i]['start_date'])));										
+								+(strtotime($arr_p[$i]['end_date']) - strtotime($arr_p[$i]['start_date'])));
 							$arr_n[sizeof($arr_p)+$id]['text'] = "";
 							$arr_n[sizeof($arr_p)+$id]['rec_type'] = "none";
 							$arr_n[sizeof($arr_p)+$id]['event_pid'] = $arr_p[$i]['event_pid'];
@@ -400,7 +402,7 @@ class ICalExporter {
 						$arr_n[sizeof($arr_p)+$id]['event_id'] = $arr_p[$i]['event_id'];
 						$arr_n[sizeof($arr_p)+$id]['start_date'] = $arr_p[$i]['exdate'];
 						$arr_n[sizeof($arr_p)+$id]['end_date'] = date("Y-m-d H:i:s", strtotime($arr_p[$i]['exdate'])
-							+(strtotime($arr_p[$i]['end_date']) - strtotime($arr_p[$i]['start_date'])));										
+							+(strtotime($arr_p[$i]['end_date']) - strtotime($arr_p[$i]['start_date'])));
 						$arr_n[sizeof($arr_p)+$id]['text'] = "";
 						$arr_n[sizeof($arr_p)+$id]['rec_type'] = "none";
 						$arr_n[sizeof($arr_p)+$id]['event_pid'] = $arr_p[$i]['event_pid'];
@@ -432,7 +434,7 @@ class ICalExporter {
 
 				//end_date
 				if (isset($arr_p[$i]['until'])){
-					$arr_n[$i]['end_date'] = $arr_p[$i]['until'];	
+					$arr_n[$i]['end_date'] = $arr_p[$i]['until'];
 				} else {
 					if ($arr_n[$i]['rec_type'] == "") {
 						if (isset($arr_p[$i]['end_date'])) {
@@ -442,7 +444,7 @@ class ICalExporter {
 							$arr_p[$i]['end_date'] = $arr_n[$i]['end_date'];
 						}
 					} else {
-						$arr_n[$i]['end_date'] = "9999-02-01 00:00:00";	
+						$arr_n[$i]['end_date'] = "9999-02-01 00:00:00";
 					}
 				}
 				//text
@@ -450,7 +452,7 @@ class ICalExporter {
 
 				//event_pid
 				$arr_n[$i]['event_pid'] = "0";
-				
+
 				//event_length
 				$arr_n[$i]['event_length'] = strtotime($arr_p[$i]['end_date']) - strtotime($arr_p[$i]['start_date']);
 			}

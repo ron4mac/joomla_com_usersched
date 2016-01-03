@@ -2,10 +2,11 @@
 defined('_JEXEC') or die;
 
 require_once JPATH_COMPONENT.'/helpers/usersched.php';
-jimport('rjuserdata.userdata');
 
 class UserSchedModelUserSched extends JModelLegacy
 {
+	protected $dbinit = false;
+
 	protected $default_config = array(
 	'default_date' => '%j %M %Y',
 	'month_date' => '%F %Y',
@@ -62,17 +63,56 @@ class UserSchedModelUserSched extends JModelLegacy
 	'lang_tag' => 'en-GB'
 	);
 
-	function getDefaultConfig ()
+	public function __construct ($config = array())
+	{
+		if (array_key_exists('dbo',$config)) {
+			parent::__construct($config);
+			return;
+		}
+
+		$dbFile = '/sched.sql3';
+		$udbPath = UschedHelper::userDataPath();
+		if (!file_exists($udbPath.$dbFile)) {
+			$this->dbinit = true;
+			mkdir($udbPath, 0777, true);
+		}
+		
+		$db = JDatabaseDriver::getInstance(array('driver'=>'sqlite','database'=>$udbPath.$dbFile));
+		$db->setDebug(7);
+		$db->connect();
+		$db->getConnection()->sqliteCreateFunction('strtotime', 'strtotime', 1);
+
+		$config['dbo'] = $db;
+		parent::__construct($config);
+
+		if ($this->dbinit) {
+			$this->buildDb($db);
+		}
+	}
+
+	public function getUdTable ($table, $where=false , $all=true, $values='*')
+	{
+		$db = $this->getDbo();
+		$db->setQuery('SELECT '.$values.' FROM ' . $table . ($where ? (' WHERE '.$where) : ''));
+		if ($all) {
+			return $db->loadAssocList();
+		} else {
+			return $db->loadAssoc();
+		}
+		return null;
+	}
+
+	public function getDefaultConfig ()
 	{
 		return $this->default_config;
 	}
 
-	function getConfig ()
+	public function getConfig ()
 	{
 		return $this->default_cfg;
 	}
 
-	function saveConfig ($data)
+	public function saveConfig ($data)
 	{	//echo'<xmp>';var_dump($data);jexit();
 		$blank = array(
 			'settings_width' => '',
@@ -167,7 +207,7 @@ class UserSchedModelUserSched extends JModelLegacy
 			'templates_endhour',
 			'templates_agendatime'
 			);
-//		$params = $this->state->get('parameters.menu');
+
 		foreach ($cbxs as $cbx) {
 			if ($data->get($cbx)) $blank[$cbx] = true;
 		}
@@ -177,25 +217,21 @@ class UserSchedModelUserSched extends JModelLegacy
 		foreach ($ints as $int) {
 			if ($data->get($int)) $blank[$int] = $data->getInt($int);
 		}
-		//echo'<xmp>';var_dump($params,$blank);jexit();
-		$calid = UserSchedHelper::uState('calid');
-		$db = $this->getUserDatabase($calid);
-		if ($db->dataExists()) {
-			$db->getDbase()->db_connect();
-			$q = $db->getDbase()->_update('options',array('value'=>"'".$db->getDbase()->escape_str(serialize($blank))."'"),array('name = "config"'));
-			//echo $q; jexit();
-			$r = $db->getDbase()->execute($q);
-		} else {
-			$this->buildDB($db, serialize($blank));
-		}
 
+		$db = $this->getDbo();
+		$cfg = $db->quote(serialize($blank));
+		if ($this->dbinit) {
+			$db->setQuery('INSERT INTO `options` (`name`,`value`) VALUES ("config",'.$cfg.')');
+		} else {
+			$db->setQuery('UPDATE `options` SET `value` = '.$cfg.' WHERE `name`="config"');
+		}
+		$db->execute();
 		$this->manageAlertees($data,$db);
 		$this->manageCategories($data,$db);
 	}
 
-	function importical ()
+	public function importical ()
 	{
-//		$params = $this->state->get('parameters.menu');
 		$calid = UserSchedHelper::uState('calid');
 		$db = $this->getUserDatabase($calid);
 		if (!$db->dataExists()) return false;
@@ -209,11 +245,10 @@ class UserSchedModelUserSched extends JModelLegacy
 		return true;
 	}
 
-	function export2ical ()
+	public function export2ical ()
 	{
 		require_once JPATH_COMPONENT . '/helpers/ical.php';
 		$exporter = new ICalExporter();
-//		$params = $this->state->get('parameters.menu');
 		$calid = UserSchedHelper::uState('calid');
 		$db = $this->getUserDatabase($calid);
 		if ($db->dataExists()) {
@@ -225,24 +260,6 @@ class UserSchedModelUserSched extends JModelLegacy
 		}
 	}
 
-	private function getUserDatabase ($calid)
-	{
-		list($calType,$ids) = explode(':',$calid);
-		$db = null;
-		switch ($calType) {
-			case 0:
-				$db = new RJUserData('sched');
-				break;
-			case 1:
-				$db = new RJUserData('sched',false,$ids,true);
-				break;
-			case 2:
-				$db = new RJUserData('sched',false,0,true);
-				break;
-		}
-		return $db;
-	}
-
 	private function manageAlertees ($data, $db)
 	{
 		// delete/update/add alertees
@@ -250,10 +267,9 @@ class UserSchedModelUserSched extends JModelLegacy
 		if (!count($aids)) return;
 		//echo'<xmp>';var_dump($aids);jexit();
 		//- for each dele
-		foreach ($data->get('alertee_dele',null,'array') as $did) {
+		foreach ($data->get('alertee_dele',array(),'array') as $did) {
 			//-- remove from db
-			$q = 'DELETE FROM alertees WHERE id = '.$did;
-			$r = $db->getDbase()->execute($q);
+			$db->setQuery('DELETE FROM alertees WHERE id = '.$did)->execute();
 			//-- remove from id list
 			if (($key = array_search($did, $aids)) !== false) { unset($aids[$key]); };
 			//echo'<xmp>';var_dump($q,$aids);jexit();
@@ -264,13 +280,19 @@ class UserSchedModelUserSched extends JModelLegacy
 			$emails = $data->get('alertee_email',null,'array');
 			$smss = $data->get('alertee_sms',null,'array');
 			foreach ($aids as $k=>$id) {
+				$q = $db->getQuery(true);
 				if ($id<0) {	//-- add if neg id
-					$q = $db->getDbase()->_insert('alertees',array('name','email','sms'),array("'{$names[$k]}'","'{$emails[$k]}'","'{$smss[$k]}'"));
-					$r = $db->getDbase()->execute($q);
+					$q->insert('alertees')
+						->columns(array('name','email','sms'))
+						->values($db->quote($names[$k]).','.$db->quote($emails[$k]).','.$db->quote($smss[$k]));
 				} else {	//-- upddate if pos id
-					$q = $db->getDbase()->_update('alertees',array('name'=>"'{$names[$k]}'",'email'=>"'{$emails[$k]}'",'sms'=>"'{$smss[$k]}'"),array('id = '.$id));
-					$r = $db->getDbase()->execute($q);
+					$q->update('alertees')
+						->set('name='.$db->quote($names[$k]))
+						->set('email='.$db->quote($emails[$k]))
+						->set('sms='.$db->quote($smss[$k]))
+						->where('id='.$id);
 				}
+				$db->setQuery($q)->execute();
 			}
 		}
 	}
@@ -282,10 +304,9 @@ class UserSchedModelUserSched extends JModelLegacy
 		if (!count($cids)) return;
 		//echo'<xmp>';var_dump($cids);jexit();
 		//- for each dele
-		foreach ($data->get('category_dele',null,'array') as $did) {
+		foreach ($data->get('category_dele',array(),'array') as $did) {
 			//-- remove from db
-			$q = 'DELETE FROM categories WHERE id = '.$did;
-			$r = $db->getDbase()->execute($q);
+			$db->setQuery('DELETE FROM categories WHERE id = '.$did)->execute();
 			//-- remove from id list
 			if (($key = array_search($did, $cids)) !== false) { unset($cids[$key]); };
 			//echo'<xmp>';var_dump($q,$cids);jexit();
@@ -296,43 +317,34 @@ class UserSchedModelUserSched extends JModelLegacy
 			$tcolrs = $data->get('category_txcolor',null,'array');
 			$bcolrs = $data->get('category_bgcolor',null,'array');
 			foreach ($cids as $k=>$id) {
+				$q = $db->getQuery(true);
 				if ($id<0) {	//-- add if neg id
-					$q = $db->getDbase()->_insert('categories',array('name','txcolor','bgcolor'),array("'{$names[$k]}'","'{$tcolrs[$k]}'","'{$bcolrs[$k]}'"));
-					$r = $db->getDbase()->execute($q);
+					$q->insert('categories')
+						->columns(array('name','txcolor','bgcolor'))
+						->values($db->quote($names[$k]).','.$db->quote($tcolrs[$k]).','.$db->quote($bcolrs[$k]));
 				} else {	//-- upddate if pos id
-					$q = $db->getDbase()->_update('categories',array('name'=>"'{$names[$k]}'",'txcolor'=>"'{$tcolrs[$k]}'",'bgcolor'=>"'{$bcolrs[$k]}'"),array('id = '.$id));
-					$r = $db->getDbase()->execute($q);
+					$q->update('categories')
+						->set('name='.$db->quote($names[$k]))
+						->set('txcolor='.$db->quote($tcolrs[$k]))
+						->set('bgcolor='.$db->quote($bcolrs[$k]))
+						->where('id='.$id);
 				}
+				$db->setQuery($q)->execute();
 			}
 		}
 	}
 
-	private function buildDB ($db, $cfg)
+	private function buildDB ($db, $cfg=false)
 	{
-		$sql = 'CREATE TABLE `events` (
-				`event_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-				`start_date` datetime NOT NULL,
-				`end_date` datetime NOT NULL,
-				`text` varchar(255) NOT NULL,
-				`category` int(11),
-				`rec_type` varchar(64) NOT NULL,
-				`event_pid` int(11) NOT NULL,
-				`event_length` int(11) NOT NULL,
-				`user` int(11) NOT NULL,
-				`lat` float(10,6) DEFAULT 0,
-				`lng` float(10,6) DEFAULT 0,
-				`alert_lead` INTEGER,
-				`alert_user` BLOB,
-				`alert_meth` TEXT)'
-				.'; CREATE TABLE `options` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` varchar(255) NOT NULL, `value` text NOT NULL )'
-				.'; CREATE TABLE `categories` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` varchar(255) NOT NULL, `txcolor` varchar(15), `bgcolor` varchar(15) )'
-				.'; CREATE TABLE `alertees` ( `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `email` TEXT, `sms` TEXT )'
-				.'; CREATE TABLE `alerted` ( `eid` INTEGER NOT NULL, `atime` INTEGER NOT NULL, `lead` INTEGER NOT NULL )';
-		$db->createDatabase($sql);
-		$cfg = $db->getDbase()->escape_str($cfg);
-		$q = $db->getDbase()->_insert('options',array('name','value'),array('\'config\'',"'$cfg'"));
-		//echo $q; jexit();
-		$r = $db->getDbase()->execute($q);
+		$sql = explode(';',file_get_contents(JPATH_COMPONENT_ADMINISTRATOR.'/models/sched.sql'));
+		$db = $this->getDbo();
+		foreach ($sql as $x) {
+			$db->setQuery($x)->execute();
+		}
+		if ($cfg) {
+			$cfg = $db->quote($cfg);
+			$db->setQuery('INSERT INTO options (`name`,`value`) VALUES ("config",'.$cfg.')')->execute();
+		}
 	}
 
 	private function importIcalendar ($data, $db)

@@ -1,6 +1,8 @@
 <?php
 defined('_JEXEC') or die;
 
+//echo'<xmp>';var_dump($this);echo'</xmp>';jexit();
+
 // determine needed CSS files and add them to head
 $is_terrace = true;
 $skin = $this->params->get('default_skin');
@@ -80,7 +82,7 @@ if ($this->params->get('show_page_heading', 1)) {
 ?>
 <div id="scheduler_here" class="dhx_cal_container" style='width:auto; height:800px;'>
 <?php if ($this->canCfg) :?>
-	<img src="components/com_usersched/static/cfg16-4.png" title="Configure calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="window.location='<?php echo JRoute::_('index.php?option=com_usersched&view=config', false); ?>'" />
+	<img src="components/com_usersched/static/cfg16-4.png" title="Configure calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="window.location='<?php echo JRoute::_('index.php?option=com_usersched&task=doConfig', false); ?>'" />
 <?php endif; ?>
 	<img src="components/com_usersched/static/printer-2.png" title="Print calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="scheduler.toPDF('<?=JURI::base()?>components/com_usersched/pdf/generate.php','fullcolor')" />
 	<div class="dhx_cal_navline">

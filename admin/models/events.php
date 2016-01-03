@@ -3,7 +3,7 @@ defined('_JEXEC') or die;
 
 jimport('joomla.filesystem.folder');
 jimport('joomla.application.component.modellist');
-jimport('rjuserdata.userdata');
+//jimport('rjuserdata.userdata');
 
 class UserSchedModelEvents extends JModelList
 {
@@ -11,18 +11,25 @@ class UserSchedModelEvents extends JModelList
 
 	public function __construct($config = array())
 	{
+		$dbFile = '/sched.sql3';
+		$udbPath = JPATH_ROOT.'/'.UserSchedHelper::getDbasePath($config['uid'], $config['isgrp']).$dbFile;		//var_dump($udbPath);jexit();
+		$db = JDatabaseDriver::getInstance(array('driver'=>'sqlite','database'=>$udbPath));
+		$db->connect();
+		$db->getConnection()->sqliteCreateFunction('strtotime', 'strtotime', 1);
+		$config['dbo'] = $db;
 		$config['filter_fields'] = array('startdate','category','rectype');
 		parent::__construct($config);
 	}
 
 	public function deleteEvents ($eids, $uid, $isGrp)
 	{
-		$events = array();
-		$db = new RJUserData('sched', false, $uid, $isGrp);
-		$db3 = $db->getDbase();
-		$db3->db_connect(false);
+//		$db = new $$RJUserData('sched', false, $uid, $isGrp);
+//		$db3 = $db->getDbase();
+//		$db3->db_connect(false);
+		$db3 = parent::getDBO();
 		foreach ($eids as $id) {
-			$db3->execute("DELETE FROM events WHERE event_id = $id");
+			$db3->setQuery("DELETE FROM events WHERE event_id = $id");
+			$db3->execute();
 		}
 	}
 
@@ -36,8 +43,8 @@ class UserSchedModelEvents extends JModelList
 			return $this->cache[$store];
 		}
 
-		$events = array();
-		$db = new RJUserData('sched', false, $this->getState('usched_uid'), $this->getState('usched_isgrp'));
+//		$events = array();
+/*		$db = new $$RJUserData('sched', false, $this->getState('usched_uid'), $this->getState('usched_isgrp'));
 		//$events = $db->getTable('events','',true);
 		//SELECT * FROM  events LEFT OUTER JOIN categories ON events.category = categories.id
 		$db3 = $db->getDbase();
@@ -46,6 +53,11 @@ class UserSchedModelEvents extends JModelList
 						while ($row = $rslt->fetchArray(SQLITE3_ASSOC))
 							$events[] = $row;
 				}
+*/
+		$db = parent::getDBO();
+		$db->setQuery('SELECT e.*,c.name AS catname FROM events AS e LEFT OUTER JOIN categories AS c ON e.category = c.id');
+		$events = $db->loadAssocList();		//var_dump($events);jexit();
+
 		$this->_total = count($events);
 
 		$start = $this->getState('list.start');

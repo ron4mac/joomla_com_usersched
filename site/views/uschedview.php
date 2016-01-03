@@ -5,9 +5,9 @@ defined('_JEXEC') or die;
  */
 
 jimport('joomla.application.component.helper');
-jimport('rjuserdata.userdata');
 
-require_once JPATH_COMPONENT.'/helpers/usersched.php';
+//require_once JPATH_COMPONENT.'/helpers/usersched.php';
+JLoader::register('UserSchedHelper', JPATH_COMPONENT . '/helpers/usersched.php');
 JLoader::register('JHtmlUsersched', JPATH_COMPONENT . '/helpers/html/usersched.php');
 
 class UserschedView extends JViewLegacy
@@ -26,49 +26,12 @@ class UserschedView extends JViewLegacy
 		// mainline a few of them
 		$this->show_versions = $this->cOpts->get('show_versions', true);
 		$this->version = $this->cOpts->get('version', 'n.n.n');
-		// and get other generally need info
+		// and get other generally needed info
 		$this->user = JFactory::getUser();
 		$calid = UserSchedHelper::uState('calid');
-		list($this->cal_type, $this->auth) = explode(':',$calid?$calid:'-1:');
+	//	list($this->cal_type, $this->auth) = explode(':',$calid?$calid:'-1:');
 		// get the calendar instance params
 		$this->params = JFactory::getApplication()->getParams();
-	}
-
-	public function display ($tpl=null)
-	{
-		$app = JFactory::getApplication();
-
-		// setup the page heading for each view
-		// because the application sets a default page title,
-		// we need to get it from the menu item itself
-		$menu = $app->getMenu()->getActive();
-		if ($menu) {
-			$this->params->def('page_heading', $this->params->get('page_title', $menu->title));
-		} else {
-			$this->params->def('page_heading', $this->params->get('page_title'));
-		}
-
-		parent::display($tpl);
-	}
-
-	protected function getUserDatabase ()
-	{
-		switch ($this->cal_type) {
-			case 0:		// user
-				$uid = $this->user->id;
-				if ($uid <= 0) return false;
-				return new RJUserData('sched');
-				break;
-			case 1:		// group
-				$gid = $this->params->get('group_auth');
-				return new RJUserData('sched',false,$gid,true);
-				break;
-			case 2:		// site
-				$aid = $this->params->get('site_auth');
-				return new RJUserData('sched',false,0,true);
-				break;
-		}
-		return false;
 	}
 
 }

@@ -157,7 +157,7 @@ class USchedAcheck {
 			$body = sprintf(JText::_('COM_USERSCHED_ALERT_BLURB'), $this->config->sitename, date('D j F Y g:ia'), $lb, $surl, $lb);
 			$body .= $evtTime . $lbb;
 			$body .= $evt['text'];
-			$this->sendAlert('email', 'Calendar Alert', $body, $ausrs);
+			$this->sendAlert('email', 'Re: Calendar Alert', $body, $ausrs);
 		}
 		if ($evt['alert_meth'] & 2) {	//SMS
 			$splt = explode($lb,$evt['text'],2);

@@ -25,9 +25,9 @@ class UserschedModelUsersched extends JModelList
 			return $this->cache[$store];
 		}
 
-		jimport('rjuserdata.userdata');
+//		jimport('rjuserdata.userdata');
 		$scheds = array();
-		$folds = RJUserDbs::getDbPaths('u','sched');
+		$folds = UschedHelper::getDbPaths('u');	//RJUserDbs::getDbPaths('u','sched');
 		foreach ($folds as $fold) {
 			$userid = (int)substr($fold,1);
 			$user = JUser::getInstance($userid);

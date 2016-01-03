@@ -62,55 +62,39 @@ class UserschedViewUsersched extends UserschedView
 
 	function display ($tpl=null)
 	{
-		$this->cal_type = $this->params->get('cal_type');
 		$this->canCfg = false;
-		$user = JFactory::getUser();
-
-		switch ($this->cal_type) {
-			case 0:		// user
-				if ($user->id <= 0) return;
-				$jID = array($user->id);
+		list($cal_type, $jID) = UschedHelper::getInstanceID(true);
+	//	$jID = explode(',',$jID);
+		switch ($cal_type) {
+			case 0:
 				$this->canCfg = true;
-				$caldb = new RJUserData('sched');
 				break;
-			case 1:		// group
-				$jID = $this->params->get('group_auth');
-				$gauth = $jID;
-				if (!is_array($gauth)) $gauth = array($gauth);
-				if (array_intersect($user->groups, $gauth)) {
+			case 1:
+				if (array_intersect($this->user->groups, $jID)) {
 					$this->canCfg = true;
 				}
-				$caldb = new RJUserData('sched', false, $jID, true);
 				break;
-			case 2:		// site
-				$jID = $this->params->get('site_auth');
-				$sauth = $jID;
-//				if (!is_array($sauth)) $sauth = array($sauth);
-//				if (array_intersect($user->groups, $sauth)) {
-				if ($user->authorise('core.edit')) {
+			case 2:
+				if ($this->user->authorise('core.edit')) {
 					$this->canCfg = true;
 				}
-				$caldb = new RJUserData('sched', false, 0, true);
 				break;
 		}
 
 		// store the caltype and user in the session
 		if (!is_array($jID)) $jID = array($jID);
 		//$this->state('calid', true, $this->cal_type.':'.implode(',', $jID));
-		UserSchedHelper::uState('calid', true, $this->cal_type.':'.implode(',', $jID));
+		UserSchedHelper::uState('calid', true, $this->params->get('cal_type').':'.implode(',', $jID));
 
-		if ($caldb->dataExists()) {
-			$this->alertees = $caldb->getTable('alertees','',true); $this->alertees = $this->alertees ?: array();	//if (!$this->alertees) $this->alertees = array();
-			$this->categories = $caldb->getTable('categories','',true); $this->categories = $this->categories ?: array();	//if (!$this->categories) $this->categories = array();
-			$cfg = $caldb->getTable('options','name = "config"');
-			if ($cfg) {
-				$this->settings = unserialize($cfg['value']);
-				$this->applyCfg($cfg['value']);
-				$this->cfgcfg = json_encode($this->config);
-				parent::display($tpl);
-			}
-		} else {
-			JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_usersched&view=config', false)); 
+		$m = $this->getModel();
+		$this->alertees = $m->getUdTable('alertees'); $this->alertees = $this->alertees ?: array();	//if (!$this->alertees) $this->alertees = array();
+		$this->categories = $m->getUdTable('categories'); $this->categories = $this->categories ?: array();	//if (!$this->categories) $this->categories = array();
+		$cfg = $m->getUdTable('options','name = "config"',false);
+		if ($cfg) {
+			$this->settings = unserialize($cfg['value']);
+			$this->applyCfg($cfg['value']);
+			$this->cfgcfg = json_encode($this->config);
+			parent::display($tpl);
 		}
 	}
 

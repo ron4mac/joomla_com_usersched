@@ -1,6 +1,8 @@
 <?php
 defined('_JEXEC') or die;
 
+JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched.php');
+
 class UserSchedController extends JControllerLegacy
 {
 	protected $userid;
@@ -12,13 +14,24 @@ class UserSchedController extends JControllerLegacy
 		$this->userid = JFactory::getUser()->id;
 	}
 
+	public function display ($cachable = false, $urlparams = false)
+	{
+		$inv = $this->input->get('view');
+		if ($inv == 'usersched' && $this->userid && !file_exists(UschedHelper::userDataPath().'/sched.sql3')) {
+			$this->input->set('view', 'config');
+		}
+		if (!$inv) $this->input->set('view', 'none');
+		return parent::display($cachable, $urlparams);
+	}
+
 	function doConfig ()
 	{
 		$calid = $this->input->getBase64('calid');
-		$this->input->set('view','config');
 		$m = $this->getModel();
 		$m->setState('calid', base64_decode($calid));
-		$this->display();
+		$view = $this->getView('config','html');
+		$view->setModel($m, true);
+		$view->display();
 	}
 
 	function setcfg ()
@@ -26,7 +39,7 @@ class UserSchedController extends JControllerLegacy
 		JSession::checkToken();
 		$m = $this->getModel();
 		$m->saveConfig($this->input->post);
-		$this->setRedirect(JRoute::_('index.php?option=com_usersched', false), 'Configuration saved');
+		$this->setRedirect(JRoute::_('index.php?option=com_usersched', false), JText::_('COM_USERSCHED_CFG_SAVED'));
 	}
 
 	function impical ()
@@ -65,25 +78,11 @@ class UserSchedController extends JControllerLegacy
 			JLog::add($l, JLog::INFO, 'usersched');
 		}
 
-		$dbtype = "SQLite3";
-		list($caltyp,$jid) = explode(':',base64_decode($this->input->get('calid')));
-		switch ($caltyp) {
-			case 0:
-				//$usrid = JFactory::getUser()->get('id');
-				$dbpath = JPATH_SITE.'/userstor/@'.$this->userid.'/com_usersched/sched.sql3';
-				break;
-			case 1:
-				$dbpath = JPATH_SITE.'/userstor/_'.$jid.'/com_usersched/sched.sql3';
-				break;
-			case 2:
-				$dbpath = JPATH_SITE.'/userstor/_0/com_usersched/sched.sql3';
-				break;
-		}
-		//$res = new SQLite3(dirname(__FILE__)."/database.sqlite");
+		$dbpath = UschedHelper::userDataPath().'/sched.sql3';
 		$res = new SQLite3($dbpath);
 
-		$this->scheduler = new schedulerConnector($res, $dbtype);
-		if (defined('RJC_DEV')) $this->scheduler->enable_log(JPATH_SITE.'/userstor/userschedconnlog.txt');
+		$this->scheduler = new schedulerConnector($res, 'SQLite3');
+		if (defined('RJC_DEV')) $this->scheduler->enable_log(JPATH_SITE.'/tmp/userschedconnlog.txt');
 		$this->scheduler->event->attach('beforeProcessing',array($this,'delete_related'));
 		$this->scheduler->event->attach('afterProcessing',array($this,'insert_related'));
 		$this->scheduler->event->attach("beforeProcessing",array($this, "set_event_user"));

@@ -121,4 +121,18 @@ class UserSchedHelper
 		return $title;
 	}
 
+	public static function getDbasePath ($uid, $isgrp)
+	{
+		$cmp = JApplicationHelper::getComponentName();
+
+		$dispatcher = JDispatcher::getInstance();
+		$results = $dispatcher->trigger('onRjuserDatapath', null);
+		$sdp = isset($results[0]) ? trim($results[0]) : '';
+		if (!$sdp) $sdp = 'userstor';
+
+		$pfx = $isgrp ? '_' : '@';
+
+		return $sdp.'/'.$pfx.$uid.'/'.$cmp;
+	}
+
 }
