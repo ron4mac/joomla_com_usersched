@@ -3,7 +3,8 @@
 // Set flag that this is a parent file
 define('_JEXEC', 1);
 // establish the site base path
-define('JPATH_BASE', dirname(__FILE__).'/../..' );
+$jpb = dirname($_SERVER['SCRIPT_FILENAME'], 3);
+define('JPATH_BASE', $jpb);
 
 // fire up the Joomla engine
 require_once (JPATH_BASE.'/includes/defines.php');
@@ -20,26 +21,26 @@ $db = JFactory::getDbo();
 // set groups to just get registered users
 $groups = array(2);
 // set a where clause for appropriate filtering
-$userGroupWhereStatement = "u.block=0 AND u.id IN (SELECT ugm.user_id FROM #__user_usergroup_map ugm WHERE ";
+$userGroupWhereStatement = 'u.block=0 AND u.id IN (SELECT ugm.user_id FROM #__user_usergroup_map ugm WHERE ';
 $hasGroups = false;
 if ($groups) {
 	foreach ($groups as $value) {
-		if ($value != "") {
+		if ($value != '') {
 			if ($hasGroups == false) {
-				$userGroupWhereStatement .= "ugm.group_id=" . $value;
+				$userGroupWhereStatement .= 'ugm.group_id=' . $value;
 				$hasGroups = true;
 			} else {
-				$userGroupWhereStatement .= " OR ugm.group_id=" . $value;
+				$userGroupWhereStatement .= ' OR ugm.group_id=' . $value;
 			}
 		}
 	}
 }
 $userGroupWhereStatement .= ")";
 // create the query
-$query = "SELECT u.name, u.block, (SELECT w.profile_value FROM #__user_profiles w WHERE w.user_id=u.id AND w.profile_key='profile.dob') AS dob FROM #__users u";
+$query = 'SELECT u.name, u.block, (SELECT w.profile_value FROM #__user_profiles w WHERE w.user_id=u.id AND w.profile_key=\'profile.dob\') AS dob FROM #__users u';
 // add any filtering
 if ($hasGroups) {
-	$query .= " WHERE " . $userGroupWhereStatement;
+	$query .= ' WHERE ' . $userGroupWhereStatement;
 }
 // fire the query to get user birthdays
 $db->setQuery( $query );

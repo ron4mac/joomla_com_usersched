@@ -24,7 +24,7 @@ class UserSchedController extends JControllerLegacy
 		return parent::display($cachable, $urlparams);
 	}
 
-	function doConfig ()
+	public function doConfig ()
 	{
 		$calid = $this->input->getBase64('calid');
 		$m = $this->getModel();
@@ -34,7 +34,7 @@ class UserSchedController extends JControllerLegacy
 		$view->display();
 	}
 
-	function setcfg ()
+	public function setcfg ()
 	{
 		JSession::checkToken();
 		$m = $this->getModel();
@@ -42,7 +42,7 @@ class UserSchedController extends JControllerLegacy
 		$this->setRedirect(JRoute::_('index.php?option=com_usersched', false), JText::_('COM_USERSCHED_CFG_SAVED'));
 	}
 
-	function impical ()
+	public function impical ()
 	{
 		JSession::checkToken();
 		$m = &$this->getModel();
@@ -58,7 +58,7 @@ class UserSchedController extends JControllerLegacy
 		$this->setRedirect(JRoute::_('index.php?option=com_usersched', false));
 	}
 
-	function exp2ical ()
+	public function exp2ical ()
 	{
 		JSession::checkToken();
 		$m = $this->getModel();
@@ -67,7 +67,7 @@ class UserSchedController extends JControllerLegacy
 	}
 
 /*	ajax call from client scheduler js (setup in view default) */
-	function calXML ()
+	public function calXML ()
 	{
 		require_once('scheduler/codebase/connector/scheduler_connector.php');
 		require_once('scheduler/codebase/connector/db_sqlite3.php');
@@ -83,15 +83,15 @@ class UserSchedController extends JControllerLegacy
 
 		$this->scheduler = new schedulerConnector($res, 'SQLite3');
 		if (defined('RJC_DEV')) $this->scheduler->enable_log(JPATH_SITE.'/tmp/userschedconnlog.txt');
-		$this->scheduler->event->attach('beforeProcessing',array($this,'delete_related'));
-		$this->scheduler->event->attach('afterProcessing',array($this,'insert_related'));
-		$this->scheduler->event->attach("beforeProcessing",array($this, "set_event_user"));
-		$this->scheduler->event->attach("afterProcessing",array($this, "after_set_event_user"));
+		$this->scheduler->event->attach('beforeProcessing', array($this,'delete_related'));
+		$this->scheduler->event->attach('afterProcessing', array($this,'insert_related'));
+		$this->scheduler->event->attach('beforeProcessing', array($this,'set_event_user'));
+		$this->scheduler->event->attach('afterProcessing', array($this,'after_set_event_user'));
 		$this->scheduler->render_table('events','event_id','start_date,end_date,text,category,rec_type,event_pid,event_length,user,alert_lead,alert_user,alert_meth');
 	}
 
 /*	below are callbacks for the scheduler connector */
-	function delete_related ($action)
+	public function delete_related ($action)
 	{
 		$status = $action->get_status();
 		$type =$action->get_value('rec_type');
@@ -106,7 +106,7 @@ class UserSchedController extends JControllerLegacy
 		}
 	}
 
-	function insert_related ($action)
+	public function insert_related ($action)
 	{
 		$status = $action->get_status();
 		$type = $action->get_value('rec_type');
@@ -115,14 +115,14 @@ class UserSchedController extends JControllerLegacy
 			$action->set_status('deleted');
 	}
 
-	function set_event_user ($action)
+	public function set_event_user ($action)
 	{
 		//if ($this->settings['templates_username'] == 'true') $action->remove_field('1');
 		$status = $action->get_status();
-		if ($status == "inserted") {
+		if ($status == 'inserted') {
 			$action->set_value("user", $this->userid);
 		} else {
-			if ($this->settings["privatemode"] == "ext") {
+			if ($this->settings['privatemode'] == 'ext') {
 				$user = $action->get_value('user');
 				if ($user != $this->userid) {
 					$action->error();
@@ -137,9 +137,9 @@ class UserSchedController extends JControllerLegacy
 		}
 	}
 
-	function after_set_event_user ($action)
+	public function after_set_event_user ($action)
 	{
-		$action->set_response_attribute("user", $this->userid);
+		$action->set_response_attribute('user', $this->userid);
 	}
 
 }

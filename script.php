@@ -1,8 +1,6 @@
 <?php
 defined('_JEXEC') or die;
  
-//jimport('rjuserdata.userdata');
-
 class com_userschedInstallerScript
 {
 	function install ($parent) 
@@ -20,12 +18,6 @@ class com_userschedInstallerScript
 
 	function preflight ($type, $parent) 
 	{
-	//	echo 'Checking for RJUserData library - ';
-	//	if (!class_exists('RJUserData',false)) {
-	//		echo '<span style="color:red">Fail</span>';
-	//		JError::raiseWarning(null, 'RJUserData library is required');
-	//		return false;
-	//	}
 		echo '<span style="color:green">Okay</span>';
 		$this->release = $parent->get('manifest')->version;
 	}
