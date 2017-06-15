@@ -36,5 +36,5 @@ CREATE TABLE `alerted` (
 	`eid` INTEGER NOT NULL,
 	`atime` INTEGER NOT NULL,
 	`lead` INTEGER NOT NULL
-	)
+	);
 COMMIT

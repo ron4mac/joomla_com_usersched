@@ -3,11 +3,11 @@
 	<name>com_usersched</name>
 	<author>Ron Crans</author>
 	<creationDate>July 2015</creationDate>
-	<copyright>(C) 2015 Ron Crans.</copyright>
+	<copyright>(C) 2015-2017 Ron Crans.</copyright>
 	<license>GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)</license>
 	<authorEmail>ron@rjconline.net</authorEmail>
 	<authorUrl>rjconline.net</authorUrl>
-	<version>0.9.9</version>
+	<version>0.9.10</version>
 	<description>COM_USERSCHED_XML_DESCRIPTION</description>
 	<scriptfile>script.php</scriptfile>
 	<files folder="site">
@@ -18,6 +18,7 @@
 		<filename>js.php</filename>
 		<filename>cron.php</filename>alertchk.php
 		<filename>alertchk.php</filename>
+		<folder>controllers</folder>
 		<folder>models</folder>
 		<folder>views</folder>
 		<folder>helpers</folder>

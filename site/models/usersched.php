@@ -74,7 +74,7 @@ class UserSchedModelUserSched extends JModelLegacy
 		$udbPath = UschedHelper::userDataPath();
 		if (!file_exists($udbPath.$dbFile)) {
 			$this->dbinit = true;
-			mkdir($udbPath, 0777, true);
+			@mkdir($udbPath, 0777, true);
 		}
 		
 		$db = JDatabaseDriver::getInstance(array('driver'=>'sqlite','database'=>$udbPath.$dbFile));

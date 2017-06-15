@@ -16,7 +16,7 @@ class pdfWrapper {
 
 	private $timelineSectionsY = 0;
 
-	public function pdfWrapper($sizes) {
+	public function __construct($sizes) {
 		$this->cb = new TCPDFExt('P', 'mm', 'USLETTER', true, 'UTF-8', false);
 
 		$this->offsetLeft = $sizes->offsetLeft;

@@ -75,7 +75,7 @@ if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && stripslashes($_SERVER['HTTP_IF_NONE
 	header('Content-type: text/javascript');
 	header('Content-Length: ' . $totsize);
 	header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastmod) . ' GMT');
-	header('ETag: "' . $hash . '"');
+	header('ETag: ' . $hash);
 	header('Cache-Control: must-revalidate');
 	foreach ($jsfiles as $jsf) {
 		if (is_array($jsf)) {

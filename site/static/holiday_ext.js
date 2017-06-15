@@ -31,37 +31,29 @@ scheduler.attachEvent("onViewChange", function (new_mode, new_date){
 	}
 });
 
-function gcal_fetch (url) {
-	var tempscript = null;
-	var callback = function(data) {
-		document.body.removeChild(tempscript);
-		tempscript = null;
-		var gevents = [], items = data.items, ix;
-		for (ix=0; ix<items.length; ix++) {
-			var item = items[ix];
-			gevents.push({text:item.summary,start_date:item.start.date,end_date:item.end.date,xevt:"isHoliday"});
-		}
-		var evs = scheduler.json.parse(gevents);
-		scheduler._process_loading(evs);
-	};
-	var uniqfunc = 'jsonp'+Math.round(Date.now()+Math.random()*1000001);
-	window[uniqfunc] = function (json) {
-		if (json.error) { console.log(uniqfunc+": "+json.error.message); }
-		callback(json);
-		delete window[uniqfunc];
-	};
-	tempscript = document.createElement("script");
-	tempscript.type = "text/javascript";
-//	tempscript.id = "tempscript";
-	tempscript.src = url + "&callback=" + uniqfunc;
-	document.body.appendChild(tempscript);
-}
-
 function getGoogleHolidays (yr) {
 	if (scheduler.gHolyYrs.indexOf(yr)==-1) {
 		scheduler.gHolyYrs.push(yr);
-		gcurl = 'https://www.googleapis.com/calendar/v3/calendars/usa__en%40holiday.calendar.google.com/events?key=AIzaSyAxlVigwBVLSu-ryKOr1c4mXextZ6nPkyc';
-		gcurl += '&timeMin='+yr+'-01-01T00%3A00%3A00%2B00%3A00&timeMax='+(yr+1)+'-01-01T00%3A00%3A00%2B00%3A00&singelEvents=true';
-		var gcfobj = new gcal_fetch(gcurl);
+		var url = "/index.php?option=com_usersched&format=raw&task=ajax.holidays&yr="+yr+"&rg=usa__en";
+		var currentURL = window.location;
+		var live_site = currentURL.protocol+'//'+currentURL.host+usched_base;
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(e) {
+			if (this.readyState < 4) { return; }
+			if (this.status !== 200) {
+				console.log(this.statusText || this.status);
+			} else if (this.status === 200) {
+				var data = JSON.parse(this.response);
+				var gevents = [], items = data.items, ix;
+				for (ix=0; ix<items.length; ix++) {
+					var item = items[ix];
+					gevents.push({text:item.summary,start_date:item.start.date,end_date:item.end.date,xevt:"isHoliday"});
+				}
+				var evs = scheduler.json.parse(gevents);
+				scheduler._process_loading(evs);
+			}
+		};
+		xhr.open('GET', live_site + url);
+		xhr.send();
 	}
 }
