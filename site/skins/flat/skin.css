@@ -10,5 +10,15 @@
 	top: 22px;
 }
 .dhx_expand_icon {
-	opacity: 0.5;
+	/*opacity: 0.5;*/
+}
+.dhx_cal_tab.first.flt {
+	border-left-width: 0;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+.dhx_cal_tab.last.flt {
+	border-right-width: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
 }

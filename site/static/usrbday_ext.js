@@ -45,7 +45,8 @@ function getBdays (yr) {
 				scheduler._process_loading(evs);
 			}
 		};
-		xhr.open('GET', live_site+'/components/com_usersched/bdayajax.php?y='+yr);
+		var url = "/index.php?option=com_usersched&format=raw&task=ajax.birthdays&y="+yr;
+		xhr.open('GET', live_site + url);
 		xhr.send();
 	}
 }

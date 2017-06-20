@@ -1,0 +1,11 @@
+/* overrides for the sheduler contrast_black skin */
+.dhx_cal_next_button, .dhx_cal_prev_button, .dhx_cal_tab, .dhx_cal_today_button {
+	height: 22px;
+	line-height: 22px;
+}
+.dhx_cal_navline div {
+	top: 22px;
+}
+.dhx_cal_navline {
+	top: 22px;
+}

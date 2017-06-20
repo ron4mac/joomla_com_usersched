@@ -1,0 +1,2 @@
+Do not delete this folder. It acts as a place-holder for a scheduler embeded skin.
+It is necessary for correct operation of skin selection.

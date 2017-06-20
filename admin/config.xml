@@ -130,6 +130,11 @@
 			type="text"
 			label="COM_USERSCHED_ALERT_REPLYTO_LABEL"
 			description="COM_USERSCHED_ALERT_REPLYTO_DESC" />
+		<field
+			name="googapi_key"
+			type="text"
+			label="COM_USERSCHED_CONFIG_GOOGAPI_LABEL"
+			description="COM_USERSCHED_CONFIG_GOOGAPI_DESC" />
 		<field name="version" type="hidden" default="x.x.x" />
 	</fieldset>
 

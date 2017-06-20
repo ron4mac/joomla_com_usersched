@@ -8,7 +8,6 @@
 	B - joomla user birthdays
 	M - Mobile device
 */
-file_put_contents('DBUG.LOG', print_r($_SERVER, true), FILE_APPEND);
 $jsfiles = array();
 $codes = $_GET['c'];$lcl = $_GET['l'];
 

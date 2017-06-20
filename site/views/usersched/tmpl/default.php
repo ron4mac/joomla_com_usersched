@@ -18,7 +18,7 @@ if ($skin) {
 		}
 	} else {
 		JHtml::stylesheet('components/com_usersched/scheduler/codebase/dhtmlxscheduler_'.$skin.'.css');
-		if ($skin != 'flat') $is_terrace = false;
+		if (!in_array($skin, array('flat','contrast_black','contrast_white'))) $is_terrace = false;
 	}
 } else {
 	JHtml::stylesheet('components/com_usersched/scheduler/codebase/dhtmlxscheduler.css');
