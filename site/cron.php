@@ -1,6 +1,11 @@
 <?php
 define('_JEXEC',1);
-define('JPATH_BASE', dirname(dirname(__DIR__)));
+$JPB = dirname(dirname(__DIR__));
+// makeup for development structure
+if (!file_exists($JPB.'/includes/defines.php')) {
+	$JPB = dirname($JPB);
+}
+define('JPATH_BASE', $JPB);
 define('JPATH_PLATFORM', JPATH_BASE . '/libraries');
 require_once JPATH_BASE . '/includes/defines.php';
 require_once JPATH_PLATFORM . '/import.php';
@@ -39,6 +44,13 @@ class USchedApp extends AbstractApplication
 		}
 	}
 }
+
+//if (!class_exists('JError')) {
+//	class JError
+//	{
+//		
+//	}
+//}
 
 try
 {

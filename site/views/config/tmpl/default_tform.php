@@ -2,7 +2,7 @@
 defined('_JEXEC') or die;
 ?>
 <form id="configform" method="post" enctype="multipart/form-data" style="margin:0">
-<input type="submit" name="saves" value="<?=JText::_('COM_USERSCHED_CFG_SAVE')?>" onclick="this.form.task.value='setcfg'" />
+<input class="btn btn-primary" type="submit" name="saves" value="<?=JText::_('COM_USERSCHED_CFG_SAVE')?>" onclick="this.form.task.value='setcfg'" />
 <div id="formtabs" class="stabber">
 <div class="stabbertab" title="<?=JText::_('COM_USERSCHED_CFG_GENERAL')?>">
 	<input type="checkbox" name="settings_repeat" id="settings_repeat"<?=$this->config['settings_repeat']?' checked="checked"':''?> />

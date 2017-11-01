@@ -121,14 +121,14 @@ class UserSchedController extends JControllerLegacy
 		$status = $action->get_status();
 		if ($status == 'inserted') {
 			$action->set_value("user", $this->userid);
-		} else {
+		}/* else {
 			if ($this->settings['privatemode'] == 'ext') {
 				$user = $action->get_value('user');
 				if ($user != $this->userid) {
 					$action->error();
 				}
 			}
-		}
+		}*/
 		if ($action->get_value('event_pid') == '') {
 			$action->set_value('event_pid', 0);
 		}
