@@ -8,7 +8,8 @@ if (!file_exists($JPB.'/includes/defines.php')) {
 define('JPATH_BASE', $JPB);
 define('JPATH_PLATFORM', JPATH_BASE . '/libraries');
 require_once JPATH_BASE . '/includes/defines.php';
-require_once JPATH_PLATFORM . '/import.php';
+require_once JPATH_BASE . '/includes/framework.php';
+//require_once JPATH_PLATFORM . '/import.php';
 require_once JPATH_SITE . '/configuration.php';
 require_once JPATH_PLATFORM . '/vendor/autoload.php';
 
