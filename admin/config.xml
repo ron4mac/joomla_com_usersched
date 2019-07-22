@@ -89,6 +89,7 @@
 	           label="Standard skin:"
 	           description="The standard skin (as default)">
 	      <option value="">-default-</option>
+	      <option value="_material">Material</option>
 	      <option value="_flat">Flat</option>
 	      <option value="_glossy">Glossy</option>
 	      <option value="_classic">Classic</option>

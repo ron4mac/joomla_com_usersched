@@ -34,7 +34,7 @@ $cssPath = $css ? $css : '../scheduler/codebase/dhtmlxscheduler.css';
 			height: 100%;
 			overflow: hidden;
 		}
-		.dhx_cal_cover { opacity:0 }
+		/*.dhx_cal_cover { opacity:0 }*/
 	</style>
 
 	<script type="text/javascript" charset="utf-8">

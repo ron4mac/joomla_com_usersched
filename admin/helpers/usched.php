@@ -141,8 +141,7 @@ abstract class UschedHelper
 
 	private static function getStorPath ()
 	{
-		$dispatcher = JDispatcher::getInstance();
-		$results = $dispatcher->trigger('onRjuserDatapath', null);
+		$results = JFactory::getApplication()->triggerEvent('onRjuserDatapath');
 		$dsp = isset($results[0]) ? trim($results[0]) : false;
 		return ($dsp ?: 'userstor');
 	}

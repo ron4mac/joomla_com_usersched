@@ -19,7 +19,7 @@ class com_userschedInstallerScript
 	function preflight ($type, $parent) 
 	{
 		echo '<span style="color:green">Okay</span>';
-		$this->release = $parent->get('manifest')->version;
+		$this->release = $parent->getManifest()->version;
 	}
 
 	function postflight ($type, $parent) 

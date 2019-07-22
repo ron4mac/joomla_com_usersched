@@ -74,6 +74,7 @@ class UserSchedControllerAjax extends JControllerLegacy
 
 	private function hCache ($yr, $rg)
 	{
+		jimport('joomla.filesystem.folder');
 		if (is_writable(JPATH_CACHE)) {
 			$cdir = JPATH_CACHE.'/'.$this->input->get('option');
 			// check cache dir or create cache dir

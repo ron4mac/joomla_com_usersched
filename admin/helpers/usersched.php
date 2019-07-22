@@ -125,8 +125,7 @@ class UserSchedHelper
 	{
 		$cmp = JApplicationHelper::getComponentName();
 
-		$dispatcher = JDispatcher::getInstance();
-		$results = $dispatcher->trigger('onRjuserDatapath', null);
+		$results = JFactory::getApplication()->triggerEvent('onRjuserDatapath');
 		$sdp = isset($results[0]) ? trim($results[0]) : '';
 		if (!$sdp) $sdp = 'userstor';
 

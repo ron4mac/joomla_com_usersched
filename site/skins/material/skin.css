@@ -1,0 +1,12 @@
+.dhx_cal_navline div, .dhx_cal_navline .dhx_cal_prev_button, .dhx_cal_navline .dhx_cal_next_button {
+    top: 22px;
+}
+.dhx_cal_tab.first.flt, .dhx_cal_tab.last.flt {
+    border-radius: 0;
+}
+.dhx_section_time.dhx_lightbox_minical select.dhx_lightbox_time_select {
+	width: 82px;
+}
+.dhx_cal_light_rec.dhx_cal_light_wide {
+    width: 514px;
+}

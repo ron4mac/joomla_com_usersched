@@ -101,7 +101,7 @@ scheduler.attachEvent("onDblClick",function(id,e) {
 });
 
 // create our own style of event display
-scheduler.renderEvent = function(container, ev) {
+scheduler.rrenderEvent = function(container, ev) {
 	var container_width = parseInt(container.style.width);
 	var container_height = parseInt(container.style.height);
 	var eclass = ev.category ? "evCat"+ev.category : "ushedEvt";
@@ -129,7 +129,7 @@ scheduler.renderEvent = function(container, ev) {
 	return true; // required, true - we've created custom form; false - display default one instead
 };
 
-scheduler.render_event_bar = function (ev) {
+scheduler.rrender_event_bar = function (ev) {
 	var parent = this._rendered_location;
 	var pos = this._get_event_bar_pos(ev);
 	var y = pos.y;
@@ -172,19 +172,19 @@ scheduler.render_event_bar = function (ev) {
 	parent.appendChild(d.firstChild);
 };
 
-scheduler.templates.event_text = function(start,end,event) {
+scheduler.templates.xxevent_text = function(start,end,event) {
 	var parts = event.text.split(/[\r\n]+/);
 	return parts[0];
 };
-scheduler.templates.event_bar_text = function(start,end,event) {
+scheduler.templates.xxevent_bar_text = function(start,end,event) {
 	var parts = event.text.split(/[\r\n]+/);
 	return parts[0];
 };
-scheduler.templates.year_tooltip = function(start,end,event) {
+scheduler.templates.xxyear_tooltip = function(start,end,event) {
 	var parts = event.text.split(/[\r\n]+/);
 	return parts.join("<br/>");
 };
-scheduler.templates.tooltip_text = function(start,end,event) {
+scheduler.templates.xxtooltip_text = function(start,end,event) {
 	var vm = scheduler._mode;
 	var parts = event.text.split(/[\r\n]+/);
 	if (!event.xevt) parts[0] += " " + scheduler.templates.event_header(start, end, event);
@@ -192,11 +192,11 @@ scheduler.templates.tooltip_text = function(start,end,event) {
 	if ((vm=="year" || vm=="month") && !(event.xevt || event.event_length=="0")) tipt += "<br/><u>" + scheduler.templates.tooltip_date_format(start) + " - " + scheduler.templates.tooltip_date_format(end) + "</u>";
 	return tipt;
 };
-scheduler.templates.quick_info_title = function(start,end,event) {
+scheduler.templates.xxquick_info_title = function(start,end,event) {
 	var parts = event.text.split(/[\r\n]+/);
 	return parts[0];
 };
-scheduler.templates.quick_info_content = function(start,end,event) {
+scheduler.templates.xxquick_info_content = function(start,end,event) {
 	var parts = event.text.split(/[\r\n]+/);
 	parts.shift();
 	var tipt = parts.join("<br/>");

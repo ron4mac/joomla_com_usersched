@@ -8,23 +8,24 @@ $is_terrace = true;
 $skin = $this->params->get('default_skin');
 if ($this->settings['settings_skin']) $skin = $this->settings['settings_skin'];
 $skinpath = 'components/com_usersched/' . ($skin ? 'skins/' : 'static/');
+$skinopts = array('version' => 'auto');
 if ($skin) {
 	$skinpath .= $skin.'/';
 	$cssfiles = JFolder::files($skinpath, '^dhtmlxscheduler.+\.css$');
 	if ($cssfiles) {
 		$is_terrace = false;
 		foreach ($cssfiles as $cssfile) {
-			JHtml::stylesheet($skinpath.$cssfile);
+			JHtml::stylesheet($skinpath.$cssfile, $skinopts);
 		}
 	} else {
-		JHtml::stylesheet('components/com_usersched/scheduler/codebase/dhtmlxscheduler_'.$skin.'.css');
-		if (!in_array($skin, array('flat','contrast_black','contrast_white'))) $is_terrace = false;
+		JHtml::stylesheet('components/com_usersched/scheduler/codebase/dhtmlxscheduler_'.$skin.'.css', $skinopts);
+		if (!in_array($skin, array('material','flat','contrast_black','contrast_white'))) $is_terrace = false;
 	}
 } else {
-	JHtml::stylesheet('components/com_usersched/scheduler/codebase/dhtmlxscheduler.css');
+	JHtml::stylesheet('components/com_usersched/scheduler/codebase/dhtmlxscheduler.css', $skinopts);
 }
-JHtml::stylesheet('components/com_usersched/static/usersched.css');
-JHtml::stylesheet($skinpath.'skin.css');
+JHtml::stylesheet('components/com_usersched/static/usersched.css', $skinopts);
+JHtml::stylesheet($skinpath.'skin.css', $skinopts);
 
 // get the calendar ID
 $calID = base64_encode(UserSchedHelper::uState('calid'));
@@ -62,7 +63,7 @@ $jdoc = JFactory::getDocument();
 //JHtml::_('behavior.framework', true);
 $jawc = new JApplicationWebClient();
 if ($jawc->mobile) $jscodes .= 'M';
-$jdoc->addScript('components/com_usersched/js.php?'.$jscodes);
+$jdoc->addScript('components/com_usersched/js.php?'.$jscodes, $skinopts);
 $jdoc->addScriptDeclaration($script);
 if (JFile::exists($skinpath.'skin.js')) {
 	$jdoc->addScript($skinpath.'skin.js');
