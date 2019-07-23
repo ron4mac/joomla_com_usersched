@@ -78,7 +78,7 @@ class UserSchedModelUserSched extends JModelLegacy
 		}
 		
 		$db = JDatabaseDriver::getInstance(array('driver'=>'sqlite','database'=>$udbPath.$dbFile));
-		$db->setDebug(7);
+	//	$db->setDebug(7);
 		$db->connect();
 		$db->getConnection()->sqliteCreateFunction('strtotime', 'strtotime', 1);
 
@@ -264,7 +264,7 @@ class UserSchedModelUserSched extends JModelLegacy
 	{
 		// delete/update/add alertees
 		$aids = $data->get('alertee_id',null,'array');
-		if (!count($aids)) return;
+		if (empty($aids)) return;
 		//echo'<xmp>';var_dump($aids);jexit();
 		//- for each dele
 		foreach ($data->get('alertee_dele',array(),'array') as $did) {
@@ -301,7 +301,7 @@ class UserSchedModelUserSched extends JModelLegacy
 	{
 		// delete/update/add categories
 		$cids = $data->get('category_id',null,'array');
-		if (!count($cids)) return;
+		if (empty($cids)) return;
 		//echo'<xmp>';var_dump($cids);jexit();
 		//- for each dele
 		foreach ($data->get('category_dele',array(),'array') as $did) {

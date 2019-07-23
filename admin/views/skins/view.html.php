@@ -48,12 +48,7 @@ class UserschedViewSkins extends JViewLegacy
 		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_SKINS_DELETEOK'),"skins.delete");
 
 		// Add a modal upload button.
-		$jV = new JVersion();
-		if (version_compare('3.0',$jV->RELEASE) === 1) {
-			$icon = '<span class="icon-32-upload"></span>';
-		} else {
-			$icon = '<i class="icon-upload"></i>';
-		}
+		$icon = '<i class="icon-upload"></i>';
 		$bar = JToolBar::getInstance('toolbar');
 		$upbut = '<a class="modal btn btn-small" href="#upload_div" rel="{size: {x: 375, y: 225}}">'.$icon.' Upload</a>';
 		$bar->appendButton('Custom', $upbut, 'skin-upload');

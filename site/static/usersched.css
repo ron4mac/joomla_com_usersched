@@ -2,6 +2,7 @@
 /*#dontuse { */
 div.dhx_cal_container {
 	line-height: normal;
+	z-index: 14;
 }
 
 div.dhx_cal_data {

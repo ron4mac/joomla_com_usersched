@@ -5,13 +5,15 @@ JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched
 
 class UserSchedController extends JControllerLegacy
 {
-	protected $userid;
+	protected $userid = 0;
+	protected $mnuItm = 0;
 
 	function __construct ($default=array())
 	{
 		parent::__construct($default);
 		if (!isset($this->input)) $this->input = JFactory::getApplication()->input;		//J2.x
 		$this->userid = JFactory::getUser()->id;
+		$this->mnuItm = $this->input->getInt('Itemid', 0);
 	}
 
 	public function display ($cachable = false, $urlparams = false)
@@ -39,7 +41,8 @@ class UserSchedController extends JControllerLegacy
 		JSession::checkToken();
 		$m = $this->getModel();
 		$m->saveConfig($this->input->post);
-		$this->setRedirect(JRoute::_('index.php?option=com_usersched', false), JText::_('COM_USERSCHED_CFG_SAVED'));
+	//	$this->setRedirect(JRoute::_('index.php?option=com_usersched', false), JText::_('COM_USERSCHED_CFG_SAVED'));
+		$this->setRedirect(JRoute::_('index.php?Itemid='.$this->mnuItm, false), JText::_('COM_USERSCHED_CFG_SAVED'));
 	}
 
 	public function impical ()
