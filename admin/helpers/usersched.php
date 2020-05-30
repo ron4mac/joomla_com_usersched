@@ -6,22 +6,22 @@ class UserSchedHelper
 
 	public static function addSubmenu ($vName)
 	{
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 			JText::_('COM_USERSCHED_SUBMENU_USERCALS'),
 			'index.php?option=com_usersched',
 			$vName == 'usersched'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 			JText::_('COM_USERSCHED_SUBMENU_GRPCALS'),
 			'index.php?option=com_usersched&view=calendars',
 			$vName == 'calendars'
 		);
-//		JSubMenuHelper::addEntry(
+//		JHtmlSidebar::addEntry(
 //			JText::_('COM_USERSCHED_SUBMENU_CONFIGURATIONS'),
 //			'index.php?option=com_usersched&view=configs',
 //			$vName == 'configs'
 //		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 			JText::_('COM_USERSCHED_SUBMENU_SKINS'),
 			'index.php?option=com_usersched&view=skins',
 			$vName == 'skins'
@@ -34,7 +34,7 @@ class UserSchedHelper
 		$result = new JObject;
 		$assetName = 'com_usersched';
 
-		$actions = JAccess::getActions($assetName);
+		$actions = JAccess::getActionsFromFile(JPATH_ADMINISTRATOR . '/components/com_usersched/access.xml');
 
 		foreach ($actions as $action) {
 			$result->set($action->name,	$user->authorise($action->name, $assetName));

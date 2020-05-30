@@ -155,4 +155,7 @@ if ($this->params->get('show_page_heading', 1)) {
 <?php
 	//echo'<xmp>';var_dump($this);echo'</xmp>';
 ?>
-<script type="text/javascript">usersched_init();</script>
+<script type="text/javascript">
+	// set this here so it is last in the chain
+	document.addEventListener('DOMContentLoaded', function() {usersched_init();});
+</script>
