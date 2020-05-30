@@ -61,6 +61,6 @@ try
 catch (Exception $e)
 {
     // An exception has been caught, just echo the message.
-    echo $e->getMessage();
+    echo date('Y-m-d H:i:s   ') . $e->getMessage();
     exit($e->getCode());
 }

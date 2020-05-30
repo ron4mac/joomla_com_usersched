@@ -263,11 +263,11 @@ class UserSchedModelUserSched extends JModelLegacy
 	private function manageAlertees ($data, $db)
 	{
 		// delete/update/add alertees
-		$aids = $data->get('alertee_id',null,'array');
+		$aids = $data->get('alertee_id',[],'array');
 		if (!count($aids)) return;
 		//echo'<xmp>';var_dump($aids);jexit();
 		//- for each dele
-		foreach ($data->get('alertee_dele',array(),'array') as $did) {
+		foreach ($data->get('alertee_dele',[],'array') as $did) {
 			//-- remove from db
 			$db->setQuery('DELETE FROM alertees WHERE id = '.$did)->execute();
 			//-- remove from id list
@@ -276,9 +276,9 @@ class UserSchedModelUserSched extends JModelLegacy
 		}
 		//- for each id list
 		if (count($aids)) {
-			$names = $data->get('alertee_name',null,'array');
-			$emails = $data->get('alertee_email',null,'array');
-			$smss = $data->get('alertee_sms',null,'array');
+			$names = $data->get('alertee_name',[],'array');
+			$emails = $data->get('alertee_email',[],'array');
+			$smss = $data->get('alertee_sms',[],'array');
 			foreach ($aids as $k=>$id) {
 				$q = $db->getQuery(true);
 				if ($id<0) {	//-- add if neg id
@@ -300,11 +300,11 @@ class UserSchedModelUserSched extends JModelLegacy
 	private function manageCategories ($data, $db)
 	{
 		// delete/update/add categories
-		$cids = $data->get('category_id',null,'array');
+		$cids = $data->get('category_id',[],'array');
 		if (!count($cids)) return;
 		//echo'<xmp>';var_dump($cids);jexit();
 		//- for each dele
-		foreach ($data->get('category_dele',array(),'array') as $did) {
+		foreach ($data->get('category_dele',[],'array') as $did) {
 			//-- remove from db
 			$db->setQuery('DELETE FROM categories WHERE id = '.$did)->execute();
 			//-- remove from id list
@@ -313,9 +313,9 @@ class UserSchedModelUserSched extends JModelLegacy
 		}
 		//- for each id list
 		if (count($cids)) {
-			$names = $data->get('category_name',null,'array');
-			$tcolrs = $data->get('category_txcolor',null,'array');
-			$bcolrs = $data->get('category_bgcolor',null,'array');
+			$names = $data->get('category_name',[],'array');
+			$tcolrs = $data->get('category_txcolor',[],'array');
+			$bcolrs = $data->get('category_bgcolor',[],'array');
 			foreach ($cids as $k=>$id) {
 				$q = $db->getQuery(true);
 				if ($id<0) {	//-- add if neg id

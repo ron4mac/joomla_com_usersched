@@ -71,7 +71,7 @@ function sched_setAutoEnd () {
 		};
 	}
 }
-sched_setAutoEnd();
+//sched_setAutoEnd();
 
 
 // other scheduler modifications
@@ -208,7 +208,7 @@ scheduler._init_year_tooltip = function() {};
 ///////////////////////////////////////////////////
 
 function usersched_init() {
-
+/*
 	if (scheduler.cfg_cfg) {
 		mergeCfgObjects(scheduler.config, scheduler.cfg_cfg);
 		if (scheduler.cfg_cfg.agenda_end) {
@@ -238,13 +238,13 @@ function usersched_init() {
 
 //	console.log(scheduler.__categories);
 	scheduler.locale.labels.section_category = "Category";
-
-	var sections = [ {name:"description", height:73, map_to:"text", type:"textarea", focus:true} ];
-	if (true) sections.push({name:"category", height:20, type:"select", options:scheduler.__categories, map_to:"category"});
-	if (scheduler.feature.canAlert) sections.push({name:"alerts", height:42, map_to:"text", type:"alerts_editor", button:"shide"});
-	if (true) sections.push({name:"recurring", type:"recurring", map_to:"rec_type", button:"recurring"});
-	if (true) sections.push({name:"time", height:72, type:"calendar_time", map_to:"auto"});
-	scheduler.config.lightbox.sections = sections;
+*/
+//	var sections = [ {name:"description", height:73, map_to:"text", type:"textarea", focus:true} ];
+//	if (true) sections.push({name:"category", height:20, type:"select", options:scheduler.__categories, map_to:"category"});
+//	if (scheduler.feature.canAlert) sections.push({name:"alerts", height:42, map_to:"text", type:"alerts_editor", button:"shide"});
+//	if (true) sections.push({name:"recurring", type:"recurring", map_to:"rec_type", button:"recurring"});
+//	if (true) sections.push({name:"time", height:72, type:"calendar_time", map_to:"auto"});
+//	scheduler.config.lightbox.sections = sections;
 
 /*	// not sure why I had done this - perhaps original fails to make appropriate change to recurring event
 	scheduler.attachEvent("onBeforeEventChanged",function(dev){
