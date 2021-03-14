@@ -52,16 +52,19 @@ if (strpos($codes,'B') !== false) {
 
 $lastmod = 0;
 $totsize = 0;
+$jss = [];
 foreach ($jsfiles as $jsf) {
 	if (is_array($jsf)) {
 		$totsize += strlen($jsf['s']) + 1;
+		$jss[] = $jsf['s'];
 	} else {
 		$lastmod = max($lastmod, @filemtime($jsf));
 		$fsz = @filesize($jsf);
 		$totsize += ($fsz ?: 12) + strlen($jsf) + 6;
+		$jss[] = $jsf;
 	}
 }
-$hash = $lastmod . '-' . $totsize . '-' . md5(implode(':',$jsfiles));
+$hash = $lastmod . '-' . $totsize . '-' . md5(implode(':',$jss));
 
 if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) == $hash)
 {
