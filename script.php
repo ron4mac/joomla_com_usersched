@@ -5,33 +5,34 @@ use Joomla\CMS\Log\Log;
 
 class com_userschedInstallerScript
 {
-	function install ($parent) 
+	public function install ($parent) 
 	{
 		$parent->getParent()->setRedirectURL('index.php?option=com_usersched');
 	}
 
-	function uninstall ($parent) 
+	public function uninstall ($parent) 
 	{
 	}
 
-	function update ($parent) 
+	public function update ($parent) 
 	{
 	}
 
-	function preflight ($type, $parent) 
+	public function preflight ($type, $parent) 
 	{
-		if (!in_array('sqlite', JDatabaseDriver::getConnectors())) {
+		$dbs = JDatabaseDriver::getConnectors();
+		if (!in_array('sqlite', $dbs) && !in_array('Sqlite', $dbs)) {
 			Log::add('Joomla support for SQLite(3) is required for this component.', Log::WARNING, 'jerror');
 			return false;
 		}
 		if (method_exists($parent,'getManifest')) {
-			$this->release = $parent->getManifest->version;
+			$this->release = $parent->getManifest()->version;
 		} else {
 			$this->release = $parent->get('manifest')->version;
 		}
 	}
 
-	function postflight ($type, $parent) 
+	public function postflight ($type, $parent) 
 	{
 		$params['version'] = $this->release;
 		$this->setParams($params, true);
