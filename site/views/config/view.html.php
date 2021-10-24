@@ -1,12 +1,16 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 require_once JPATH_COMPONENT.'/helpers/usersched.php';
 require_once JPATH_COMPONENT.'/views/uschedview.php';
 
 class UserschedViewConfig extends UserschedView
 {
-	protected $config = array (
+	protected $config = [
 	'default_date' => '%j %M %Y',
 	'month_date' => '%F %Y',
 	'load_date' => '%Y-%m-%d',
@@ -48,10 +52,10 @@ class UserschedViewConfig extends UserschedView
 
 	'positive_closing' => false,
 
-	'icons_edit' => array('icon_save', 'icon_cancel'),
-	'icons_select' => array('icon_details', 'icon_edit', 'icon_delete'),
-	'buttons_left' => array('dhx_save_btn', 'dhx_cancel_btn'),
-	'buttons_right' => array('dhx_delete_btn'),
+	'icons_edit' => ['icon_save', 'icon_cancel'],
+	'icons_select' => ['icon_details', 'icon_edit', 'icon_delete'],
+	'buttons_left' => ['dhx_save_btn', 'dhx_cancel_btn'],
+	'buttons_right' => ['dhx_delete_btn'],
 	'highlight_displayed_event' => true,
 	'displayed_event_color' => '#ffc5ab',
 	'displayed_event_text_color' => '#7e2727',
@@ -59,7 +63,7 @@ class UserschedViewConfig extends UserschedView
 	'left_border' => true,
 
 	'lang_tag' => 'en-GB'
-	);
+	];
 
 	function display ($tpl=null)
 	{
@@ -91,7 +95,7 @@ class UserschedViewConfig extends UserschedView
 				break;
 			case 2:		// site
 				$start = 'sstart';
-				if (!is_array($authids)) $authids = array($authids);
+				if (!is_array($authids)) $authids = [$authids];
 				if ($this->user->authorise('core.create')) {
 					$this->canCfg = true;
 					$this->canSkin = true;
@@ -104,19 +108,19 @@ class UserschedViewConfig extends UserschedView
 				echo'<xmp>';var_dump($this);echo'</xmp>';jexit();
 		}
 
-		JHtml::stylesheet('components/com_usersched/static/config.css');
-		JHtml::_('behavior.colorpicker');	// also initiates jQuery so the next script works okay
-		JHtml::script('components/com_usersched/static/config.js'/*,true*/);
+		$this->document->addStyleSheet('components/com_usersched/static/config.css');
+		HTMLHelper::_('behavior.colorpicker');	// also initiates jQuery so the next script works okay
+		$this->document->addScript('components/com_usersched/static/config.js');
 		$script = 'jQuery(document).ready(function() { tabberAutomatic(tabberOptions); attachColorPickers(); });'."\n";
-		JFactory::getDocument()->addScriptDeclaration($script);
+		$this->document->addScriptDeclaration($script);
 
-		//$langTag = JFactory::getLanguage()->getTag();
-		$this->config['lang_tag'] = JFactory::getLanguage()->getTag();
+		//$langTag = Factory::getLanguage()->getTag();
+		$this->config['lang_tag'] = Factory::getLanguage()->getTag();
 
 		if (UschedHelper::userDataExists('sched.sql3')) {
 			$m = $this->getModel();
-			$this->alertees = $m->getUdTable('alertees'); if (!$this->alertees) $this->alertees = array();
-			$this->categories = $m->getUdTable('categories'); if (!$this->categories) $this->categories = array();
+			$this->alertees = $m->getUdTable('alertees'); if (!$this->alertees) $this->alertees = [];
+			$this->categories = $m->getUdTable('categories'); if (!$this->categories) $this->categories = [];
 			$cfg = $m->getUdTable('options','name = "config"',false);
 			if ($cfg) {
 				$this->settings = unserialize($cfg['value']);
@@ -127,8 +131,8 @@ class UserschedViewConfig extends UserschedView
 				parent::display($tpl);
 			}
 		} else {
-			$this->alertees = array();
-			$this->categories = array(); 
+			$this->alertees = [];
+			$this->categories = [];
 			$this->skinOptions = $this->getSkinOptions();
 			$this->config = UserSchedHelper::$dfltConfig;
 			parent::display($start);
@@ -157,11 +161,11 @@ class UserschedViewConfig extends UserschedView
 		jimport('joomla.filesystem.folder');
 
 		// Initialize variables.
-		$options = array();
+		$options = [];
 		$path = JPATH_SITE . '/components/com_usersched/skins';
 
 		// Prepend some default options
-		$options[] = JHtml::_('select.option', '', JText::_('JOPTION_USE_DEFAULT'));
+		$options[] = HTMLHelper::_('select.option', '', Text::_('JOPTION_USE_DEFAULT'));
 
 		// Get a list of folders in the search path with the given filter.
 		$folders = JFolder::folders($path);
@@ -169,7 +173,7 @@ class UserschedViewConfig extends UserschedView
 		// Build the options list from the list of folders.
 		if (is_array($folders)) {
 			foreach ($folders as $folder) {
-				$options[] = JHtml::_('select.option', $folder, $folder);
+				$options[] = HTMLHelper::_('select.option', $folder, $folder);
 			}
 		}
 

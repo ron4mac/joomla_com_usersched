@@ -1,8 +1,8 @@
 <?php 
 defined('_JEXEC') or die('Restricted access');
 $data = $this->data;	//echo'<pre>';var_dump($data); //jexit();
-JHtml::script('components/com_usersched/static/config.js',true);
-JHtml::stylesheet('components/com_usersched/static/config.css');
+$this->document->addStyleSheet('components/com_usersched/static/config.css');
+$this->document->addScript('components/com_usersched/static/config.js',true);
 if ($this->params->get('show_page_heading', 1)) {
 	echo '<div class="page-header"><h3>'.$this->escape($this->params->get('page_heading')).'</h3></div>';
 }

@@ -1,6 +1,9 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Language\Text;
+use Joomla\Database\DatabaseDriver;
+
 // this WILL work but not used right now
 //require_once  JPATH_PLATFORM . '/cms/component/helper.php';
 //var_dump(JComponentHelper::getParams('com_usersched'));
@@ -16,7 +19,7 @@ class USchedAcheck {
 	{
 		$this->bug = $bug;
 		$this->config = $cfg;
-		$opt = array('driver'=>'sqlite','host'=>'','user'=>'','password'=>'','database'=>$dbp,'prefix'=>'');
+		$opt = ['driver'=>'sqlite','host'=>'','user'=>'','password'=>'','database'=>$dbp,'prefix'=>''];
 		$db = JDatabaseDriver::getInstance($opt);
 		$db->connect();
 		$db->getConnection()->sqliteCreateFunction('strtotime', 'strtotime', 1);
@@ -105,7 +108,7 @@ class USchedAcheck {
 				break;
 		}
 
-		$days = array();
+		$days = [];
 		if ($daysl) {
 			$days = explode(',',$daysl);
 			//!! need to handle monday as begin of week
@@ -154,7 +157,7 @@ class USchedAcheck {
 		$lb = "\n"; $lbb = "\n\n";
 		if ($evt['alert_meth'] & 1) {	//email
 			$surl = $this->config->live_site;
-			$body = sprintf(JText::_('COM_USERSCHED_ALERT_BLURB'), $this->config->sitename, date('D j F Y g:ia'), $lb, $surl, $lb);
+			$body = sprintf(Text::_('COM_USERSCHED_ALERT_BLURB'), $this->config->sitename, date('D j F Y g:ia'), $lb, $surl, $lb);
 			$body .= $evtTime . $lbb;
 			$body .= $evt['text'];
 			$this->sendAlert('email', 'Re: Calendar Alert', $body, $ausrs);

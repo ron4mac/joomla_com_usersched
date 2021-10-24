@@ -1,6 +1,8 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Language\Text;
+
 /**
  * View class for a list of user schedules.
  */
@@ -38,9 +40,9 @@ class UserschedViewUsersched extends JViewLegacy
 	{
 		$canDo	= UserSchedHelper::getActions();
 
-		JToolBarHelper::title(JText::_('COM_USERSCHED_MENU').' : '.JText::_('COM_USERSCHED_MANAGER_USCHEDS'), 'calendar usersched');
+		JToolBarHelper::title(Text::_('COM_USERSCHED_MENU').' : '.Text::_('COM_USERSCHED_MANAGER_USCHEDS'), 'calendar usersched');
 
-		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_MANAGER_DELETEOK'));
+		JToolBarHelper::deleteList(Text::_('COM_USERSCHED_MANAGER_DELETEOK'));
 		//JToolBarHelper::trash('usersched.trash');
 
 	//	if ($canDo->get('core.edit.state')) {

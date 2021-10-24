@@ -1,6 +1,8 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+
 jimport('joomla.filesystem.folder');
 jimport('joomla.application.component.modellist');
 //jimport('rjuserdata.userdata');
@@ -114,7 +116,7 @@ class UserSchedModelEvents extends JModelList
 	protected function populateState ($ordering = null, $direction = null) {
 		parent::populateState('startdate', 'ASC');
 
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$uid = $input->getInt('uid');
 		if (isset($uid)) $this->setState('usched_uid',$uid);
 		$isGrp = $input->getBool('isgrp');

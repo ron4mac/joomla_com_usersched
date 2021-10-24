@@ -1,6 +1,9 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 // Include the component HTML helpers.
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
@@ -18,7 +21,7 @@ $script = '
 	}
 ';
 // Add the script to the document head.
-JFactory::getDocument()->addScriptDeclaration($script);
+Factory::getDocument()->addScriptDeclaration($script);
 
 $canDo		= UserSchedHelper::getActions();
 $imgPath = JUri::base().'components/com_usersched/static/';
@@ -34,16 +37,16 @@ $unselIcon = 'unselected.png';
 				<th width="1%"></th>
 				<th width="1%"><?php echo JHtml::_('myGrid.checkall'); ?></th>
 				<th width="15%">
-					<?php echo JText::_('COM_USERSCHED_SKIN_NAME'); ?>
+					<?php echo Text::_('COM_USERSCHED_SKIN_NAME'); ?>
 				</th>
 				<th width="1%">
-					<?php echo JText::_('COM_USERSCHED_USERSKIN_COLUMN') ?>
+					<?php echo Text::_('COM_USERSCHED_USERSKIN_COLUMN') ?>
 				</th>
 				<th width="1%">
-					<?php echo JText::_('COM_USERSCHED_GROUPSKIN_COLUMN') ?>
+					<?php echo Text::_('COM_USERSCHED_GROUPSKIN_COLUMN') ?>
 				</th>
 				<th width="1%">
-					<?php echo JText::_('COM_USERSCHED_SITESKIN_COLUMN') ?>
+					<?php echo Text::_('COM_USERSCHED_SITESKIN_COLUMN') ?>
 				</th>
 				<th width="30%">
 					&#160;
@@ -67,7 +70,7 @@ $unselIcon = 'unselected.png';
 						<?php echo JHtml::_('grid.id', $i, $item['name']); ?>
 					</td>
 					<td>
-						<a href="javascript:void(0);" onclick="return previewSkin('cb<?php echo $i; ?>')" title="<?php echo JText::_('COM_USERSCHED_PREVIEW_SKIN'); ?>"><?php echo $item['name']?$item['name']:'-standard-'; ?></a>
+						<a href="javascript:void(0);" onclick="return previewSkin('cb<?php echo $i; ?>')" title="<?php echo Text::_('COM_USERSCHED_PREVIEW_SKIN'); ?>"><?php echo $item['name']?$item['name']:'-standard-'; ?></a>
 					</td>
 					<td class="center">
 						<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i; ?>','skins.makeDfltU')"><img src="<?php echo $imgPath.($item['isUdef']?$selIcon:$unselIcon)?>" /></a>
@@ -97,10 +100,10 @@ $unselIcon = 'unselected.png';
 <div id="upload_div" style="width:auto;height:100%;border:1px solid #CCC;padding:10px;display:inline-table">
 	<form action="<?php echo JRoute::_('index.php?option=com_usersched&view=skins'); ?>" class="form-validate" onsubmit=" return document.formvalidator.isValid(this)" enctype="multipart/form-data" method="post" name="upldForm" id="upldForm">
 		<div>
-			<p><?php echo JText::_('COM_USERSCHED_UPLOAD_MSG') ?></p>
-			<label><?php echo JText::_('COM_USERSCHED_UPLOAD_LABEL') ?></label><input type="text" name="skin_name" class="required validate-string" required />
+			<p><?php echo Text::_('COM_USERSCHED_UPLOAD_MSG') ?></p>
+			<label><?php echo Text::_('COM_USERSCHED_UPLOAD_LABEL') ?></label><input type="text" name="skin_name" class="required validate-string" required />
 			<br /><input type="file" name="skinfile" accept="application/zip" class="required validate-string" />
-			<br /><button type="submit" class="validate"><?php echo JText::_('COM_USERSCHED_UPLOAD_SUBMIT') ?></button>
+			<br /><button type="submit" class="validate"><?php echo Text::_('COM_USERSCHED_UPLOAD_SUBMIT') ?></button>
 			<input type="hidden" name="task" value="skins.addSkin" />
 			<?php echo JHtml::_('form.token'); ?>
 		</div>

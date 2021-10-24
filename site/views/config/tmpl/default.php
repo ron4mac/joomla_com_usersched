@@ -11,4 +11,3 @@ if ($this->canCfg) {
 } else {
 	echo 'NOT ALLOWED';
 }
-?>

@@ -25,7 +25,7 @@ class USchedApp extends AbstractApplication
 		$lang->load('com_usersched', dirname(__FILE__), $lang->getTag(), true);
 
 		$config = new JConfig();
-		ini_set('date.timezone',$config->offset);
+//		ini_set('date.timezone',$config->offset);
 		$xtime = time();
 		if ($dirh = opendir(JPATH_SITE . '/userstor')) {
 			while (false !== ($entry = readdir($dirh))) {

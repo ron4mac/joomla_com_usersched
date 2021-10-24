@@ -1,6 +1,12 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Log\Log;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Session\Session;
+
 JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched.php');
 
 class UserSchedController extends JControllerLegacy
@@ -8,11 +14,11 @@ class UserSchedController extends JControllerLegacy
 	protected $userid = 0;
 	protected $mnuItm = 0;
 
-	function __construct ($default=array())
+	function __construct ($default=[])
 	{
 		parent::__construct($default);
-		if (!isset($this->input)) $this->input = JFactory::getApplication()->input;		//J2.x
-		$this->userid = JFactory::getUser()->id;
+		if (!isset($this->input)) $this->input = Factory::getApplication()->input;		//J2.x
+		$this->userid = Factory::getUser()->id;
 		$this->mnuItm = $this->input->getInt('Itemid', 0);
 	}
 
@@ -38,16 +44,16 @@ class UserSchedController extends JControllerLegacy
 
 	public function setcfg ()
 	{
-		JSession::checkToken();
+		Session::checkToken();
 		$m = $this->getModel();
 		$m->saveConfig($this->input->post);
-	//	$this->setRedirect(JRoute::_('index.php?option=com_usersched', false), JText::_('COM_USERSCHED_CFG_SAVED'));
-		$this->setRedirect(JRoute::_('index.php?Itemid='.$this->mnuItm, false), JText::_('COM_USERSCHED_CFG_SAVED'));
+	//	$this->setRedirect(Route::_('index.php?option=com_usersched', false), Text::_('COM_USERSCHED_CFG_SAVED'));
+		$this->setRedirect(Route::_('index.php?Itemid='.$this->mnuItm, false), Text::_('COM_USERSCHED_CFG_SAVED'));
 	}
 
 	public function impical ()
 	{
-		JSession::checkToken();
+		Session::checkToken();
 		$m = &$this->getModel();
 		$r = $m->importical();
 		if ($r) {
@@ -57,13 +63,13 @@ class UserSchedController extends JControllerLegacy
 			$msg = 'Failed to import events';
 			$fbk = 'error';
 		}
-		JFactory::getApplication()->enqueueMessage($msg, $fbk);
-		$this->setRedirect(JRoute::_('index.php?option=com_usersched', false));
+		Factory::getApplication()->enqueueMessage($msg, $fbk);
+		$this->setRedirect(Route::_('index.php?option=com_usersched', false));
 	}
 
 	public function exp2ical ()
 	{
-		JSession::checkToken();
+		Session::checkToken();
 		$m = $this->getModel();
 		$m->export2ical();
 	//	jexit();
@@ -76,9 +82,9 @@ class UserSchedController extends JControllerLegacy
 		require_once('scheduler/codebase/connector/db_sqlite3.php');
 
 		if (defined('RJC_DEV')) {
-			JLog::addLogger(array('text_file' => 'usersched.log.php'), JLog::INFO, 'usersched');
+			Log::addLogger(['text_file' => 'usersched.log.php'], Log::INFO, 'usersched');
 			$l = print_r($_GET,true).print_r($_POST,true);
-			JLog::add($l, JLog::INFO, 'usersched');
+			Log::add($l, Log::INFO, 'usersched');
 		}
 
 		$dbpath = UschedHelper::userDataPath().'/sched.sql3';
@@ -86,10 +92,10 @@ class UserSchedController extends JControllerLegacy
 
 		$this->scheduler = new schedulerConnector($res, 'SQLite3');
 		if (defined('RJC_DEV')) $this->scheduler->enable_log(JPATH_SITE.'/tmp/userschedconnlog.txt');
-		$this->scheduler->event->attach('beforeProcessing', array($this,'delete_related'));
-		$this->scheduler->event->attach('afterProcessing', array($this,'insert_related'));
-		$this->scheduler->event->attach('beforeProcessing', array($this,'set_event_user'));
-		$this->scheduler->event->attach('afterProcessing', array($this,'after_set_event_user'));
+		$this->scheduler->event->attach('beforeProcessing', [$this,'delete_related']);
+		$this->scheduler->event->attach('afterProcessing', [$this,'insert_related']);
+		$this->scheduler->event->attach('beforeProcessing', [$this,'set_event_user']);
+		$this->scheduler->event->attach('afterProcessing', [$this,'after_set_event_user']);
 		$this->scheduler->render_table('events','event_id','start_date,end_date,text,category,rec_type,event_pid,event_length,user,alert_lead,alert_user,alert_meth');
 	}
 

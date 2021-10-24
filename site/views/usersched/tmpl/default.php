@@ -1,6 +1,9 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+
 //echo'<xmp>';var_dump($this);echo'</xmp>';jexit();
 
 // determine needed CSS files and add them to head
@@ -8,24 +11,24 @@ $is_terrace = true;
 $skin = $this->params->get('default_skin');
 if ($this->settings['settings_skin']) $skin = $this->settings['settings_skin'];
 $skinpath = 'components/com_usersched/' . ($skin ? 'skins/' : 'static/');
-$skinopts = array('version' => 'auto');
+$skinopts = ['version' => 'auto'];
 if ($skin) {
 	$skinpath .= $skin.'/';
 	$cssfiles = JFolder::files($skinpath, '^dhtmlxscheduler.+\.css$');
 	if ($cssfiles) {
 		$is_terrace = false;
 		foreach ($cssfiles as $cssfile) {
-			JHtml::stylesheet($skinpath.$cssfile, $skinopts);
+			$this->document->addStylesheet($skinpath.$cssfile, $skinopts);
 		}
 	} else {
-		JHtml::stylesheet('components/com_usersched/scheduler/codebase/dhtmlxscheduler_'.$skin.'.css', $skinopts);
-		if (!in_array($skin, array('material','flat','contrast_black','contrast_white'))) $is_terrace = false;
+		$this->document->addStylesheet('components/com_usersched/scheduler/codebase/dhtmlxscheduler_'.$skin.'.css', $skinopts);
+		if (!in_array($skin, ['material','flat','contrast_black','contrast_white'])) $is_terrace = false;
 	}
 } else {
-	JHtml::stylesheet('components/com_usersched/scheduler/codebase/dhtmlxscheduler.css', $skinopts);
+	$this->document->addStylesheet('components/com_usersched/scheduler/codebase/dhtmlxscheduler.css', $skinopts);
 }
-JHtml::stylesheet('components/com_usersched/static/usersched.css', $skinopts);
-JHtml::stylesheet($skinpath.'skin.css', $skinopts);
+$this->document->addStylesheet('components/com_usersched/static/usersched.css', $skinopts);
+$this->document->addStylesheet($skinpath.'skin.css', $skinopts);
 
 // get the calendar ID
 $calID = base64_encode(UserSchedHelper::uState('calid'));
@@ -45,7 +48,7 @@ if ($this->alertees) {
 	}
 	$script .= '\';';
 }
-$locale = JFactory::getLanguage()->getLocale();
+$locale = Factory::getLanguage()->getLocale();
 $jscodes = 'l='.$locale[4];
 $jscodes .= '&c=R';
 if ($this->params->get('can_alert') && $this->alertees) {
@@ -57,18 +60,15 @@ if ($this->settings['settings_agenda']) $jscodes .= 'G';
 if ($this->settings['settings_ushol']) $jscodes .= 'H';
 if ($this->settings['settings_bday']) $jscodes .= 'B';
 if ($this->canCfg) $jscodes .= 'A';
-//try to convince the browser to reload the whole thing (for development purposes)
-//$jscodes .='&t='.time();
-$jdoc = JFactory::getDocument();
-//JHtml::_('behavior.framework', true);
+
 $jawc = new JApplicationWebClient();
 if ($jawc->mobile) $jscodes .= 'M';
-$jdoc->addScript('components/com_usersched/js.php?'.$jscodes, $skinopts);
-$jdoc->addScriptDeclaration($script);
+$this->document->addScript('components/com_usersched/js.php?'.$jscodes, $skinopts);
+$this->document->addScriptDeclaration($script);
 if (JFile::exists($skinpath.'skin.js')) {
-	$jdoc->addScript($skinpath.'skin.js');
+	$this->document->addScript($skinpath.'skin.js');
 }
-$jdoc->addStyleDeclaration($this->categoriesCSS());
+$this->document->addStyleDeclaration($this->categoriesCSS());
 
 $icns_left = -17;
 $icns_leftx = 20;
@@ -83,7 +83,7 @@ if ($this->params->get('show_page_heading', 1)) {
 ?>
 <div id="scheduler_here" class="dhx_cal_container" style='width:auto; height:800px;'>
 <?php if ($this->canCfg) :?>
-	<img src="components/com_usersched/static/cfg16-4.png" title="Configure calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="window.location='<?php echo JRoute::_('index.php?option=com_usersched&task=doConfig', false); ?>'" />
+	<img src="components/com_usersched/static/cfg16-4.png" title="Configure calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="window.location='<?php echo Route::_('index.php?option=com_usersched&task=doConfig', false); ?>'" />
 <?php endif; ?>
 	<img src="components/com_usersched/static/printer-2.png" title="Print calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="scheduler.toPDF('<?=JURI::base()?>components/com_usersched/pdf/generate.php','fullcolor')" />
 	<div class="dhx_cal_navline">
@@ -91,23 +91,14 @@ if ($this->params->get('show_page_heading', 1)) {
 		<div class="dhx_cal_prev_button" style="left:50px">&nbsp;</div>
 		<div class="dhx_cal_next_button" style="left:97px">&nbsp;</div>
 		<div class="dhx_cal_today_button" style="left:148px"></div>
-<?php else: ?>
+<?php elseif (false): ?>
 		<div class="dhx_cal_prev_button">&nbsp;</div>
 		<div class="dhx_cal_next_button">&nbsp;</div>
 		<div class="dhx_cal_today_button"></div>
 <?php endif; ?>
 <?php if ($is_terrace) :?>
 		<?php
-		$mtabs = array();
-		if ($this->settings['settings_agenda']) $mtabs[] = 'agenda_tab';
-		if ($this->settings['settings_day']) $mtabs[] = 'day_tab';
-		if ($this->settings['settings_week']) $mtabs[] = 'week_tab';
-		if ($this->settings['settings_month']) $mtabs[] = 'month_tab';
-		if ($this->settings['settings_year']) $mtabs[] = 'year_tab';
-		for ($i=1; $i<=count($mtabs); $i++) {
-			$cls = $i==1 ? ' first flt' : ($i == count($mtabs)? ' last flt' : ' flt');
-			echo '<div class="dhx_cal_tab'.$cls.'" name="'.$mtabs[$i-1].'"></div>';
-		}
+		echo $this->loadTemplate('material');
 		?>
 		<div class="dhx_cal_date"></div>
 		<?php if (false && $this->settings['settings_agenda']): ?>

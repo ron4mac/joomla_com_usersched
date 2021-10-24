@@ -2,6 +2,9 @@
 // License: GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched.php');
 JLoader::register('UserSchedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usersched.php');
 
@@ -11,7 +14,7 @@ class UserschedController extends JControllerLegacy
 	public function __construct($config = array())
 	{
 		parent::__construct($config);
-		if (!isset($this->input)) $this->input = JFactory::getApplication()->input;		//J2.x
+		if (!isset($this->input)) $this->input = Factory::getApplication()->input;		//J2.x
 	}
 
 	public function display ($cachable=false, $urlparams=false)
@@ -33,7 +36,7 @@ class UserschedController extends JControllerLegacy
 			$dbp = JPATH_SITE.'/'.UserSchedHelper::getDbasePath($del, $view == 'calendars');
 			JFolder::delete($dbp);
 		}
-		$this->setRedirect('index.php?option=com_usersched&view='.$view, JText::_('COM_USERSCHED_MSG_COMPLETE'));
+		$this->setRedirect('index.php?option=com_usersched&view='.$view, Text::_('COM_USERSCHED_MSG_COMPLETE'));
 	}
 
 	/****** OTHER OVERRIDES ******/

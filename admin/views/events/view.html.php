@@ -1,6 +1,9 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 /**
  * View class for a list of user schedules.
  */
@@ -47,9 +50,9 @@ class UserschedViewEvents extends JViewLegacy
 			$name = $user->name;
 		}
 
-		JToolBarHelper::title(JText::_('COM_USERSCHED_MENU').' : '.JText::_('COM_USERSCHED_MANAGER_EVENTS').' : '.$name, 'calendar usersched');
+		JToolBarHelper::title(Text::_('COM_USERSCHED_MENU').' : '.Text::_('COM_USERSCHED_MANAGER_EVENTS').' : '.$name, 'calendar usersched');
 
-		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_EVENTS_DELETEOK'), 'events.delete');
+		JToolBarHelper::deleteList(Text::_('COM_USERSCHED_EVENTS_DELETEOK'), 'events.delete');
 		//JToolBarHelper::trash('usersched.trash');
 
 	//	if ($canDo->get('core.edit.state')) {
@@ -67,7 +70,7 @@ class UserschedViewEvents extends JViewLegacy
 	protected function state ($vari, $set=false, $val='', $glb=false)
 	{
 		$stvar = ($glb?'':'com_usersched.').$vari;
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		if ($set) {
 			$app->setUserState($stvar, $val);
 			return;

@@ -1,6 +1,8 @@
 <?php
 defined('_JEXEC') or die;
- 
+
+use Joomla\CMS\Log\Log;
+
 class com_userschedInstallerScript
 {
 	function install ($parent) 
@@ -18,7 +20,10 @@ class com_userschedInstallerScript
 
 	function preflight ($type, $parent) 
 	{
-		echo '<span style="color:green">Okay</span>';
+		if (!in_array('sqlite', JDatabaseDriver::getConnectors())) {
+			Log::add('Joomla support for SQLite(3) is required for this component.', Log::WARNING, 'jerror');
+			return false;
+		}
 		if (method_exists($parent,'getManifest')) {
 			$this->release = $parent->getManifest->version;
 		} else {

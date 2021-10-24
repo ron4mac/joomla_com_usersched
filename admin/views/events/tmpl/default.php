@@ -1,6 +1,8 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Language\Text;
+
 // Include the component HTML helpers.
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
@@ -8,7 +10,7 @@ JHtml::_('behavior.multiselect');
 
 //var_dump('vdf',$this);jexit();
 
-$dtimeformat = 'D, j M Y g:ia';	//JText::_('DATE_FORMAT_LC2');
+$dtimeformat = 'D, j M Y g:ia';	//Text::_('DATE_FORMAT_LC2');
 $listOrder	= $this->state('list.ordering');
 $listDirn	= $this->state('list.direction');
 $canDo		= UserSchedHelper::getActions();
@@ -31,7 +33,7 @@ $canDo		= UserSchedHelper::getActions();
 					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_EV_RECTYPE', 'rectype', $listDirn, $listOrder); ?>
 				</th>
 				<th width="50%">
-					<?php echo JText::_('COM_USERSCHED_EV_TEXT'); ?>
+					<?php echo Text::_('COM_USERSCHED_EV_TEXT'); ?>
 				</th>
 			</tr>
 		</thead>

@@ -165,6 +165,7 @@ div.sched_alrtatr #alertlead_mul {
 	border-top: 1px solid #CCCCCC;
 	color: #005493;
 	opacity: 100;
+	z-index: 100;
 }
 .dhx_event_resize {
 	margin-left:2px;

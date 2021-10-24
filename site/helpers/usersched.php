@@ -1,10 +1,12 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+
 abstract class UserSchedHelper {
 
 	//default config view settings
-	public static $dfltConfig = array(
+	public static $dfltConfig = [
 		'settings_width' => '680px',
 		'settings_height' => '600px',
 		'settings_eventnumber' => 5,
@@ -43,12 +45,12 @@ abstract class UserSchedHelper {
 		'templates_eventbartext>' => 'return "<span title=\'"+event.text+"\'>" + event.text + "</span>";',
 		'templates_username' => false,
 		'lang_tag' => 'en-GB'
-	);
+	];
 
 	public static function uState ($vari, $set=false, $val='', $glb=false)
 	{
 		$stvar = ($glb?'':'com_usersched.').$vari;
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		if ($set) {
 			$app->setUserState($stvar, $val);
 			return;
@@ -58,7 +60,7 @@ abstract class UserSchedHelper {
 
 	public static function groupTitle ($gid)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$db->setQuery(
 			'SELECT `title`' .
 			' FROM `#__usergroups`' .

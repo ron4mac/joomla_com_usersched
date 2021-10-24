@@ -1,14 +1,18 @@
 <?php 
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 global $isDevel;
 $isDevel = true;
 $data = $this->data;	//echo'<pre>';var_dump($data); //jexit();
-JFactory::getDocument()->addStyleDeclaration($this->categoriesCSS());
+Factory::getDocument()->addStyleDeclaration($this->categoriesCSS());
 if ($this->params->get('show_page_heading', 1)) {
 	echo '<div class="page-header"><h3>'.$this->escape($this->params->get('page_heading')).'</h3></div>';
 }
 ?>
-<p style="font-size:1.2em"><?php echo JText::sprintf($this->message ? $this->message : 'COM_USERSCHED_RANGE_MESSAGE', $this->formattedDateTime($this->rBeg, $this->rEnd)) ?></p>
+<p style="font-size:1.2em"><?php echo Text::sprintf($this->message ? $this->message : 'COM_USERSCHED_RANGE_MESSAGE', $this->formattedDateTime($this->rBeg, $this->rEnd)) ?></p>
 <table align="center" width="100%" cellspacing="10" cellpadding="5" class="ev_table">
 <?php
     $num_events = count($data);

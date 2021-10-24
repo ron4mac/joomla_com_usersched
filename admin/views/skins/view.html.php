@@ -1,6 +1,9 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 /**
  * View class for a list of calendar skins.
  */
@@ -27,7 +30,7 @@ class UserschedViewSkins extends JViewLegacy
 		if (isset($this->state->task)) {
 			$tpl = $this->state->task;
 			parent::display($tpl);
-			JFactory::getApplication()->input->setVar('hidemainmenu', true);
+			Factory::getApplication()->input->setVar('hidemainmenu', true);
 		} else {
 			$this->addToolbar();
 			parent::display($tpl);
@@ -43,9 +46,9 @@ class UserschedViewSkins extends JViewLegacy
 	{
 		$canDo	= UserSchedHelper::getActions();
 
-		JToolBarHelper::title(JText::_('COM_USERSCHED_MENU').' : '.JText::_('COM_USERSCHED_MANAGER_SKINS'), 'calendar usersched');
+		JToolBarHelper::title(Text::_('COM_USERSCHED_MENU').' : '.Text::_('COM_USERSCHED_MANAGER_SKINS'), 'calendar usersched');
 
-		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_SKINS_DELETEOK'),"skins.delete");
+		JToolBarHelper::deleteList(Text::_('COM_USERSCHED_SKINS_DELETEOK'),"skins.delete");
 
 		// Add a modal upload button.
 		$icon = '<i class="icon-upload"></i>';
@@ -70,7 +73,7 @@ class UserschedViewSkins extends JViewLegacy
 	protected function state ($vari, $set=false, $val='', $glb=false)
 	{
 		$stvar = ($glb?'':'com_usersched.').$vari;
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		if ($set) {
 			$app->setUserState($stvar, $val);
 			return;

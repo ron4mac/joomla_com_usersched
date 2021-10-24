@@ -1,7 +1,9 @@
 <?php
 
+use Joomla\CMS\Factory;
+
 function groupTitle ($gid) {
-	$db = JFactory::getDbo();
+	$db = Factory::getDbo();
     $db->setQuery(
         'SELECT `title`' .
         ' FROM `#__usergroups`' .

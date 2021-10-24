@@ -8,7 +8,7 @@
 	B - joomla user birthdays
 	M - Mobile device
 */
-$jsfiles = array();
+$jsfiles = [];
 $codes = $_GET['c'];$lcl = $_GET['l'];
 
 $jsfiles[] = 'scheduler/codebase/dhtmlxscheduler.js';
@@ -27,7 +27,7 @@ if (strpos($codes,'A') === false) {
 	$scpt .= 'scheduler.attachEvent("onClick",function(){return false;});';
 	$scpt .= 'scheduler.config.details_on_dblclick = true;';
 	$scpt .= 'scheduler.config.dblclick_create = false;';
-	$jsfiles[] = array('s'=>$scpt);
+	$jsfiles[] = ['s'=>$scpt];
 }
 $jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_minical.js';
 if (strpos($codes,'M') !== false) {

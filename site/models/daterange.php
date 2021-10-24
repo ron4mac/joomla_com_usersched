@@ -6,7 +6,7 @@ require_once JPATH_COMPONENT.'/models/usersched.php';
 class UserSchedModelDaterange extends UserSchedModelUserSched
 {
 
-	public function __construct ($config = array())
+	public function __construct ($config = [])
 	{
 		$dbFile = UschedHelper::userDataPath() . '/sched.sql3';
 		// if no calendar yet exists, dont let the model parent create one

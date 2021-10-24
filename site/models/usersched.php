@@ -1,13 +1,16 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+//use Joomla\Database\DatabaseDriver;
+
 require_once JPATH_COMPONENT.'/helpers/usersched.php';
 
 class UserSchedModelUserSched extends JModelLegacy
 {
 	protected $dbinit = false;
 
-	protected $default_config = array(
+	protected $default_config = [
 	'default_date' => '%j %M %Y',
 	'month_date' => '%F %Y',
 	'load_date' => '%Y-%m-%d',
@@ -50,10 +53,10 @@ class UserSchedModelUserSched extends JModelLegacy
 
 	'positive_closing' => false,
 
-	'icons_edit' => array('icon_save', 'icon_cancel'),
-	'icons_select' => array('icon_details', 'icon_edit', 'icon_delete'),
-	'buttons_left' => array('dhx_save_btn', 'dhx_cancel_btn'),
-	'buttons_right' => array('dhx_delete_btn'),
+	'icons_edit' => ['icon_save', 'icon_cancel'],
+	'icons_select' => ['icon_details', 'icon_edit', 'icon_delete'],
+	'buttons_left' => ['dhx_save_btn', 'dhx_cancel_btn'],
+	'buttons_right' => ['dhx_delete_btn'],
 	'highlight_displayed_event' => true,
 	'displayed_event_color' => '#ffc5ab',
 	'displayed_event_text_color' => '#7e2727',
@@ -61,9 +64,9 @@ class UserSchedModelUserSched extends JModelLegacy
 	'left_border' => true,
 
 	'lang_tag' => 'en-GB'
-	);
+	];
 
-	public function __construct ($config = array())
+	public function __construct ($config = [])
 	{
 		if (array_key_exists('dbo',$config)) {
 			parent::__construct($config);
@@ -77,7 +80,7 @@ class UserSchedModelUserSched extends JModelLegacy
 			@mkdir($udbPath, 0777, true);
 		}
 		
-		$db = JDatabaseDriver::getInstance(array('driver'=>'sqlite','database'=>$udbPath.$dbFile));
+		$db = JDatabaseDriver::getInstance(['driver'=>'sqlite','database'=>$udbPath.$dbFile]);
 	//	$db->setDebug(7);
 		$db->connect();
 		$db->getConnection()->sqliteCreateFunction('strtotime', 'strtotime', 1);
@@ -114,7 +117,7 @@ class UserSchedModelUserSched extends JModelLegacy
 
 	public function saveConfig ($data)
 	{	//echo'<xmp>';var_dump($data);jexit();
-		$blank = array(
+		$blank = [
 			'settings_width' => '',
 			'settings_height' => '',
 			'settings_eventnumber' => 5,
@@ -158,8 +161,8 @@ class UserSchedModelUserSched extends JModelLegacy
 			'templates_eventbartext>' => 'return "<span title=\'"+event.text+"\'>" + event.text + "</span>";',
 			'templates_username' => false,
 			'lang_tag' => 'en-GB'
-			);
-		$cbxs = array(
+			];
+		$cbxs = [
 			'settings_posts',
 			'settings_repeat',
 			'settings_firstday',
@@ -183,8 +186,8 @@ class UserSchedModelUserSched extends JModelLegacy
 			'settings_ical',
 			'settings_minical',
 			'templates_username'
-			);
-		$vals = array(
+			];
+		$vals = [
 			'settings_width',
 			'settings_height',
 			'settings_defaultmode',
@@ -198,15 +201,15 @@ class UserSchedModelUserSched extends JModelLegacy
 			'templates_eventtext',
 			'templates_eventheader',
 			'templates_eventbartext>'
-			);
-		$ints = array(
+			];
+		$ints = [
 			'settings_eventnumber',
 			'templates_minmin',
 			'templates_hourheight',
 			'templates_starthour',
 			'templates_endhour',
 			'templates_agendatime'
-			);
+			];
 
 		foreach ($cbxs as $cbx) {
 			if ($data->get($cbx)) $blank[$cbx] = true;
@@ -236,7 +239,7 @@ class UserSchedModelUserSched extends JModelLegacy
 		$db = $this->getUserDatabase($calid);
 		if (!$db->dataExists()) return false;
 		$db->getDbase()->db_connect();	// cause it to open read/write
-		if ($icalfile = JFactory::getApplication()->input->files->get('ical_file', null)) {
+		if ($icalfile = Factory::getApplication()->input->files->get('ical_file', null)) {
 			if ($icalfile['tmp_name']) {
 				$icaldata = file_get_contents($icalfile['tmp_name']);
 				$this->importIcalendar($icaldata, $db);
@@ -283,7 +286,7 @@ class UserSchedModelUserSched extends JModelLegacy
 				$q = $db->getQuery(true);
 				if ($id<0) {	//-- add if neg id
 					$q->insert('alertees')
-						->columns(array('name','email','sms'))
+						->columns(['name','email','sms'])
 						->values($db->quote($names[$k]).','.$db->quote($emails[$k]).','.$db->quote($smss[$k]));
 				} else {	//-- upddate if pos id
 					$q->update('alertees')
@@ -320,7 +323,7 @@ class UserSchedModelUserSched extends JModelLegacy
 				$q = $db->getQuery(true);
 				if ($id<0) {	//-- add if neg id
 					$q->insert('categories')
-						->columns(array('name','txcolor','bgcolor'))
+						->columns(['name','txcolor','bgcolor'])
 						->values($db->quote($names[$k]).','.$db->quote($tcolrs[$k]).','.$db->quote($bcolrs[$k]));
 				} else {	//-- upddate if pos id
 					$q->update('categories')
@@ -374,7 +377,7 @@ class UserSchedModelUserSched extends JModelLegacy
 					break;
 			}
 		}
-		if (!isset($evt['user'])) $evt['user'] = JFactory::getUser()->id;
+		if (!isset($evt['user'])) $evt['user'] = Factory::getUser()->id;
 		$q = $db->_insert('events', array_keys($evt), array_values($evt));
 		//echo'<pre>';var_dump($q);echo'</pre>';
 		$db->execute($q);

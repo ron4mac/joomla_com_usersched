@@ -1,6 +1,8 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Language\Text;
+
 // Include the component HTML helpers.
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
@@ -27,7 +29,7 @@ $canDo = UserSchedHelper::getActions();
 					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_GROUPMEMBERS', 'a.members', $listDirn, $listOrder); ?>
 				</th>
 				<th width="15%">
-					<?php echo JText::_('COM_USERSCHED_GROUPID'); ?>
+					<?php echo Text::_('COM_USERSCHED_GROUPID'); ?>
 				</th>
 				<th width="30%">
 					&#160;

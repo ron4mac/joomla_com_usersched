@@ -1,13 +1,16 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 class UserschedControllerSkins extends JControllerLegacy
 {
 
 	public function __construct($config = array())
 	{
 		parent::__construct($config);
-		if (!isset($this->input)) $this->input = JFactory::getApplication()->input;		//J2.x
+		if (!isset($this->input)) $this->input = Factory::getApplication()->input;		//J2.x
 	}
 
 	public function delete ()
@@ -18,7 +21,7 @@ class UserschedControllerSkins extends JControllerLegacy
 		$model = $this->getModel('skins');
 		$model->deleteSkins($dels);
 
-		$this->setRedirect('index.php?option=com_usersched&view='.$view, JText::_('COM_USERSCHED_MSG_COMPLETE'));
+		$this->setRedirect('index.php?option=com_usersched&view='.$view, Text::_('COM_USERSCHED_MSG_COMPLETE'));
 	}
 
 	public function addSkin ()
@@ -26,15 +29,15 @@ class UserschedControllerSkins extends JControllerLegacy
 		$errmsg = '';
 		$upfile = $_FILES['skinfile'];
 		if ($upfile['error']) {
-			$errmsg = JText::_('COM_USERSCHED_UPLDERR_'.$upfile['error']);
+			$errmsg = Text::_('COM_USERSCHED_UPLDERR_'.$upfile['error']);
 		} else {
 			$rslt = $this->getModel('skins')->addSkin($upfile['tmp_name'], $this->input->get('skin_name'));
-			if ($rslt) $errmsg = JText::_('COM_USERSCHED_UPLDERRZ_'.$rslt);
+			if ($rslt) $errmsg = Text::_('COM_USERSCHED_UPLDERRZ_'.$rslt);
 		}
 		if ($errmsg) {
 			$this->setRedirect('index.php?option=com_usersched&view=skins', $errmsg, 'error');
 		} else {
-			$this->setRedirect('index.php?option=com_usersched&view=skins', JText::_('COM_USERSCHED_UPLDOK'));
+			$this->setRedirect('index.php?option=com_usersched&view=skins', Text::_('COM_USERSCHED_UPLDOK'));
 		}
 	}
 

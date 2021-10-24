@@ -1,28 +1,31 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 class UserSchedHelper
 {
 
 	public static function addSubmenu ($vName)
 	{
 		JHtmlSidebar::addEntry(
-			JText::_('COM_USERSCHED_SUBMENU_USERCALS'),
+			Text::_('COM_USERSCHED_SUBMENU_USERCALS'),
 			'index.php?option=com_usersched',
 			$vName == 'usersched'
 		);
 		JHtmlSidebar::addEntry(
-			JText::_('COM_USERSCHED_SUBMENU_GRPCALS'),
+			Text::_('COM_USERSCHED_SUBMENU_GRPCALS'),
 			'index.php?option=com_usersched&view=calendars',
 			$vName == 'calendars'
 		);
 //		JHtmlSidebar::addEntry(
-//			JText::_('COM_USERSCHED_SUBMENU_CONFIGURATIONS'),
+//			Text::_('COM_USERSCHED_SUBMENU_CONFIGURATIONS'),
 //			'index.php?option=com_usersched&view=configs',
 //			$vName == 'configs'
 //		);
 		JHtmlSidebar::addEntry(
-			JText::_('COM_USERSCHED_SUBMENU_SKINS'),
+			Text::_('COM_USERSCHED_SUBMENU_SKINS'),
 			'index.php?option=com_usersched&view=skins',
 			$vName == 'skins'
 		);
@@ -30,7 +33,7 @@ class UserSchedHelper
 
 	public static function getActions ()
 	{
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$result = new JObject;
 		$assetName = 'com_usersched';
 
@@ -93,7 +96,7 @@ class UserSchedHelper
 					case '@':
 						if (!$u) break;
 						$uid = (int)substr($fold,1);
-						$user = JFactory::getUser($uid);
+						$user = Factory::getUser($uid);
 						$scheds[] = array('name'=>$user->name,'uname'=>$user->username,'uid'=>$uid);
 						break;
 					case '_':
@@ -111,7 +114,7 @@ class UserSchedHelper
 	public static function getGroupTitle ($gid)
 	{
 		// Get the title of the group.
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('title'));
 		$query->from($db->quoteName('#__usergroups'));
@@ -125,7 +128,7 @@ class UserSchedHelper
 	{
 		$cmp = JApplicationHelper::getComponentName();
 
-		$results = JFactory::getApplication()->triggerEvent('onRjuserDatapath');
+		$results = Factory::getApplication()->triggerEvent('onRjuserDatapath');
 		$sdp = isset($results[0]) ? trim($results[0]) : '';
 		if (!$sdp) $sdp = 'userstor';
 

@@ -1,6 +1,8 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+
 abstract class UschedHelper
 {
 	protected static $instanceType = null;
@@ -69,7 +71,7 @@ abstract class UschedHelper
 	public static function userAuth ($uid)
 	{
 		self::getTypeOwner();
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$uid = $user->get('id');
 		$ugrps = $user->get('groups');	//var_dump('ug:',$ugrps);
 		switch (self::$instanceType) {
@@ -141,7 +143,7 @@ abstract class UschedHelper
 
 	private static function getStorPath ()
 	{
-		$results = JFactory::getApplication()->triggerEvent('onRjuserDatapath');
+		$results = Factory::getApplication()->triggerEvent('onRjuserDatapath');
 		$dsp = isset($results[0]) ? trim($results[0]) : false;
 		return ($dsp ?: 'userstor');
 	}
@@ -150,7 +152,7 @@ abstract class UschedHelper
 	private static function getTypeOwner ()
 	{
 		if (is_null(self::$instanceType)) {
-			$app = JFactory::getApplication();
+			$app = Factory::getApplication();
 			$id = $app->input->getBase64('calid', false);
 			if ($id) {
 				$ids = explode(':',base64_decode($id));
@@ -161,7 +163,7 @@ abstract class UschedHelper
 				self::$instanceType = $params->get('cal_type');
 				switch (self::$instanceType) {
 					case 0:
-						self::$ownerID = JFactory::getUser()->get('id');
+						self::$ownerID = Factory::getUser()->get('id');
 						if (!self::$ownerID) self::$ownerID = -1;
 						break;
 					case 1:

@@ -1,14 +1,11 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+
 class UserSchedControllerAjax extends JControllerLegacy
 {
-	public function __construct ($default=array())
-	{
-		parent::__construct($default);
-		if (!isset($this->input)) $this->input = JFactory::getApplication()->input;		//J2.x
-	}
-
 	//	ajax call from client scheduler for user birthdays
 	public function birthdays ()
 	{
@@ -22,9 +19,9 @@ class UserSchedControllerAjax extends JControllerLegacy
 
 		$yr = $this->input->get('y');
 		// get the database
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		// set groups to just get registered users
-		$groups = array(2);
+		$groups = [2];
 		// set a where clause for appropriate filtering
 		$userGroupWhereStatement = 'u.block=0 AND u.id IN (SELECT ugm.user_id FROM #__user_usergroup_map ugm WHERE ';
 		$hasGroups = false;
@@ -51,13 +48,13 @@ class UserSchedControllerAjax extends JControllerLegacy
 		$db->setQuery( $query );
 		$rows = $db->loadObjectList();
 		// turn them into calendar events
-		$evts = array();
+		$evts = [];
 		foreach ($rows as $u) {
 			$dob = unQuote($u->dob);
 			$bday = strtotime($dob);
 			$nxd = $bday + 86400;
 			if ($bday) {
-				$evts[] = array('text'=>$u->name,'start_date'=>$yr.date('-m-d',$bday),'end_date'=>$yr.date('-m-d',$nxd),'xevt'=>'isBrthday');
+				$evts[] = ['text'=>$u->name,'start_date'=>$yr.date('-m-d',$bday),'end_date'=>$yr.date('-m-d',$nxd),'xevt'=>'isBrthday'];
 			}
 		};
 		// send the events to the client
@@ -85,7 +82,7 @@ class UserSchedControllerAjax extends JControllerLegacy
 			$cache_file = $cdir.'/'.$yr.'-'.$rg.'.json';
 
 			// check cache file, if not then write cache file
-			if (!JFile::exists($cache_file) || filesize($cache_file) == 0 || ((filemtime($cache_file) + 604800 ) < time())) {
+			if (!JFile::exists($cache_file) || filesize($cache_file) == 0 || ((filemtime($cache_file) + 604800 ) < time())) {	// older than 1 week
 				$data = $this->getGholidays($yr, $rg);
 				JFile::write($cache_file, $data);
 			} else {
@@ -100,11 +97,11 @@ class UserSchedControllerAjax extends JControllerLegacy
 
 	private function getGholidays ($yr, $rg)
 	{
-		$key = JComponentHelper::getParams('com_usersched')->get('googapi_key','');
+		$key = ComponentHelper::getParams('com_usersched')->get('googapi_key','');
 		$url = 'https://www.googleapis.com/calendar/v3/calendars/'.$rg.'@holiday.calendar.google.com/events?key='.$key;
 		$url .= '&timeMin='.$yr.'-01-01T00%3A00%3A00%2B00%3A00&timeMax='.($yr+1).'-01-01T00%3A00%3A00%2B00%3A00&singelEvents=true';
 		$downloader = new FOFDownload();
-		$downloader->setAdapterOptions(array(CURLOPT_SSL_VERIFYPEER => 0,CURLOPT_SSL_VERIFYHOST => 0));
+		$downloader->setAdapterOptions([CURLOPT_SSL_VERIFYPEER => 0,CURLOPT_SSL_VERIFYHOST => 0]);
 		$data = $downloader->getFromURL($url);
 		return $data;
 	}

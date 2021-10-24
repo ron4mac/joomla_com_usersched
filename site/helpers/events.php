@@ -12,7 +12,7 @@ function bugout ($msg, $vars='') {
 
 function gatherEvents ($ddb, $rBeg, $rEnd, $useLead=true, $useRecur=true, $where='')
 {
-	$eray = array();
+	$eray = [];
 	if (!$ddb->dataExists()) return $eray;
 	
 }
@@ -26,8 +26,8 @@ function gatherEvents ($ddb, $rBeg, $rEnd, $useLead=true, $useRecur=true, $where
 	lead time is not used for calculation, so adjust $rBeg $rEnd to account for lead time if necessary
 */
 function recursNow (&$evt, $rBeg, $rEnd, $lasto=true) {
-	list($rec_pattern, $xtra) = explode('#', $evt['rec_type']);
-	list($type,$count,$day,$count2,$daysl) = explode('_', $rec_pattern);
+	list($rec_pattern, $xtra) = array_pad(explode('#', $evt['rec_type']),2,null);
+	list($type,$count,$day,$count2,$daysl) = array_pad(explode('_', $rec_pattern),5,null);
 //	bugout('',array($type,$count,$day,$count2,$daysl,$xtra));
 	$dt = new R_DateTime($evt['start_date']);
 //	bugout( '@@ '. $dt->format('Y-m-d H:i D') );
@@ -68,7 +68,7 @@ function recursNow (&$evt, $rBeg, $rEnd, $lasto=true) {
 			break;
 	}
 
-	$days = array();
+	$days = [];
 	if ($daysl) {
 		$days = explode(',',$daysl);
 		//!! need to handle monday as begin of week

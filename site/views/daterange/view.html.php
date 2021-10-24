@@ -15,12 +15,12 @@ class UserschedViewDaterange extends UserschedView
 
 		$m = $this->getModel();
 
-		JHtml::stylesheet('components/com_usersched/static/upcoming.css');
+		$this->document->addStyleSheet('components/com_usersched/static/upcoming.css');
 		if ($m->hasData()) {
 			//$this->alertees = $m->getUdTable('alertees','',true);
 			$this->categories = $m->getUdTable('categories');
 			// if not registered, hide private categories
-			$private = array(-1);
+			$private = [-1];
 			if ($this->user->id == 0) {
 				//var_dump($this->categories);
 				foreach ($this->categories as $cat) {
@@ -43,6 +43,18 @@ class UserschedViewDaterange extends UserschedView
 			bugout('[-]'.$where,$evts);
 			foreach ($evts as $k=>$evt) {
 				if ($evt['rec_type']) {
+					// check for deleted individual instances of repeated events
+					if ($evt['rec_type'] == 'none') {
+						// remove this from the event list
+						unset($evts[$k]);
+						// find and remove the associated event instance
+						foreach ($evts as $ek=>$ue) {
+							if ($evt['event_pid'] == $ue['event_id'] && $evt['event_length'] == $ue['t_start']) {
+								unset($evts[$ek]);
+							}
+						}
+						continue;
+					}
 					if (recursNow($evt, $this->rBeg, $this->rEnd, false)) {
 						// adjust end to reflect event length
 						$evt['t_end'] = $evt['t_start'] + $evt['event_length'];
@@ -52,6 +64,12 @@ class UserschedViewDaterange extends UserschedView
 					else unset($evts[$k]);
 				}
 			}
+
+			// turn urls into links
+			foreach ($evts as $k=>$evt) {
+				JHtmlUsersched::makeLinks($evts[$k]['text']);
+			}
+
 			usort($evts, function ($a,$b) { if ($a['t_start']==$b['t_start']) return 0; return ($a['t_start'] < $b['t_start']) ? -1 : 1; });
 			$this->data = $evts;
 			parent::display($tpl);

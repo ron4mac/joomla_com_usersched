@@ -6,7 +6,7 @@ require_once JPATH_COMPONENT.'/views/uschedview.php';
 
 class UserschedViewUsersched extends UserschedView
 {
-	protected $config = array(
+	protected $config = [
 	'default_date' => '%j %M %Y',
 	'month_date' => '%F %Y',
 	'load_date' => '%Y-%m-%d',
@@ -49,22 +49,22 @@ class UserschedViewUsersched extends UserschedView
 
 	'positive_closing' => false,
 
-	'icons_edit' => array('icon_save', 'icon_cancel'),
-	'icons_select' => array('icon_details', 'icon_edit', 'icon_delete'),
-	'buttons_left' => array('dhx_save_btn', 'dhx_cancel_btn'),
-	'buttons_right' => array('dhx_delete_btn'),
+	'icons_edit' => ['icon_save', 'icon_cancel'],
+	'icons_select' => ['icon_details', 'icon_edit', 'icon_delete'],
+	'buttons_left' => ['dhx_save_btn', 'dhx_cancel_btn'],
+	'buttons_right' => ['dhx_delete_btn'],
 	'highlight_displayed_event' => true,
 	'displayed_event_color' => '#ffc5ab',
 	'displayed_event_text_color' => '#7e2727',
 
 	'left_border' => true
-	);
+	];
 
 	function display ($tpl=null)
 	{
 		$this->canCfg = false;
 		list($cal_type, $jID) = UschedHelper::getInstanceID(true);
-	//	$jID = explode(',',$jID);
+		$jID = explode(',',$jID);
 		switch ($cal_type) {
 			case 0:
 				$this->canCfg = true;
@@ -82,13 +82,13 @@ class UserschedViewUsersched extends UserschedView
 		}
 
 		// store the caltype and user in the session
-		if (!is_array($jID)) $jID = array($jID);
+		if (!is_array($jID)) $jID = [$jID];
 		//$this->state('calid', true, $this->cal_type.':'.implode(',', $jID));
 		UserSchedHelper::uState('calid', true, $this->params->get('cal_type').':'.implode(',', $jID));
 
 		$m = $this->getModel();
-		$this->alertees = $m->getUdTable('alertees'); $this->alertees = $this->alertees ?: array();	//if (!$this->alertees) $this->alertees = array();
-		$this->categories = $m->getUdTable('categories'); $this->categories = $this->categories ?: array();	//if (!$this->categories) $this->categories = array();
+		$this->alertees = $m->getUdTable('alertees'); $this->alertees = $this->alertees ?: [];	//if (!$this->alertees) $this->alertees = [];
+		$this->categories = $m->getUdTable('categories'); $this->categories = $this->categories ?: [];	//if (!$this->categories) $this->categories = [];
 		$cfg = $m->getUdTable('options','name = "config"',false);
 		if ($cfg) {
 			$this->settings = unserialize($cfg['value']);
@@ -125,10 +125,10 @@ class UserschedViewUsersched extends UserschedView
 
 	protected function categoriesJSON ()
 	{
-		$jsn = array('{key:"",label:"[ none ]"}');
+		$jsn = ['{key:"",label:"[ none ]"}'];
 		if ($this->categories)
 		foreach ($this->categories as $cat) {
-			$jsn[] = json_encode(array('key'=>$cat['id'], 'label'=>$cat['name']));
+			$jsn[] = json_encode(['key'=>$cat['id'], 'label'=>$cat['name']]);
 		}
 		return $jsn;
 	}

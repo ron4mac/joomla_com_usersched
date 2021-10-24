@@ -1,6 +1,9 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 /**
  * View class for a list of group schedulers.
  */
@@ -32,9 +35,9 @@ class UserschedViewCalendars extends JViewLegacy
 	{
 		$canDo	= UserSchedHelper::getActions();
 
-		JToolBarHelper::title(JText::_('COM_USERSCHED_MENU').' : '.JText::_('COM_USERSCHED_MANAGER_GSCHEDS'), 'calendar usersched');
+		JToolBarHelper::title(Text::_('COM_USERSCHED_MENU').' : '.Text::_('COM_USERSCHED_MANAGER_GSCHEDS'), 'calendar usersched');
 
-		JToolBarHelper::deleteList(JText::_('COM_USERSCHED_MANAGER_DELETEOK'));
+		JToolBarHelper::deleteList(Text::_('COM_USERSCHED_MANAGER_DELETEOK'));
 		//JToolBarHelper::trash('usersched.trash');
 
 	//	if ($canDo->get('core.edit.state')) {
@@ -52,7 +55,7 @@ class UserschedViewCalendars extends JViewLegacy
 	protected function state ($vari, $set=false, $val='', $glb=false)
 	{
 		$stvar = ($glb?'':'com_usersched.').$vari;
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		if ($set) {
 			$app->setUserState($stvar, $val);
 			return;
