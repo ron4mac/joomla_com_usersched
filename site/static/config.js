@@ -11,8 +11,8 @@ function addCategory (elem) {
 	var pg = document.createElement("p");
 	pg.innerHTML = '<input type="hidden" name="category_id[]" value="'+addCategory.sid+'" />\
 	<span class="col1"><input type="text" name="category_name[]" value="New Category" class="ecname" /></span>\
-	<span class="col2"><input class="minicolors" type="text" name="category_txcolor[]" data-cid="tx.'+addCategory.sid+'" data-control="wheel" data-position="bottom" value="" /></span>\
-	<span class="col3"><input class="minicolors" type="text" name="category_bgcolor[]" data-cid="bg.'+addCategory.sid+'" data-control="wheel" data-position="bottom" value="" /></span>\
+	<span class="col2"><input class="hminicolors" type="color" name="category_txcolor[]" data-cid="tx.'+addCategory.sid+'" data-control="wheel" data-position="bottom" value="" /></span>\
+	<span class="col3"><input class="hminicolors" type="color" name="category_bgcolor[]" data-cid="bg.'+addCategory.sid+'" data-control="wheel" data-position="bottom" value="" /></span>\
 	<span class="col4"><div>&nbsp;</div></span>\
 	<span class="catsamp" id="catsamp_'+addCategory.sid+'">New Category</span>';
 	elem.parentNode.insertBefore(pg,elem);

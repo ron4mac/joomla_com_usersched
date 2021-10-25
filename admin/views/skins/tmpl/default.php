@@ -3,12 +3,13 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 // Include the component HTML helpers.
-JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
-JHtml::_('behavior.tooltip');
+HTMLHelper::addIncludePath(JPATH_COMPONENT.'/helpers/html');
+HTMLHelper::_('bootstrap.tooltip');
 //JHTML::_('behavior.modal');
-JHTML::_('behavior.formvalidation');
+//HTMLHelper::_('bootstrap.formvalidation');
 
 $script = '
 	function previewSkin (row) {

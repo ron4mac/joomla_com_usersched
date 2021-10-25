@@ -12,12 +12,12 @@ $jsfiles = [];
 $codes = $_GET['c'];$lcl = $_GET['l'];
 
 $jsfiles[] = 'scheduler/codebase/dhtmlxscheduler.js';
-$jsfiles[] = 'scheduler/codebase/sources/locale/locale_'.$lcl.'.js';
+$jsfiles[] = 'scheduler/codebase/locale/locale_'.$lcl.'.js';
 if (strpos($codes,'Y') !== false) $jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_year_view.js';
 if (strpos($codes,'G') !== false) $jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_agenda_view.js';
 if (strpos($codes,'R') !== false) {
 	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_recurring.js';
-	$jsfiles[] = 'scheduler/codebase/sources/locale/recurring/locale_recurring_'.$lcl.'.js';
+	$jsfiles[] = 'scheduler/codebase/locale/recurring/locale_recurring_'.$lcl.'.js';
 }
 if (strpos($codes,'A') === false) {
 	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_readonly.js';

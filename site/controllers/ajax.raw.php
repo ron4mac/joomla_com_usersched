@@ -3,6 +3,8 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Http\HttpFactory;
 
 class UserSchedControllerAjax extends JControllerLegacy
 {
@@ -71,23 +73,22 @@ class UserSchedControllerAjax extends JControllerLegacy
 
 	private function hCache ($yr, $rg)
 	{
-		jimport('joomla.filesystem.folder');
 		if (is_writable(JPATH_CACHE)) {
 			$cdir = JPATH_CACHE.'/'.$this->input->get('option');
 			// check cache dir or create cache dir
-			if (!JFolder::exists($cdir)) {
-				JFolder::create($cdir); 
+			if (!Folder::exists($cdir)) {
+				Folder::create($cdir); 
 			}
 
 			$cache_file = $cdir.'/'.$yr.'-'.$rg.'.json';
 
 			// check cache file, if not then write cache file
-			if (!JFile::exists($cache_file) || filesize($cache_file) == 0 || ((filemtime($cache_file) + 604800 ) < time())) {	// older than 1 week
+			if (!file_exists($cache_file) || filesize($cache_file) == 0 || ((filemtime($cache_file) + 604800 ) < time())) {	// older than 1 week
 				$data = $this->getGholidays($yr, $rg);
-				JFile::write($cache_file, $data);
+				file_put_contents($cache_file, $data);
 			} else {
 				// read cache file
-				$data = JFile::read($cache_file);
+				$data = file_get_contents($cache_file);
 			}
 			return $data;
 		} else {
@@ -100,10 +101,9 @@ class UserSchedControllerAjax extends JControllerLegacy
 		$key = ComponentHelper::getParams('com_usersched')->get('googapi_key','');
 		$url = 'https://www.googleapis.com/calendar/v3/calendars/'.$rg.'@holiday.calendar.google.com/events?key='.$key;
 		$url .= '&timeMin='.$yr.'-01-01T00%3A00%3A00%2B00%3A00&timeMax='.($yr+1).'-01-01T00%3A00%3A00%2B00%3A00&singelEvents=true';
-		$downloader = new FOFDownload();
-		$downloader->setAdapterOptions([CURLOPT_SSL_VERIFYPEER => 0,CURLOPT_SSL_VERIFYHOST => 0]);
-		$data = $downloader->getFromURL($url);
-		return $data;
+		$connector = HttpFactory::getHttp();
+		$data = $connector->get($url);
+		return $data->body;
 	}
 
 	

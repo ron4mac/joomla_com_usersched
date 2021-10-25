@@ -2,7 +2,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-//use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseDriver;
 
 require_once JPATH_COMPONENT.'/helpers/usersched.php';
 
@@ -80,7 +80,11 @@ class UserSchedModelUserSched extends JModelLegacy
 			@mkdir($udbPath, 0777, true);
 		}
 		
-		$db = JDatabaseDriver::getInstance(['driver'=>'sqlite','database'=>$udbPath.$dbFile]);
+		if (class_exists('DatabaseDriver')) {
+			$db = DatabaseDriver::getInstance(['driver'=>'sqlite','database'=>$udbPath.$dbFile]);
+		} else {
+			$db = JDatabaseDriver::getInstance(['driver'=>'sqlite','database'=>$udbPath.$dbFile]);
+		}
 	//	$db->setDebug(7);
 		$db->connect();
 		$db->getConnection()->sqliteCreateFunction('strtotime', 'strtotime', 1);
