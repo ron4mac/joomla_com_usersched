@@ -20,11 +20,15 @@ class UserschedView extends JViewLegacy
 	protected $show_versions, $version;		// settings for version display
 	protected $user, $cal_type, $auth;		// user and calendar/authid info
 	protected $params;						// calendar instance (menu item) parameters
+	protected $mnuItm;						// menu id for this instance
 
 	public function __construct ($config=[])
 	{
 		parent::__construct($config);
 		if (!$this->document) $this->document = Factory::getDocument();
+		// get the menu id
+		$app = Factory::getApplication();
+		$this->mnuItm = $app->input->getInt('Itemid');
 		// get the component options
 		$this->cOpts = ComponentHelper::getParams('com_usersched');
 		// mainline a few of them

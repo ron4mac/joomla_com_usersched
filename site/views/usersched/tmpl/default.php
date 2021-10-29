@@ -3,6 +3,7 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
 //echo'<xmp>';var_dump($this);echo'</xmp>';jexit();
 
@@ -36,9 +37,9 @@ $calID = base64_encode(UserSchedHelper::uState('calid'));
 // gather and inline needed javascript variables
 $script = 'var usched_calid = "'.$calID.'";';
 $script .= 'var usched_mode = "'.$this->settings['settings_defaultmode'].'";';
-$script .= 'var usched_base = "'.JURI::base(true).'";';
+$script .= 'var usched_base = "'.Uri::base(true).'";';
 //$script .= 'var userschedlurl = "' . JURI::base() . 'index.php?option=com_usersched&view=usersched&task=calXML&calid=' . $calID .'";';
-$script .= 'var userschedlurl = "' . JURI::base() . 'index.php?option=com_usersched&format=raw&task=calXML&calid=' . urlencode($calID) .'";';
+$script .= 'var userschedlurl = "' . Uri::base() . 'index.php?option=com_usersched&format=raw&task=calXML&calid=' . urlencode($calID) .'";';
 ////////$script .= 'scheduler.cfg_cfg = '.$this->cfgcfg.';';
 $script .= 'scheduler.__categories = ['.implode(',',$this->categoriesJSON()).'];';
 if ($this->alertees) {
@@ -83,9 +84,9 @@ if ($this->params->get('show_page_heading', 1)) {
 ?>
 <div id="scheduler_here" class="dhx_cal_container" style='width:auto; height:800px;'>
 <?php if ($this->canCfg) :?>
-	<img src="components/com_usersched/static/cfg16-4.png" title="Configure calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="window.location='<?php echo Route::_('index.php?option=com_usersched&task=doConfig', false); ?>'" />
+	<img src="components/com_usersched/static/cfg16-4.png" title="Configure calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="window.location='<?php echo Route::_('index.php?option=com_usersched&task=doConfig&Itemid='.$this->mnuItm, false); ?>'" />
 <?php endif; ?>
-	<img src="components/com_usersched/static/printer-2.png" title="Print calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="scheduler.toPDF('<?=JURI::base()?>components/com_usersched/pdf/generate.php','fullcolor')" />
+	<img src="components/com_usersched/static/printer-2.png" title="Print calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="scheduler.toPDF('<?=Uri::base()?>components/com_usersched/pdf/generate.php','fullcolor')" />
 	<div class="dhx_cal_navline">
 <?php if (false && $is_terrace) :?>
 		<div class="dhx_cal_prev_button" style="left:50px">&nbsp;</div>

@@ -4,6 +4,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Filesystem\Folder;
 
 require_once JPATH_COMPONENT.'/helpers/usersched.php';
 require_once JPATH_COMPONENT.'/views/uschedview.php';
@@ -158,17 +159,15 @@ class UserschedViewConfig extends UserschedView
 
 	protected function getSkinOptions ()
 	{
-		jimport('joomla.filesystem.folder');
-
 		// Initialize variables.
 		$options = [];
-		$path = JPATH_SITE . '/components/com_usersched/skins';
+		$path = JPATH_COMPONENT_SITE . '/skins';
 
 		// Prepend some default options
 		$options[] = HTMLHelper::_('select.option', '', Text::_('JOPTION_USE_DEFAULT'));
 
 		// Get a list of folders in the search path with the given filter.
-		$folders = JFolder::folders($path);
+		$folders = Folder::folders($path);
 
 		// Build the options list from the list of folders.
 		if (is_array($folders)) {

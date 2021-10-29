@@ -47,8 +47,7 @@ class UserSchedController extends JControllerLegacy
 		Session::checkToken();
 		$m = $this->getModel();
 		$m->saveConfig($this->input->post);
-	//	$this->setRedirect(Route::_('index.php?option=com_usersched', false), Text::_('COM_USERSCHED_CFG_SAVED'));
-		$this->setRedirect(Route::_('index.php?Itemid='.$this->mnuItm, false), Text::_('COM_USERSCHED_CFG_SAVED'));
+		$this->setRedirect(Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->mnuItm, false), Text::_('COM_USERSCHED_CFG_SAVED'));
 	}
 
 	public function impical ()
@@ -64,7 +63,7 @@ class UserSchedController extends JControllerLegacy
 			$fbk = 'error';
 		}
 		Factory::getApplication()->enqueueMessage($msg, $fbk);
-		$this->setRedirect(Route::_('index.php?option=com_usersched', false));
+		$this->setRedirect(Route::_('index.php?option=com_usersched&view=config&Itemid='.$this->mnuItm, false));
 	}
 
 	public function exp2ical ()
@@ -78,8 +77,8 @@ class UserSchedController extends JControllerLegacy
 /*	ajax call from client scheduler js (setup in view default) */
 	public function calXML ()
 	{
-		require_once('scheduler/codebase/connector/scheduler_connector.php');
-		require_once('scheduler/codebase/connector/db_sqlite3.php');
+		require_once 'scheduler/codebase/connector/scheduler_connector.php';
+		require_once 'scheduler/codebase/connector/db_sqlite3.php';
 
 		if (defined('RJC_DEV')) {
 			Log::addLogger(['text_file' => 'usersched.log.php'], Log::INFO, 'usersched');

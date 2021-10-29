@@ -3,8 +3,11 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Router\Route;
+
+$fact = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->mnuItm, false);
 ?>
-<form id="configform" method="post" enctype="multipart/form-data" style="margin:0">
+<form id="configform" action="<?=$fact?>" method="post">
 <input class="btn btn-primary" type="submit" name="saves" value="<?=Text::_('COM_USERSCHED_CFG_SAVE')?>" onclick="this.form.task.value='setcfg'" />
 <div id="formtabs" class="stabber">
 <div class="stabbertab" title="<?=Text::_('COM_USERSCHED_CFG_GENERAL')?>">

@@ -1,6 +1,11 @@
 .dhx_cal_navline div, .dhx_cal_navline .dhx_cal_prev_button, .dhx_cal_navline .dhx_cal_next_button {
     top: 22px;
 }
+.dhx_cal_tab, .dhx_cal_tab.active {
+	font-size: 11px;
+	height: 19px;
+	line-height: 20px;
+}
 .dhx_cal_tab.first.flt, .dhx_cal_tab.last.flt {
     border-radius: 0;
 }
