@@ -8,7 +8,7 @@ class UserschedView extends JViewLegacy
 	public function display ($tpl=null)
 	{	echo 'HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH';
 		UserschedHelper::addSubmenu($this->relm);
-		JHtmlSidebar::render();
+		$this->sidebar = JHtmlSidebar::render();
 		parent::display($tpl);
 	}
 

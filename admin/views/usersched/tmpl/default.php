@@ -15,37 +15,40 @@ $listDirn	= $this->state('list.direction');
 $canDo		= UserSchedHelper::getActions();
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_usersched&view=usersched'); ?>" method="post" name="adminForm" id="adminForm">
-	<div class="clr"> </div>
+	<div id="j-sidebar-container" class="span2">
+		<?php echo $this->sidebar; ?>
+	</div>
+	<div id="j-main-container" class="span10">
 
-	<table class="table table-striped adminlist">
-		<thead>
-			<tr>
-				<th width="1%"></th>
-				<th width="1%"><?php echo JHtml::_('myGrid.checkall'); ?></th>
-				<th width="15%">
-					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_USERNAME', 'username', $listDirn, $listOrder); ?>
-				</th>
-				<th width="15%">
-					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_FULLNAME', 'fullname', $listDirn, $listOrder); ?>
-				</th>
-				<th width="15%">
-					<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_USERID', 'userid', $listDirn, $listOrder); ?>
-				</th>
-				<th width="30%">
-					&#160;
-				</th>
-			</tr>
-		</thead>
-		<tfoot>
-			<tr>
-				<td colspan="6">
-					<?php echo $this->pagination->getListFooter(); ?>
-				</td>
-			</tr>
-		</tfoot>
-		<tbody>
-		<?php foreach ($this->items as $i => $item) : ?>
-			<tr class="row<?php echo $i % 2; ?>">
+		<table class="table table-striped adminlist">
+			<thead>
+				<tr>
+					<th width="1%"></th>
+					<th width="1%"><?php echo JHtml::_('myGrid.checkall'); ?></th>
+					<th width="15%">
+						<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_USERNAME', 'username', $listDirn, $listOrder); ?>
+					</th>
+					<th width="15%">
+						<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_FULLNAME', 'fullname', $listDirn, $listOrder); ?>
+					</th>
+					<th width="15%">
+						<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_USERID', 'userid', $listDirn, $listOrder); ?>
+					</th>
+					<th width="30%">
+						&#160;
+					</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td colspan="6">
+						<?php echo $this->pagination->getListFooter(); ?>
+					</td>
+				</tr>
+			</tfoot>
+			<tbody>
+			<?php foreach ($this->items as $i => $item) : ?>
+				<tr class="row<?php echo $i % 2; ?>">
 					<td class="right">
 						<?php echo $i + 1 + $this->pagination->limitstart; ?>
 					</td>
@@ -70,12 +73,13 @@ $canDo		= UserSchedHelper::getActions();
 			</tbody>
 		</table>
 
+		<div>
+			<input type="hidden" name="task" value="" />
+			<input type="hidden" name="boxchecked" value="0" />
+			<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
+			<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
+			<?php echo JHtml::_('form.token'); ?>
+		</div>
 
-	<div>
-		<input type="hidden" name="task" value="" />
-		<input type="hidden" name="boxchecked" value="0" />
-		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
-		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
-		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>

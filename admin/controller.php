@@ -22,7 +22,7 @@ class UserschedController extends JControllerLegacy
 	//	require_once JPATH_COMPONENT.'/helpers/usersched.php';
 
 		// Load the submenu.
-		UserschedHelper::addSubmenu($this->input->get('view', 'usersched'));
+//		UserschedHelper::addSubmenu($this->input->get('view', 'usersched'));
 
 		parent::display();
 	}
