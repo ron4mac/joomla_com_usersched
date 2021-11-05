@@ -31,16 +31,14 @@ $selIcon = 'selected.png';
 $unselIcon = 'unselected.png';
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_usersched&view=skins'); ?>" method="post" name="adminForm" id="adminForm">
-	<div id="j-sidebar-container" class="span2">
-		<?php echo $this->sidebar; ?>
-	</div>
+	<?php echo HTMLHelper::_('usched.sideBar', $this->sidebar); ?>
 	<div id="j-main-container" class="span10">
 
 		<table class="table table-striped adminlist">
 			<thead>
 				<tr>
 					<th width="1%"></th>
-					<th width="1%"><?php echo JHtml::_('myGrid.checkall'); ?></th>
+					<th width="1%"><?php echo JHtml::_('usched.checkall'); ?></th>
 					<th width="15%">
 						<?php echo Text::_('COM_USERSCHED_SKIN_NAME'); ?>
 					</th>

@@ -6,9 +6,9 @@ JLoader::register('UserSchedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/use
 class UserschedView extends JViewLegacy
 {
 	public function display ($tpl=null)
-	{	echo 'HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH';
+	{
 		UserschedHelper::addSubmenu($this->relm);
-		$this->sidebar = JHtmlSidebar::render();
+		$this->sidebar = ((int)JVERSION < 4) ? JHtmlSidebar::render() : '';
 		parent::display($tpl);
 	}
 

@@ -17,16 +17,14 @@ $listDirn	= $this->state('list.direction');
 $canDo		= UserSchedHelper::getActions();
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_usersched&view=events'); ?>" method="post" name="adminForm" id="adminForm">
-	<div id="j-sidebar-container" class="span2">
-		<?php echo $this->sidebar; ?>
-	</div>
+	<?php echo HTMLHelper::_('usched.sideBar', $this->sidebar); ?>
 	<div id="j-main-container" class="span10">
 
 		<table class="table table-striped adminlist">
 			<thead>
 				<tr>
 					<th width="1%"></th>
-					<th width="1%"><?php echo JHtml::_('myGrid.checkall'); ?></th>
+					<th width="1%"><?php echo JHtml::_('usched.checkall'); ?></th>
 					<th width="15%">
 						<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_EV_START', 'startdate', $listDirn, $listOrder); ?>
 					</th>
