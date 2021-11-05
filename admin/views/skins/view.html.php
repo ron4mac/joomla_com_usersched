@@ -4,14 +4,17 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 
+require_once JPATH_COMPONENT_ADMINISTRATOR.'/views/uschedview.php';
+
 /**
  * View class for a list of calendar skins.
  */
-class UserschedViewSkins extends JViewLegacy
+class UserschedViewSkins extends UserschedView
 {
 	protected $items;
 	protected $pagination;
 	protected $state;
+	protected $relm = 'skins';
 
 	/**
 	 * Display the view

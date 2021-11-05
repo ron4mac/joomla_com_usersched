@@ -4,14 +4,17 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 
+require_once JPATH_COMPONENT_ADMINISTRATOR.'/views/uschedview.php';
+
 /**
  * View class for a list of user schedules.
  */
-class UserschedViewEvents extends JViewLegacy
+class UserschedViewEvents extends UserschedView
 {
 	protected $items;
 	protected $pagination;
 	protected $state;
+	protected $relm = 'events';
 
 	/**
 	 * Display the view

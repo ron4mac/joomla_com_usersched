@@ -1,16 +1,20 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+
+require_once JPATH_COMPONENT_ADMINISTRATOR.'/views/uschedview.php';
 
 /**
  * View class for a list of user schedules.
  */
-class UserschedViewUsersched extends JViewLegacy
+class UserschedViewUsersched extends UserschedView
 {
 	protected $items;
 	protected $pagination;
 	protected $state;
+	protected $relm = 'usersched';
 
 	/**
 	 * Display the view
@@ -60,7 +64,7 @@ class UserschedViewUsersched extends JViewLegacy
 	protected function state ($vari, $set=false, $val='', $glb=false)
 	{
 		$stvar = ($glb?'':'com_usersched.').$vari;
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		if ($set) {
 			$app->setUserState($stvar, $val);
 			return;
