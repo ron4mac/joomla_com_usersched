@@ -21,7 +21,7 @@ class UserschedControllerSkins extends JControllerLegacy
 		$model = $this->getModel('skins');
 		$model->deleteSkins($dels);
 
-		$this->setRedirect('index.php?option=com_usersched&view='.$view, Text::_('COM_USERSCHED_MSG_COMPLETE'));
+		$this->setRedirect('index.php?option=com_usersched&view='.$view, Text::_('COM_USERSCHED_MSG_COMPLETE').print_r($this->input->post,true));
 	}
 
 	public function addSkin ()

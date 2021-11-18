@@ -42,6 +42,8 @@ class UserschedViewEvents extends UserschedView
 	 */
 	protected function addToolbar()
 	{
+		Factory::getApplication()->input->set('hidemainmenu', true);
+
 		$canDo	= UserSchedHelper::getActions();
 
 		$uid = $this->state->get('usched_uid');

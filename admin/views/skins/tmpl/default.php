@@ -9,7 +9,6 @@ use Joomla\CMS\HTML\HTMLHelper;
 // Include the component HTML helpers.
 HTMLHelper::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
-//JHTML::_('behavior.modal');
 //HTMLHelper::_('bootstrap.formvalidation');
 
 $script = '
@@ -29,7 +28,33 @@ $canDo = UserSchedHelper::getActions();
 $imgPath = Uri::base().'components/com_usersched/static/';
 $selIcon = 'selected.png';
 $unselIcon = 'unselected.png';
+$upform = '<form action="'.JRoute::_('index.php?option=com_usersched&view=skins').'" onsubmit="return document.formvalidator.isValid(this)" enctype="multipart/form-data" method="post" name="upldForm" id="upldForm">
+		<div>
+			<p>'.Text::_('COM_USERSCHED_UPLOAD_MSG').'</p>
+			<label>'.Text::_('COM_USERSCHED_UPLOAD_LABEL').'</label><input type="text" name="skin_name" class="required validate-string" required />
+			<br /><input type="file" name="skinfile" accept="application/zip" class="required validate-file" />
+			<br /><button type="submit" class="validate">'.Text::_('COM_USERSCHED_UPLOAD_SUBMIT').'</button>
+			<input type="hidden" name="task" value="skins.addSkin" />
+			'.HTMLHelper::_('form.token').'
+		</div>
+	</form>
+';
+//$upform='';
 ?>
+<style>
+	#modal-box .modal-body {padding:1.5em};
+</style>
+<?php echo HTMLHelper::_(
+	'bootstrap.renderModal',
+	'modal-box', // selector
+	array( // options
+		'modal-dialog-scrollable' => true,
+		'title'  => 'Test Title',
+//		'footer' => '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+//					<button type="button" class="btn btn-primary" id="modal-save">Send</button>',
+	),
+		$upform
+); ?>
 <form action="<?php echo JRoute::_('index.php?option=com_usersched&view=skins'); ?>" method="post" name="adminForm" id="adminForm">
 	<?php echo HTMLHelper::_('usched.sideBar', $this->sidebar); ?>
 	<div id="j-main-container" class="span10">
@@ -38,7 +63,7 @@ $unselIcon = 'unselected.png';
 			<thead>
 				<tr>
 					<th width="1%"></th>
-					<th width="1%"><?php echo JHtml::_('usched.checkall'); ?></th>
+					<th width="1%"><?php echo HTMLHelper::_('usched.checkall'); ?></th>
 					<th width="15%">
 						<?php echo Text::_('COM_USERSCHED_SKIN_NAME'); ?>
 					</th>
@@ -70,7 +95,7 @@ $unselIcon = 'unselected.png';
 						<?php echo $i + 1 + $this->pagination->limitstart; ?>
 					</td>
 					<td>
-						<?php echo JHtml::_('grid.id', $i, $item['name']); ?>
+						<?php echo HTMLHelper::_('grid.id', $i, $item['name']); ?>
 					</td>
 					<td>
 						<a href="javascript:void(0);" onclick="return previewSkin('cb<?php echo $i; ?>')" title="<?php echo Text::_('COM_USERSCHED_PREVIEW_SKIN'); ?>"><?php echo $item['name']?$item['name']:'-standard-'; ?></a>
@@ -96,21 +121,7 @@ $unselIcon = 'unselected.png';
 		<div>
 			<input type="hidden" name="task" value="" />
 			<input type="hidden" name="boxchecked" value="0" />
-			<?php echo JHtml::_('form.token'); ?>
+			<?php echo HTMLHelper::_('form.token'); ?>
 		</div>
 	</div>
 </form>
-<div style="display:none">
-<div id="upload_div" style="width:auto;height:100%;border:1px solid #CCC;padding:10px;display:inline-table">
-	<form action="<?php echo JRoute::_('index.php?option=com_usersched&view=skins'); ?>" class="form-validate" onsubmit=" return document.formvalidator.isValid(this)" enctype="multipart/form-data" method="post" name="upldForm" id="upldForm">
-		<div>
-			<p><?php echo Text::_('COM_USERSCHED_UPLOAD_MSG') ?></p>
-			<label><?php echo Text::_('COM_USERSCHED_UPLOAD_LABEL') ?></label><input type="text" name="skin_name" class="required validate-string" required />
-			<br /><input type="file" name="skinfile" accept="application/zip" class="required validate-string" />
-			<br /><button type="submit" class="validate"><?php echo Text::_('COM_USERSCHED_UPLOAD_SUBMIT') ?></button>
-			<input type="hidden" name="task" value="skins.addSkin" />
-			<?php echo JHtml::_('form.token'); ?>
-		</div>
-	</form>
-</div>
-</div>

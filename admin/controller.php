@@ -1,5 +1,4 @@
 <?php
-// License: GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
@@ -10,22 +9,6 @@ JLoader::register('UserSchedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/use
 
 class UserschedController extends JControllerLegacy
 {
-
-	public function __construct($config = array())
-	{
-		parent::__construct($config);
-		if (!isset($this->input)) $this->input = Factory::getApplication()->input;		//J2.x
-	}
-
-	public function display ($cachable=false, $urlparams=false)
-	{
-	//	require_once JPATH_COMPONENT.'/helpers/usersched.php';
-
-		// Load the submenu.
-//		UserschedHelper::addSubmenu($this->input->get('view', 'usersched'));
-
-		parent::display();
-	}
 
 	public function remove ()
 	{

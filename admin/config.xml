@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
 
-<!--	<fieldset name="component">
-		<field
-			name="default_skin"
-			type="folderlist"
-			directory="components/com_usersched/skins"
-			hide_none="1"
-			label="COM_USERSCHED_SKIN_DEFAULT_LABEL"
-			description="COM_USERSCHED_SKIN_DEFAULT_DESC">
-		</field>
-	</fieldset> -->
-
-	<fieldset name="useroptions" description="COM_USERSCHED_CONFIG_CALOPTS_DESC">
+	<fieldset name="useroptions" label="COM_CONFIG_USEROPTIONS_FIELDSET_LABEL" description="COM_USERSCHED_CONFIG_CALOPTS_DESC">
 		<field
 			name="user_canskin"
 			type="radio"
@@ -48,7 +37,7 @@
 		</field>
 	</fieldset>
 
-	<fieldset name="grpoptions" description="COM_USERSCHED_CONFIG_CALOPTS_DESC">
+	<fieldset name="grpoptions" label="COM_CONFIG_GRPOPTIONS_FIELDSET_LABEL" description="COM_USERSCHED_CONFIG_CALOPTS_DESC">
 		<field
 			name="grp_canskin"
 			type="radio"
@@ -84,7 +73,7 @@
 		</field>
 	</fieldset>
 
-	<fieldset name="component">
+	<fieldset name="component" label="COM_CONFIG_COMPOPTIONS_FIELDSET_LABEL">
 	    <field name="standard_skin" type="list" default=""
 	           label="Standard skin:"
 	           description="The standard skin (as default)">

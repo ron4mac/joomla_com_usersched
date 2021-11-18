@@ -9,8 +9,7 @@ if (!Factory::getUser()->authorise('core.manage', 'com_usersched')) {
 	return JError::raiseWarning(404, Text::_('JERROR_ALERTNOAUTHOR'));
 }
 
-$j_version = preg_replace('#[^0-9\.]#i','',JVERSION);
-define('USERSCHED_J30', version_compare($j_version,'3.0.0','>=') ? true : false);
+define('USERSCHED_J30', (int)JVERSION < 4 ? true : false);
 
 // Shared scripts for all views
 $doc = Factory::getDocument();

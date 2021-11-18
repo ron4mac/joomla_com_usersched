@@ -3,6 +3,7 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 require_once JPATH_COMPONENT_ADMINISTRATOR.'/views/uschedview.php';
 
@@ -49,28 +50,42 @@ class UserschedViewSkins extends UserschedView
 	{
 		$canDo	= UserSchedHelper::getActions();
 
-		JToolBarHelper::title(Text::_('COM_USERSCHED_MENU').' : '.Text::_('COM_USERSCHED_MANAGER_SKINS'), 'calendar usersched');
+		ToolBarHelper::title(Text::_('COM_USERSCHED_MENU').' : '.Text::_('COM_USERSCHED_MANAGER_SKINS'), 'calendar usersched');
 
-		JToolBarHelper::deleteList(Text::_('COM_USERSCHED_SKINS_DELETEOK'),"skins.delete");
+		ToolBarHelper::deleteList(Text::_('COM_USERSCHED_SKINS_DELETEOK'),'skins.delete');
+	//	ToolBarHelper::custom('skins.delete','delete','delete', 'COM_USERSCHED_SKINS_DELETEOK',true,'modal-box');
+		$bar = JToolBar::getInstance('toolbar');
+	//	$bar->appendButton('Confirm', Text::_('COM_USERSCHED_SKINS_DELETEOK'), 'delete', 'delete', 'skins.delete', true, 'modal-box');
+
+		ToolBarHelper::spacer();
 
 		// Add a modal upload button.
-		$icon = '<i class="icon-upload"></i>';
-		$bar = JToolBar::getInstance('toolbar');
+		$icon = '<span class="icon-upload"> </span>';
 		$upbut = '<a class="modal btn btn-small" href="#upload_div" rel="{size: {x: 375, y: 225}}">'.$icon.' Upload</a>';
+		$upbut = '<button
+	class="button-upload btn btn-primary" 
+	data-bs-toggle="modal" 
+	data-bs-target="#modal-box" 
+	data-bs-title="Fixing the ice shelves" 
+	data-bs-id="14794" 
+	data-bs-action="showCampDescription" 
+	onclick="return false;">
+	'.$icon.Text::_('COM_USERSCHED_UPLOAD_SKIN').'
+</button>';
 		$bar->appendButton('Custom', $upbut, 'skin-upload');
 
-		//JToolBarHelper::trash('usersched.trash');
+		//ToolBarHelper::trash('usersched.trash');
 
 	//	if ($canDo->get('core.edit.state')) {
-	//		JToolBarHelper::custom('scheds.reset', 'refresh.png', 'refresh_f2.png', 'JUSERSCHED_RESET', false);
+	//		ToolBarHelper::custom('scheds.reset', 'refresh.png', 'refresh_f2.png', 'JUSERSCHED_RESET', false);
 	//	}
 
-		JToolBarHelper::divider();
+		ToolBarHelper::divider();
 		if ($canDo->get('core.admin')) {
-			JToolBarHelper::preferences('com_usersched');
+			ToolBarHelper::preferences('com_usersched');
 		}
-		JToolBarHelper::divider();
-		JToolBarHelper::help('calendar_skins', true);
+		ToolBarHelper::divider();
+		ToolBarHelper::help('calendar_skins', true);
 	}
 
 	protected function state ($vari, $set=false, $val='', $glb=false)
