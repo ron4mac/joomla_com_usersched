@@ -112,8 +112,8 @@ class UserschedViewConfig extends UserschedView
 		$this->document->addStyleSheet('components/com_usersched/static/config.css');
 	//	HTMLHelper::_('bootstrap.colorPicker');	// also initiates jQuery so the next script works okay
 		$this->document->addScript('components/com_usersched/static/config.js');
-		$script = 'jQuery(document).ready(function() { tabberAutomatic(tabberOptions); /*attachColorPickers();*/ });'."\n";
-		$this->document->addScriptDeclaration($script);
+//		$script = 'jQuery(document).ready(function() { tabberAutomatic(tabberOptions); /*attachColorPickers();*/ });'."\n";
+//		$this->document->addScriptDeclaration($script);
 
 		//$langTag = Factory::getLanguage()->getTag();
 		$this->config['lang_tag'] = Factory::getLanguage()->getTag();

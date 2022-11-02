@@ -6,17 +6,20 @@ use Joomla\CMS\Log\Log;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Session\Session;
+use Joomla\CMS\MVC\Controller\BaseController;
 
 JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched.php');
 
-class UserSchedController extends JControllerLegacy
+class UserSchedController extends BaseController
 {
+	protected $instanceObj;
 	protected $userid = 0;
 	protected $mnuItm = 0;
 
 	function __construct ($default=[])
 	{
 		parent::__construct($default);
+		$this->instanceObj = UschedHelper::getInstanceObject();
 		if (!isset($this->input)) $this->input = Factory::getApplication()->input;		//J2.x
 		$this->userid = Factory::getUser()->id;
 		$this->mnuItm = $this->input->getInt('Itemid', 0);
@@ -24,19 +27,20 @@ class UserSchedController extends JControllerLegacy
 
 	public function display ($cachable = false, $urlparams = false)
 	{
-		$inv = $this->input->get('view');
+		$inv = $this->input->get('view','none');
 		if ($inv == 'usersched' && $this->userid && !file_exists(UschedHelper::userDataPath().'/sched.sql3')) {
 			$this->input->set('view', 'config');
 		}
-		if (!$inv) $this->input->set('view', 'none');
+		$iview = $this->getView($inv,'html');
+		$iview->instObj = $this->instanceObj;
 		return parent::display($cachable, $urlparams);
 	}
 
 	public function doConfig ()
 	{
-		$calid = $this->input->getBase64('calid');
+//		$calid = $this->input->getBase64('calid');
 		$m = $this->getModel();
-		$m->setState('calid', base64_decode($calid));
+//		$m->setState('calid', base64_decode($calid));
 		$view = $this->getView('config','html');
 		$view->setModel($m, true);
 		$view->display();

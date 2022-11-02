@@ -164,3 +164,4 @@ $fact = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->
 //	foreach ($testabs as $fgroup => $ftitle) $this->renderFormSection($fgroup,$ftitle);
 ?>
 </div>
+<script>tabberAutomatic(tabberOptions);</script>

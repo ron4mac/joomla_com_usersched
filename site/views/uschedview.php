@@ -37,7 +37,7 @@ class UserschedView extends JViewLegacy
 		// and get other generally needed info
 		$this->user = Factory::getUser();
 		$calid = UserSchedHelper::uState('calid');
-	//	list($this->cal_type, $this->auth) = explode(':',$calid?$calid:'-1:');
+		list($this->cal_type, $this->auth) = explode(':',$calid?$calid:'-1:');
 		// get the calendar instance params
 		$this->params = Factory::getApplication()->getParams();
 	}

@@ -77,6 +77,7 @@ function sched_setAutoEnd () {
 // other scheduler modifications
 scheduler.feature = {};
 scheduler.xy.scroll_width = 0;
+scheduler.config.left_border = true;	// fix skin css's for the border type/color
 
 // add category class for styling
 scheduler.templates.event_class = function(start, end, event) {

@@ -15,3 +15,6 @@
 .dhx_cal_light_rec.dhx_cal_light_wide {
     width: 514px;
 }
+.dhx_month_body_border, .dhx_month_head_border, .dhx_scale_bar_border, .dhx_scale_hour_border {
+    border-left: 1px solid #e0e0e0;
+}

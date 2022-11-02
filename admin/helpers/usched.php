@@ -5,15 +5,54 @@ use Joomla\CMS\Factory;
 
 abstract class UschedHelper
 {
+	protected static $instanceObj = null;
 	protected static $instanceType = null;
 	protected static $ownerID = null;
 	protected static $udp = null;
 
+	public static function getInstanceObject ()	// SO
+	{
+		if (!empty(self::$instanceObj)) return self::$instanceObj;
+		$app = Factory::getApplication();
+		$menuid = $app->input->getInt('Itemid', 0);
+		if (!$menuid) throw new Exception('COM_USERSCHED_MISSING_MENUID', 400);
+		$params = $app->getParams();
+	//	file_put_contents('APPARMS.TXT',print_r($params,true),FILE_APPEND);
+		$user = $app->getIdentity();
+		$uid = $user->get('id');
+		$ugrps = $user->get('groups');
+		$allperms = USchedInstanceObject::CAN_CREA + USchedInstanceObject::CAN_EDIT + USchedInstanceObject::CAN_DELE;
+		$path = '';
+		$perms = 0;
+		switch ($params->get('cal_type')) {
+			case 0:	//user
+				if ($uid) $perms = $allperms;
+				$path = '@'.$uid;
+				break;
+			case 1:	//group
+				$auth = $params->get('group_auth');
+				$path = '_'.$auth;
+				if ($uid && in_array($auth, $ugrps)) $perms = $allperms;
+				break;
+			case 2:	//site
+				$auth = $params->get('site_auth');
+				$path = '_0';
+				if ($uid && in_array($auth, $ugrps)) $perms = $allperms;
+				break;
+		}
+		$obj = new USchedInstanceObject($params->get('cal_type'), $menuid, $uid, $path, $perms);
+		file_put_contents('APPARMS.TXT',print_r($obj,true),FILE_APPEND);
+		self::$instanceObj = $obj;
+		return $obj;
+	}
+
+
 	public static function userDataPath ()
 	{
+		if (!self::$instanceObj) self::getInstanceObject();
 		if (self::$udp) return self::$udp;
 		self::getTypeOwner();
-		$cmp = JApplicationHelper::getComponentName();
+		$cmp = JApplicationHelper::getComponentName().'_'.self::$instanceObj->menuid;
 		switch ((int)self::$instanceType) {
 			//case -1:
 			case 0:
@@ -176,6 +215,41 @@ abstract class UschedHelper
 			}
 		//var_dump(self::$instanceType,self::$ownerID);
 		}
+	}
+
+}
+
+
+class USchedInstanceObject	// SO
+{
+	protected $perms;
+	public $type, $menuid, $uid, $path;
+	public const CAN_CREA = 1;
+	public const CAN_EDIT = 2;
+	public const CAN_DELE = 4;
+
+	public function __construct ($type, $menuid, $uid, $path, $perms)
+	{
+		$this->type = $type;
+		$this->menuid = $menuid;
+		$this->uid = $uid;
+		$this->path = $path;
+		$this->perms = $perms;
+	}
+
+	public function canCreate ()
+	{
+		return ($this->perms & self::CAN_CREA);
+	}
+
+	public function canEdit ()
+	{
+		return ($this->perms & self::CAN_EDIT);
+	}
+
+	public function canDelete ()
+	{
+		return ($this->perms & self::CAN_DELE);
 	}
 
 }
