@@ -8,21 +8,7 @@ For group and site instances, choose who can edit the instance.
 Calendar event alert notification:
 
 Calendars can be configured to have email/SMS alerts attached to events. For this to function, a CRON job must 
-be set on the server to run periodically (every 5 minutes is probably best). The most efficient method is to run 
-PHP directly to execute the task. And it could be beneficial to use a separate php.ini file for the run.
+be set on the server to run periodically (every 5 minutes is probably best).
 
 Sample CRON job setting:
-<PHP_PATH>/php -q -c <SOME_PATH>/cron_php.ini  <JOOMLA_BASE>/components/com_usersched/cron.php &>> <SOME_PATH>/cronmsg.txt
-
-Sample PHP ini file (cron_php.ini):
-< - -- --- ---- clip ---- --- -- - >
-[PHP]
-memory_limit = 1024M
-
-; may need these to access sqlite Db when PHP is run from the shell by CRON
-extension = "pdo.so"
-extension = "pdo_sqlite.so"
-
-; may need to set the correct time zone to be in sync with the calendar
-;date.timezone = America/New_York
-< - -- --- ---- clip ---- --- -- - >
+/usr/bin/wget -q -O - "<JOOMLA_URL>/index.php?option=com_usersched&task=ajax.cron&format=raw" >> <SOME_PATH>/cronmsg.txt
