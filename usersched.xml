@@ -2,12 +2,12 @@
 <extension type="component" version="3.3" client="site" method="upgrade">
 	<name>com_usersched</name>
 	<author>Ron Crans</author>
-	<creationDate>November 2021</creationDate>
-	<copyright>(C) 2015-2021 Ron Crans.</copyright>
+	<creationDate>November 2022</creationDate>
+	<copyright>(C) 2015-2022 Ron Crans.</copyright>
 	<license>GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)</license>
 	<authorEmail>ron@rjconline.net</authorEmail>
 	<authorUrl>rjconline.net</authorUrl>
-	<version>0.9.20</version>
+	<version>0.9.22</version>
 	<updater jver="4\.[0-3]" pver="7.0" />
 	<description>COM_USERSCHED_XML_DESCRIPTION</description>
 	<scriptfile>script.php</scriptfile>
@@ -16,8 +16,7 @@
 		<filename>index.html</filename>
 		<filename>usersched.php</filename>
 		<filename>js.php</filename>
-		<filename>cron.php</filename>alertchk.php
-		<filename>alertchk.php</filename>
+		<filename>alertcheck.php</filename>
 		<folder>controllers</folder>
 		<folder>models</folder>
 		<folder>views</folder>

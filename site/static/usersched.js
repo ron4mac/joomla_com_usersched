@@ -77,7 +77,6 @@ function sched_setAutoEnd () {
 // other scheduler modifications
 scheduler.feature = {};
 scheduler.xy.scroll_width = 0;
-scheduler.config.left_border = true;	// fix skin css's for the border type/color
 
 // add category class for styling
 scheduler.templates.event_class = function(start, end, event) {
@@ -260,6 +259,27 @@ function usersched_init() {
 		return true;
 	});
 */
+
+	// okay .. distilling above
+	// setup the category label
+	scheduler.locale.labels.section_category = "Category";
+	// set the height of the description
+	scheduler.config.lightbox.sections[0].height = 60;
+	// get the repeat section
+	let rs = scheduler.config.lightbox.sections[1];
+	// add category selection after description, removing repeat
+	scheduler.config.lightbox.sections.splice(1, 1, {name:"category", type:"select", height:"auto", options:scheduler.__categories, map_to:"category"});
+	// move repeats to the end
+	scheduler.config.lightbox.sections.push(rs);
+	// tack alerts to the end
+	if (scheduler.feature.canAlert) scheduler.config.lightbox.sections.push({name:"alerts", map_to:"text", type:"alerts_editor", button:"shide"});
+	console.log(scheduler.config.lightbox.sections);
+
+
+	// use the left border
+	scheduler.config.left_border = true;	// fix skin css's for the border type/color
+
+
 
 	// replace the 'loading' locator function with ours
 	scheduler.detachEvent("ev_onxls:0");

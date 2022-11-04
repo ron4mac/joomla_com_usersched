@@ -64,7 +64,7 @@ class UserschedViewUsersched extends UserschedView
 	{
 		$this->canCfg = false;
 		list($cal_type, $jID) = UschedHelper::getInstanceID(true);
-		$jID = explode(',',$jID);
+		$jID = is_array($jID) ? $jID : explode(',',$jID);
 		switch ($cal_type) {
 			case 0:
 				$this->canCfg = true;

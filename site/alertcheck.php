@@ -1,12 +1,9 @@
 <?php
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\Database\DatabaseDriver;
-
-// this WILL work but not used right now
-//require_once  JPATH_PLATFORM . '/cms/component/helper.php';
-//var_dump(JComponentHelper::getParams('com_usersched'));
 
 class USchedAcheck {
 
@@ -139,13 +136,17 @@ class USchedAcheck {
 
 	private function sendAlert ($addr, $subj, $body, $ausrs)
 	{
-		$mailer = JFactory::getMailer();
-		foreach ($this->alertees as $a) {
-			if (in_array($a['id'], $ausrs) && $a[$addr]) $mailer->addRecipient($a[$addr]);
+		try {
+			$mailer = Factory::getMailer();
+			foreach ($this->alertees as $a) {
+				if (in_array($a['id'], $ausrs) && $a[$addr]) $mailer->addRecipient($a[$addr]);
+			}
+			$mailer->setSubject($subj);
+			$mailer->setBody($body);
+			if (!$mailer->Send()) echo 'Mailing failed: '.$mailer->ErrorInfo."\n";
+		} catch (Exception $e) {
+			echo $e->getMessage();
 		}
-		$mailer->setSubject($subj);
-		$mailer->setBody($body);
-		if (!$mailer->Send()) echo 'Mailing failed: '.$mailer->ErrorInfo."\n";
 	}
 
 	protected function sendAlerts ($evt, $atime)

@@ -16,64 +16,71 @@ scheduler.__alerts = {
 	}
 };
 
-//function sched_extend() {
-
-	scheduler.locale.labels.section_alerts = scheduler.__alerts.locale.alert_title;
+scheduler.locale.labels.section_alerts = scheduler.__alerts.locale.alert_title;
 //	var lsl = scheduler.config.lightbox.sections.length;
 //	scheduler.config.lightbox.sections.splice(lsl-2,0,{ name: "alerts", height: 42, map_to: "text", type: "alerts_editor", button:"shide" });
-	scheduler.locale.labels.button_shide = scheduler.__alerts.locale.alert_show;
+scheduler.locale.labels.button_shide = scheduler.__alerts.locale.alert_show;
 
-	scheduler.form_blocks["alerts_editor"] = {
-		render:function(sns) {
-			var htm = '<form id ="alert_form" style="display:none"><div class="sched_alerts"><div class="sched_alrtatr"><label>'+scheduler.__alerts.locale.alert_users+'</label>\
-<select id="sel_alertusers" name="sel_alertusers[]" multiple="multiple" class="alrt_users">\
-'+scheduler.alertWho+'\
-</select></div>\
-<div class="sched_alrtatr"><label>'+scheduler.__alerts.locale.alert_method+'</label>\
-<select id="alertmethod" name="alertmethod" class="alrt_meth">\
-<option value="1">'+scheduler.__alerts.locale.alert_email+'</option>\
-<option value="2">'+scheduler.__alerts.locale.alert_SMS+'</option>\
-<option value="3">'+scheduler.__alerts.locale.alert_both+'</option>\
-</select></div>\
-<div class="sched_alrtatr"><label>'+scheduler.__alerts.locale.alert_lead+'</label>\
-<input name="alertlead_val" id="alertlead_val" type="number" min="0" class="alrt_lead">\
-<select size="1" name="alertlead_mul" id="alertlead_mul">\
-<option value="1">'+scheduler.__alerts.locale.alert_minutes+'</option>\
-<option value="2">'+scheduler.__alerts.locale.alert_hours+'</option>\
-<option value="3">'+scheduler.__alerts.locale.alert_days+'</option>\
-<option value="4">'+scheduler.__alerts.locale.alert_weeks+'</option>\
-</select></div>\
-</div></form>\
-';
-			return htm;
-		},
-		set_value:function(node, value, ev) {
-			sched_fillAlert(node,value,ev);
-		},
-		get_value:function(node, ev) {
-			sched_getAlert(node,ev);
-			return ev.text;
-		},
-		focus:function(node) {
-			var a = node.childNodes[1];
-			a.select();
-			a.focus();
-		},
-		button_click:function(ix, el, sect, cont){
-			if (cont.style.display=='none') {
-				cont.style.display = "inline-block";
-				el.nextSibling.innerHTML = scheduler.__alerts.locale.alert_hide;
-			} else {
-				cont.style.display = "none";
-				el.nextSibling.innerHTML = scheduler.__alerts.locale.alert_show;
-			}
-			scheduler.setLightboxSize();
+scheduler.form_blocks["alerts_editor"] = {
+	render:function(sns) {
+		let htm = `<div class="dhx_form_alerts" style="height:0px">
+	<form id ="alert_form">
+	<div class="sched_alertsf">
+		<div class="sched_alrtatru">
+			<label>${scheduler.__alerts.locale.alert_users}
+			<select id="sel_alertusers" name="sel_alertusers[]" multiple="multiple" class="alrt_users">
+				${scheduler.alertWho}
+			</select>
+			</label>
+		</div>
+		<div class="sched_alrtatrm">
+			<label>${scheduler.__alerts.locale.alert_method}
+			<select id="alertmethod" name="alertmethod" class="alrt_meth">
+				<option value="1">${scheduler.__alerts.locale.alert_email}</option>
+				<option value="2">${scheduler.__alerts.locale.alert_SMS}</option>
+				<option value="3">${scheduler.__alerts.locale.alert_both}</option>
+			</select>
+			</label>
+		</div>
+		<div class="sched_alrtatrxl">
+			<label>${scheduler.__alerts.locale.alert_lead}</label>
+			<input name="alertlead_val" id="alertlead_val" type="number" min="0" class="alrt_lead">
+			<select size="1" name="alertlead_mul" id="alertlead_mul">
+				<option value="1">${scheduler.__alerts.locale.alert_minutes}</option>
+				<option value="2">${scheduler.__alerts.locale.alert_hours}</option>
+				<option value="3">${scheduler.__alerts.locale.alert_days}</option>
+				<option value="4">${scheduler.__alerts.locale.alert_weeks}</option>
+			</select>
+		</div>
+	</div>
+	</form>
+	</div>
+`;
+		return htm;
+	},
+	set_value:function(node, value, ev) {
+		sched_fillAlert(node.firstElementChild,value,ev);
+	},
+	get_value:function(node, ev) {
+		sched_getAlert(node.firstElementChild,ev);
+		return ev.text;
+	},
+	focus:function(node) {
+		var a = node.firstElementChild.childNodes[1];
+		a.select();
+		a.focus();
+	},
+	button_click:function(ix, el, sect, cont){
+		if (cont.style.height=='0px') {
+			cont.style.height = "auto";
+			el.nextSibling.innerHTML = scheduler.__alerts.locale.alert_hide;
+		} else {
+			cont.style.height = "0px";
+			el.nextSibling.innerHTML = scheduler.__alerts.locale.alert_show;
 		}
-	};
-
-//	sched_setAutoEnd();
-
-//}
+		scheduler.setLightboxSize();
+	}
+};
 
 
 function sched_fillAlert(elem,val,evt) {

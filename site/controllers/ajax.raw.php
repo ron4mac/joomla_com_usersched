@@ -2,9 +2,11 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Http\HttpFactory;
+use Joomla\CMS\Component\ComponentHelper;
+
+JLoader::register('USchedAcheck', JPATH_COMPONENT.'/alertcheck.php');
 
 class UserSchedControllerAjax extends JControllerLegacy
 {
@@ -106,5 +108,35 @@ class UserSchedControllerAjax extends JControllerLegacy
 		return $data->body;
 	}
 
+	// cron job access here to send alerts
+	public function cron ()
+	{
+		// get the storage location path
+		$results = Factory::getApplication()->triggerEvent('onRjuserDatapath');
+		$dsp = isset($results[0]) ? trim($results[0]) : false;
+		$stor = ($dsp ?: 'userstor');
+
+		$config = new JConfig();
+		$xtime = time();
+		if ($dirh = opendir(JPATH_SITE . '/'.$stor)) {
+			while (false !== ($entry = readdir($dirh))) {
+				if ($entry != '.' && $entry != '..' && is_dir(JPATH_SITE.'/'.$stor.'/'.$entry)) {
+					if ($entry[0] == '@' || $entry[0] == '_') {
+						$grp = $entry[0] == '_';
+						foreach (glob(JPATH_SITE.'/'.$stor.'/'.$entry.'/com_usersched_[0-9]*') as $mid) {
+							$dbp = $mid.'/sched.sql3';
+							if (file_exists($dbp)) {
+								$acheck = new USchedAcheck($dbp, $config);
+								$acheck->processAlerts($xtime);
+								unset($acheck);
+							}
+						}
+					}
+				}
+			}
+			closedir($dirh);
+		}
+	}
+	
 	
 }

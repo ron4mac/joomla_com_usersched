@@ -1,4 +1,5 @@
 /* overrides for the sheduler default skin (dhx-terrace) */
+/*
 .dhx_cal_date, .dhx_cal_next_button, .dhx_cal_prev_button, .dhx_cal_tab, .dhx_cal_today_button {
 	height: 22px;
 	line-height: 22px;
@@ -10,7 +11,7 @@
 	top: 22px;
 }
 .dhx_expand_icon {
-	/*opacity: 0.5;*/
+	opacity: 0.5;
 }
 .dhx_cal_tab.first.flt {
 	border-left-width: 0;
@@ -21,4 +22,22 @@
 	border-right-width: 0;
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
+}
+*/
+.dhx_form_alerts {
+	padding-left: 1rem;
+	overflow: hidden;
+}
+.sched_alertsf {
+	display: flex;
+	flex-wrap: wrap;
+}
+.sched_alrtatru, .sched_alrtatrm {
+	margin-right: 2rem;
+}
+.sched_alrtatru select, .sched_alrtatrm select {
+	display: block;
+}
+#alertlead_val {
+	width: 3rem;
 }
