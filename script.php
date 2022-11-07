@@ -22,7 +22,7 @@ class com_userschedInstallerScript extends InstallerScript
 	public function update ($parent) 
 	{
 		// delete old unused files
-		$site_path = $parent->getPath('extension_site');
+		$site_path = $parent->parent->getPath('extension_site');
 		if ($site_path) {
 			$site_path .= '/';
 			JFile::delete($site_path.'cron.php');

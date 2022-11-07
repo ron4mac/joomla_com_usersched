@@ -25,7 +25,8 @@ class USchedAcheck {
 
 	public function processAlerts ($time)
 	{
-		$this->clearOldMarks($time);
+		// remove expired alerted sentinals (> 1 day)
+		$this->db->setQuery('DELETE FROM alerted WHERE ('.$time.' - `atime`) >= `lead`')->execute();
 
 		$this->alertees = $this->getTable('alertees');
 		if (!$this->alertees) return;	// can't alert if no one to alert
@@ -192,13 +193,6 @@ class USchedAcheck {
 			if ($st['eid'] == $id) return true;
 		}
 		return false;
-	}
-
-	// remove expired alerted sentinals (> 1 day)
-	protected function clearOldMarks ($atime)
-	{
-		$this->db->setQuery('DELETE FROM alerted WHERE ('.$atime.' - `atime`) >= `lead`');
-		$this->db->execute();
 	}
 
 	private function formattedDateTime ($from, $to=0)
