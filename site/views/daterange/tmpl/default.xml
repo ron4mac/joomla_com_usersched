@@ -18,6 +18,12 @@
 				hint="COM_USERSCHED_RANGE_MESSAGE"
 			/>
 
+			<field name="cal_menu" type="MenuItem"
+				label="Menu Item Connection"
+				description="Select the menu item association"
+				required="required"
+			/>
+
 			<field name="cal_type" type="radio"
 				default="0"
 				description="COM_USERSCHED_CALTYPE_DESC"

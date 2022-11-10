@@ -10,14 +10,18 @@ abstract class UschedHelper
 	protected static $ownerID = null;
 	protected static $udp = null;
 
-	public static function getInstanceObject ()	// SO
+	public static function getInstanceObject ($mid=null)	// SO
 	{
 		if (!empty(self::$instanceObj)) return self::$instanceObj;
 		$app = Factory::getApplication();
-		$menuid = $app->input->getInt('Itemid', 0);
+		if ($mid) {
+			$params = $app->getMenu()->getItem($mid)->getParams();
+			$menuid = $mid;
+		} else {
+			$params = $app->getParams();
+			$menuid = $app->input->getInt('Itemid', 0);
+		}
 		if (!$menuid) throw new Exception('COM_USERSCHED_MISSING_MENUID', 400);
-		$params = $app->getParams();
-	//	file_put_contents('APPARMS.TXT',print_r($params,true),FILE_APPEND);
 		$user = $app->getIdentity();
 		$uid = $user->get('id');
 		$ugrps = $user->get('groups');
@@ -77,10 +81,10 @@ abstract class UschedHelper
 	}
 
 
-	public static function getDbPaths ($which, $full=false)
+	public static function getDbPaths ($which, $dbname, $full=false, $cmp='')	// AO
 	{
-		$paths = array();
-		$cmp = JApplicationHelper::getComponentName();
+		$paths = [];
+		if (!$cmp) $cmp = JApplicationHelper::getComponentName();
 		switch ($which) {
 			case 'u':
 				$char1 = '@';
@@ -96,9 +100,14 @@ abstract class UschedHelper
 		if (is_dir($dpath) && ($dh = opendir($dpath))) {
 			while (($file = readdir($dh)) !== false) {
 				if ($file[0]==$char1) {
-					$ptf = $dpath.$file.'/'.$cmp.'/sched.sql3';
+					foreach (glob($dpath.$file.'/'.$cmp.'*') as $mid) {
+						$ptf = $mid.'/'.$dbname.'.sql3';
 					if (file_exists($ptf))
 						$paths[] = $full ? $ptf : $file;
+						$ptf = $mid.'/'.$dbname.'.db3';
+						if (file_exists($ptf))
+							$paths[] = $full ? $ptf : $file;
+					}
 				}
 			}
 			closedir($dh);

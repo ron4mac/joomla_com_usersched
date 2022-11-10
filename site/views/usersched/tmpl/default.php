@@ -40,7 +40,7 @@ $script .= 'var usched_mode = "'.$this->settings['settings_defaultmode'].'";';
 $script .= 'var usched_base = "'.Uri::base(true).'";';
 //$script .= 'var userschedlurl = "' . JURI::base() . 'index.php?option=com_usersched&view=usersched&task=calXML&calid=' . $calID .'";';
 $script .= 'var userschedlurl = "' . Uri::base() . 'index.php?option=com_usersched&Itemid='.$this->instObj->menuid.'&format=raw&task=calXML&calid=' . urlencode($calID) .'";';
-////////$script .= 'scheduler.cfg_cfg = '.$this->cfgcfg.';';
+$script .= 'scheduler.cfg_cfg = '.$this->cfgcfg.';';
 $script .= 'scheduler.__categories = ['.implode(',',$this->categoriesJSON()).'];';
 if ($this->alertees) {
 	$script .= 'scheduler.alertWho = \'';

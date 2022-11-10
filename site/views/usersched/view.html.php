@@ -1,7 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 
-require_once JPATH_COMPONENT.'/helpers/usersched.php';
+//require_once JPATH_COMPONENT.'/helpers/usersched.php';
 require_once JPATH_COMPONENT.'/views/uschedview.php';
 
 class UserschedViewUsersched extends UserschedView
@@ -18,7 +18,7 @@ class UserschedViewUsersched extends UserschedView
 //	'hour_size_px' => 42,
 	'time_step' => 15,
 
-	'start_on_monday' => 1,
+	'start_on_monday' => false,
 	'first_hour' => 8,
 	'last_hour' => 22,
 	'readonly' => false,

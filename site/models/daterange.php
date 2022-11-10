@@ -18,7 +18,9 @@ class UserSchedModelDaterange extends UserSchedModelUserSched
 
 	public function hasData ()
 	{
-		return (bool) $this->getDbo();
+		$dbFile = UschedHelper::userDataPath() . '/sched.sql3';
+		return file_exists($dbFile);
+	//	return (bool) $this->getDbo();
 	}
 
 }

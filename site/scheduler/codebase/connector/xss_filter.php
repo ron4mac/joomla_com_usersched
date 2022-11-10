@@ -153,7 +153,8 @@ class ConnectorSecurity{
         if ($mode == DHX_SECURITY_TRUSTED)
             return $value;
         if ($mode == DHX_SECURITY_SAFETEXT)
-            return filter_var($value, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+            return htmlspecialchars($value, ENT_NOQUOTES);
+        //    return filter_var($value, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
         if ($mode == DHX_SECURITY_SAFEHTML){
             if (ConnectorSecurity::$filterClass == null)
                 ConnectorSecurity::$filterClass = new dhx_externalinput_clean();

@@ -13,16 +13,22 @@ JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched
 class UserSchedController extends BaseController
 {
 	protected $instanceObj;
+	protected $theView;
 	protected $userid = 0;
 	protected $mnuItm = 0;
 
-	function __construct ($default=[])
+	function __construct ($default=[], MVCFactoryInterface $factory = null, $app = null, $input = null)
 	{
 		parent::__construct($default);
-		$this->instanceObj = UschedHelper::getInstanceObject();
-		if (!isset($this->input)) $this->input = Factory::getApplication()->input;		//J2.x
+		$this->mnuItm = $input->getInt('Itemid', 0);
+		$this->theView = $input->get('view','none');
+		if ($this->theView == 'daterange') {
+			$drmi = $app->getParams()->get('cal_menu');
+			$this->instanceObj = UschedHelper::getInstanceObject($drmi);
+		} else {
+			$this->instanceObj = UschedHelper::getInstanceObject();
+		}
 		$this->userid = Factory::getUser()->id;
-		$this->mnuItm = $this->input->getInt('Itemid', 0);
 	}
 
 	public function display ($cachable = false, $urlparams = false)
@@ -30,6 +36,8 @@ class UserSchedController extends BaseController
 		$inv = $this->input->get('view','none');
 		if ($inv == 'usersched' && $this->userid && !file_exists(UschedHelper::userDataPath().'/sched.sql3')) {
 			$this->input->set('view', 'config');
+			$iview = $this->getView('config','html');
+			$iview->instObj = $this->instanceObj;
 		}
 		$iview = $this->getView($inv,'html');
 		$iview->instObj = $this->instanceObj;
@@ -42,6 +50,7 @@ class UserSchedController extends BaseController
 		$m = $this->getModel();
 //		$m->setState('calid', base64_decode($calid));
 		$view = $this->getView('config','html');
+		$view->instObj = $this->instanceObj;
 		$view->setModel($m, true);
 		$view->display();
 	}

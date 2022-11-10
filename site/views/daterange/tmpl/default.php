@@ -22,7 +22,7 @@ if ($this->params->get('show_page_heading', 1)) {
 		<td class="ev_td_<?php echo $row['category'] ?>">
 			<ul>
 				<li class="ev_td_li">
-					<?php echo $this->formattedDateTime($row['t_start'], $row['t_end']); ?><br />
+					<?php echo $this->formattedDateTime($row['t_start'], $row['t_end']); echo $row['alert_user'] ? '<i class="usch-alert far fa-bell"></i>' : ''; ?><br />
 					<?php echo $this->formattedText($row['text']); ?>
 				</li>
 			</ul>

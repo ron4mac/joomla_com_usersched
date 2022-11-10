@@ -208,16 +208,16 @@ scheduler._init_year_tooltip = function() {};
 ///////////////////////////////////////////////////
 
 function usersched_init() {
-/*
+
 	if (scheduler.cfg_cfg) {
-		mergeCfgObjects(scheduler.config, scheduler.cfg_cfg);
+		mergeCfgObjects(scheduler.config, scheduler.cfg_cfg);	console.log(scheduler.config);
 		if (scheduler.cfg_cfg.agenda_end) {
 			var d = new Date();
 			scheduler.config.agenda_end = new Date(d.getTime()+(scheduler.cfg_cfg.agenda_end*86400000));
 		}
 		//delete(scheduler.cfg_cfg);
 	}
-
+/*
 	scheduler.config.show_loading = true;
 	scheduler.xy.bar_height = 18;
 

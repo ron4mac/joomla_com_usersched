@@ -114,15 +114,13 @@ $fact = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->
 <div class="stabbertab ectable" title="<?=Text::_('COM_USERSCHED_CFG_CATEGORY')?>">
 	<p><span class="col1"><?=Text::_('COM_USERSCHED_CFG_CATNAME')?></span><span class="col2"><?=Text::_('COM_USERSCHED_CFG_TXTCOLOR')?></span><span class="col3"><?=Text::_('COM_USERSCHED_CFG_BGCOLOR')?></span><span class="col4">&nbsp;<?=Text::_('COM_USERSCHED_CFG_DELETE')?></span></p>
 	<?php foreach ($this->categories as $cat) :?>
-	<p>
+	<p onchange="console.log(event);">
 		<input type="hidden" name="category_id[]" value="<?=$cat['id']?>" />
 		<span class="col1"><input type="text" name="category_name[]" value="<?=$cat['name']?>" class="ecname" /></span>
-	<!--	<span class="col2"><input type="text" name="category_txcolor[]" data-cid="t.<?=$cat['id']?>" value="<?=$cat['txcolor']?>" class="minicolors" /></span> 
-		<span class="col3"><input type="text" name="category_bgcolor[]" data-cid="b.<?=$cat['id']?>" value="<?=$cat['bgcolor']?>" class="minicolors" /></span> -->
 		<span class="col2"><?=HTMLHelper::_('usersched.colorPicker',$cat['id'],'tx',$cat['txcolor'])?></span>
 		<span class="col3"><?=HTMLHelper::_('usersched.colorPicker',$cat['id'],'bg',$cat['bgcolor'])?></span>
 		<span class="col4"><input type="checkbox" name="category_dele[]" value="<?=$cat['id']?>" class="ecdele" /></span>
-		<span class="catsamp" id="catsamp_<?=$cat['id']?>" style="color:<?=$cat['txcolor']?>;background-color:<?=$cat['bgcolor']?>"><?=$cat['name']?></span>
+		<span class="catsamp" style="color:<?=$cat['txcolor']?>;background-color:<?=$cat['bgcolor']?>"><?=$cat['name']?></span>
 	</p>
 	<?php endforeach;?>
 	<!-- <div class="clr">&nbsp;</div> -->

@@ -6,7 +6,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Filesystem\Folder;
 
-require_once JPATH_COMPONENT.'/helpers/usersched.php';
+//require_once JPATH_COMPONENT.'/helpers/usersched.php';
 require_once JPATH_COMPONENT.'/views/uschedview.php';
 
 class UserschedViewConfig extends UserschedView
@@ -22,7 +22,7 @@ class UserschedViewConfig extends UserschedView
 
 	'time_step' => 5,
 
-	'start_on_monday' => 1,
+	'start_on_monday' => false,
 	'first_hour' => 0,
 	'last_hour' => 24,
 	'readonly' => false,
@@ -84,8 +84,9 @@ class UserschedViewConfig extends UserschedView
 				$this->canAlert = $this->cOpts->get('user_canalert') || $this->params->get('can_alert');
 				break;
 			case 1:		// group
-				$start = 'gstart';
-				if (in_array($authids, $this->user->groups)) {
+				$start = 'gstart';		//var_dump($this->auth,$authids, $this->user->groups);
+//				if (in_array($authids, $this->user->groups)) {
+				if ($this->instObj->canCreate()) {
 					$this->canCfg = true;
 					$this->grpId = $authids;
 					$this->canSkin = $this->cOpts->get('grp_canskin') || $this->params->get('can_skin');

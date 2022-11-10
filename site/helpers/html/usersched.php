@@ -5,9 +5,8 @@ abstract class JHtmlUsersched
 {
 	public static function colorPicker ($id, $torb, $val)
 	{
-		$html = '<input class="hminicolors" type="color" name="category_'.$torb.'color[]" data-cid="'.$torb.'.'.$id.'"';
-		$html .= ' data-control="wheel" data-position="bottom"';
-		$html .= ' value="'.$val.'" />';
+		$html = '<input type="color" name="category_'.$torb.'color[]"';
+		$html .= ' oninput="show_'.$torb.'(this)" onchange="show_'.$torb.'(this)" value="'.$val.'" />';
 		return $html;
 	}
 

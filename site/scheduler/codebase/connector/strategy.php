@@ -1,5 +1,5 @@
 <?php
-
+////////
 class RenderStrategy {
 
 	protected $conn = null;

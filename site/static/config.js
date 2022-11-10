@@ -1,5 +1,5 @@
 function addAlertee (elem) {
-	var pg = document.createElement("p");
+	let pg = document.createElement("p");
 	pg.innerHTML = '<input type="hidden" name="alertee_id[]" value="-1" />\
 	<span class="col1"><input type="text" name="alertee_name[]" value="" class="aename" /></span>\
 	<span class="col2"><input type="text" name="alertee_email[]" value="" class="aeemail" /></span>\
@@ -8,67 +8,26 @@ function addAlertee (elem) {
 }
 
 function addCategory (elem) {
-	var pg = document.createElement("p");
+	let pg = document.createElement("p");
 	pg.innerHTML = '<input type="hidden" name="category_id[]" value="'+addCategory.sid+'" />\
 	<span class="col1"><input type="text" name="category_name[]" value="New Category" class="ecname" /></span>\
-	<span class="col2"><input class="hminicolors" type="color" name="category_txcolor[]" data-cid="tx.'+addCategory.sid+'" data-control="wheel" data-position="bottom" value="" /></span>\
-	<span class="col3"><input class="hminicolors" type="color" name="category_bgcolor[]" data-cid="bg.'+addCategory.sid+'" data-control="wheel" data-position="bottom" value="" /></span>\
+	<span class="col2"><input type="color" name="category_txcolor[]" value="#000000" oninput="show_tx(this)" onchange="show_tx(this)" /></span>\
+	<span class="col3"><input type="color" name="category_bgcolor[]" value="#FFFFFF" oninput="show_bg(this)" onchange="show_bg(this)" /></span>\
 	<span class="col4"><div>&nbsp;</div></span>\
-	<span class="catsamp" id="catsamp_'+addCategory.sid+'">New Category</span>';
+	<span class="catsamp">New Category</span>';
 	elem.parentNode.insertBefore(pg,elem);
-	jQuery(pg).find('input.minicolors').each(function() {
-			jQuery(this).minicolors({
-				control: jQuery(this).attr('data-control') || 'hue',
-				position: jQuery(this).attr('data-position') || 'right',
-				theme: 'bootstrap'
-			});
-		//	attachMiniColorPicker(addCategory.sid, this);
-		});
-	attachColorPicker(addCategory.sid, pg);
 	addCategory.sid--;
-//	elem.parentNode.insertBefore(pg,elem);
-//	attachColorPicker(pg);
 }
 addCategory.sid = -1;
 
-function attachColorPicker (ix, elm) {
-	var inps = jQuery(elm).find('span input');
-	var spns = jQuery(elm).find('span.catsamp');
-	attachMiniColorPicker(ix, inps[1]);
-	attachMiniColorPicker(ix, inps[2]);
-	jQuery(inps[0]).data().samplem = spns[0];
-	jQuery(inps[0]).on('keyup',function() { jQuery(this).data().samplem.innerHTML = jQuery(this).val(); });
-//	inps[1].addEvent("keyup", function(e){ this.innerHTML = e.target.value;}.bind(spns[4]));
+function show_tx (elm) {
+	let samp = elm.parentElement.parentElement.querySelector('.catsamp');
+	samp.style.color = elm.value;
 }
 
-function attachColorPickers () {
-	var pees = jQuery("div.ectable p");
-	for (var i=1; i<pees.length; i++) {
-		attachColorPicker(i, pees[i]);
-	}
-}
-
-function attachMiniColorPicker (ix, elm) {
-	var jqe = jQuery(elm);
-	var acid = jqe.data().cid.split('.');
-	jqe.data().sampelm = document.getElementById('catsamp_'+acid[1]);
-	if (acid[0]=='tx') {
-		jqe.data().minicolorsSettings.change = setCat_tx;
-	} else {
-		jqe.data().minicolorsSettings.change = setCat_bg;
-	}
-}
-
-function attachMiniColorPickers () {
-	var cins = jQuery('input.minicolors');
-	cins.each(attachMiniColorPicker);
-}
-
-function setCat_tx (hex, opa) {
-	this.data().sampelm.style.color = hex;
-}
-function setCat_bg (hex, opa) {
-	this.data().sampelm.style.backgroundColor = hex;
+function show_bg (elm) {
+	let samp = elm.parentElement.parentElement.querySelector('.catsamp');
+	samp.style.backgroundColor = elm.value;
 }
 
 

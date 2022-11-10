@@ -22,7 +22,7 @@ class UserSchedModelUserSched extends JModelLegacy
 	'hour_size_px' => 42,
 	'time_step' => 15,
 
-	'start_on_monday' => 1,
+	'start_on_monday' => false,
 	'first_hour' => 0,
 	'last_hour' => 24,
 	'readonly' => true,
@@ -120,7 +120,7 @@ class UserSchedModelUserSched extends JModelLegacy
 	}
 
 	public function saveConfig ($data)
-	{	//echo'<xmp>';var_dump($data);jexit();
+	{	//echo'<xmp>';var_dump($data);echo'</xmp>';jexit();
 		$blank = [
 			'settings_width' => '',
 			'settings_height' => '',

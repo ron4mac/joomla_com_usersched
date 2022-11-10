@@ -21,7 +21,7 @@ class UserschedModelCalendars extends JModelList
 
 //		jimport('rjuserdata.userdata');
 		$scheds = array();
-		$folds =  UschedHelper::getDbPaths('g');	//RJUserDbs::getDbPaths('g','sched');
+		$folds =  UschedHelper::getDbPaths('g','sched');	//RJUserDbs::getDbPaths('g','sched');
 		foreach ($folds as $fold) {
 			$gid = (int)substr($fold,1);
 			$group = UserSchedHelper::getGroupTitle($gid);

@@ -4,13 +4,6 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 
-/*
- * This is a base view class to (hopefully) avoid duplication of code needed by all views
- */
-
-jimport('joomla.application.component.helper');
-
-//require_once JPATH_COMPONENT.'/helpers/usersched.php';
 JLoader::register('UserSchedHelper', JPATH_COMPONENT . '/helpers/usersched.php');
 JLoader::register('JHtmlUsersched', JPATH_COMPONENT . '/helpers/html/usersched.php');
 
@@ -36,7 +29,7 @@ class UserschedView extends JViewLegacy
 		$this->version = $this->cOpts->get('version', 'n.n.n');
 		// and get other generally needed info
 		$this->user = Factory::getUser();
-		$calid = UserSchedHelper::uState('calid');
+		$calid = UserSchedHelper::uState('calid');	//var_dump($calid);
 		list($this->cal_type, $this->auth) = explode(':',$calid?$calid:'-1:');
 		// get the calendar instance params
 		$this->params = Factory::getApplication()->getParams();
