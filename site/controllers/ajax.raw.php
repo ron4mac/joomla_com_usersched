@@ -54,6 +54,7 @@ class UserSchedControllerAjax extends JControllerLegacy
 		// turn them into calendar events
 		$evts = [];
 		foreach ($rows as $u) {
+			if (empty($u->dob)) continue;
 			$dob = unQuote($u->dob);
 			$bday = strtotime($dob);
 			$nxd = $bday + 86400;
@@ -111,6 +112,8 @@ class UserSchedControllerAjax extends JControllerLegacy
 	// cron job access here to send alerts
 	public function cron ()
 	{
+$dbs = RJUserCom::getDbPaths(null, 'sched', true);
+
 		// get the storage location path
 		$results = Factory::getApplication()->triggerEvent('onRjuserDatapath');
 		$dsp = isset($results[0]) ? trim($results[0]) : false;
@@ -118,6 +121,17 @@ class UserSchedControllerAjax extends JControllerLegacy
 
 		$config = new JConfig();
 		$xtime = time();
+
+		foreach ($dbs as $dbp=>$inst) {
+			foreach ($inst as $info) {
+				$acheck = new USchedAcheck($info['path'], $config);
+				$acheck->processAlerts($xtime);
+				unset($acheck);
+			}
+		}
+/*
+		return;
+
 		if ($dirh = opendir(JPATH_SITE . '/'.$stor)) {
 			while (false !== ($entry = readdir($dirh))) {
 				if ($entry != '.' && $entry != '..' && is_dir(JPATH_SITE.'/'.$stor.'/'.$entry)) {
@@ -136,6 +150,7 @@ class UserSchedControllerAjax extends JControllerLegacy
 			}
 			closedir($dirh);
 		}
+*/
 	}
 	
 	

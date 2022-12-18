@@ -1,3 +1,6 @@
+//'use strict';
+/*global scheduler*/
+
 scheduler.__lang = {
 	locale: {
 		lang_more: 'more(%d)'
@@ -5,7 +8,7 @@ scheduler.__lang = {
 };
 
 function mergeCfgObjects (obj1, obj2) {
-	for (var p in obj2)
+	for (let p in obj2)
 		if (obj2.hasOwnProperty(p))
 			obj1[p] = typeof obj2[p] === 'object' ? mergeCfgObjects(obj1[p], obj2[p]) : obj2[p];
 	return obj1;
@@ -13,38 +16,38 @@ function mergeCfgObjects (obj1, obj2) {
 
 function sched_setAutoEnd () {
 	var old_setValue = scheduler.form_blocks.time.set_value;	//console.log(old_setValue.e);
-	scheduler.form_blocks.time.set_value = function(node,value,ev,config){
+	scheduler.form_blocks.time.set_value = function (node,value,ev,config) {
 			//console.log(ev);
-			var is_fd = (scheduler.date.time_part(ev.start_date)===0 && scheduler.date.time_part(ev.end_date)===0);
+//			var is_fd = (scheduler.date.time_part(ev.start_date)===0 && scheduler.date.time_part(ev.end_date)===0);
 			old_setValue.apply(this, arguments);
-			var s=node.getElementsByTagName("select");
-			var map = config._time_format_order;	//console.log(config);
+			let s = node.getElementsByTagName("select");
+			let map = config._time_format_order;	//console.log(config);
 			ev.sdnd_adj = (ev.event_length*1) ? ev.event_length : (ev.end_date - ev.start_date)/1000;
 			//console.log('esa'+ev.sdnd_adj);
 			
-
-			function _update_lightbox_select() {
-				var nsd = new Date(s[map[3]].value,s[map[2]].value,s[map[1]].value,0,s[map[0]].value);
-				var nnd = new Date(nsd.getTime() + ev.sdnd_adj*1000);
+			const _update_lightbox_select = () => {
+				let nsd = new Date(s[map[3]].value,s[map[2]].value,s[map[1]].value,0,s[map[0]].value);
+				let nnd = new Date(nsd.getTime() + ev.sdnd_adj*1000);
 				s[4+map[1]].value = nnd.getDate();
 				s[4+map[2]].value = nnd.getMonth();
 				s[4+map[3]].value = nnd.getFullYear();
-				var hm = nnd.getHours() * 60 + nnd.getMinutes();
+				let hm = nnd.getHours() * 60 + nnd.getMinutes();
 				s[4+map[0]].value = hm;
-			}
-			function _sched_update_evtdiff() {
-				var sd = new Date(s[map[3]].value,s[map[2]].value,s[map[1]].value,0,s[map[0]].value);
-				var nd = new Date(s[map[3]+4].value,s[map[2]+4].value,s[map[1]+4].value,0,s[map[0]+4].value);
+			};
+			const _sched_update_evtdiff = () => {
+				let sd = new Date(s[map[3]].value,s[map[2]].value,s[map[1]].value,0,s[map[0]].value);
+				let nd = new Date(s[map[3]+4].value,s[map[2]+4].value,s[map[1]+4].value,0,s[map[0]+4].value);
 				ev.sdnd_adj = (nd-sd)/1000;
-			}
+			};
 
-			for(var i=0; i<4; i++) {
-				s[i].onchange = function(){_update_lightbox_select();};
+			for (let i=0; i<4; i++) {
+				s[i].onchange = _update_lightbox_select;
 			}
-			for(i=4; i<8; i++) {
-				s[i].onchange = function(){_sched_update_evtdiff();};
+			for (let i=4; i<8; i++) {
+				s[i].onchange = _sched_update_evtdiff;
 			}
 		};
+
 	if (scheduler.form_blocks.calendar_time) {
 		var oldc_setValue = scheduler.form_blocks.calendar_time.set_value;
 		scheduler.form_blocks.calendar_time.set_value = function(node,val,evt){
@@ -56,10 +59,9 @@ function sched_setAutoEnd () {
 //			oldc_setValue.apply(this, arguments);
 			//console.log(evLen,inputs,selects,val,evt);
 
-
 			function _update_minical_select() {
-				start_date = scheduler.date.add(inputs[0]._date, selects[0].value, "minute");
-				end_date = new Date(start_date.getTime() + evLen);
+				let start_date = scheduler.date.add(inputs[0]._date, selects[0].value, "minute");
+				let end_date = new Date(start_date.getTime() + evLen);
 
 				inputs[1].value = scheduler.templates.calendar_time(end_date);
 				inputs[1]._date = scheduler.date.date_part(new Date(end_date));
@@ -71,7 +73,7 @@ function sched_setAutoEnd () {
 		};
 	}
 }
-//sched_setAutoEnd();
+sched_setAutoEnd();
 
 
 // other scheduler modifications
@@ -210,13 +212,16 @@ scheduler._init_year_tooltip = function() {};
 function usersched_init() {
 
 	if (scheduler.cfg_cfg) {
-		mergeCfgObjects(scheduler.config, scheduler.cfg_cfg);	console.log(scheduler.config);
+		mergeCfgObjects(scheduler.config, scheduler.cfg_cfg);
 		if (scheduler.cfg_cfg.agenda_end) {
 			var d = new Date();
 			scheduler.config.agenda_end = new Date(d.getTime()+(scheduler.cfg_cfg.agenda_end*86400000));
 		}
 		//delete(scheduler.cfg_cfg);
 	}
+
+	scheduler.config.show_loading = true;
+
 /*
 	scheduler.config.show_loading = true;
 	scheduler.xy.bar_height = 18;
@@ -241,7 +246,6 @@ function usersched_init() {
 */
 //	var sections = [ {name:"description", height:73, map_to:"text", type:"textarea", focus:true} ];
 //	if (true) sections.push({name:"category", height:20, type:"select", options:scheduler.__categories, map_to:"category"});
-//	if (scheduler.feature.canAlert) sections.push({name:"alerts", height:42, map_to:"text", type:"alerts_editor", button:"shide"});
 //	if (true) sections.push({name:"recurring", type:"recurring", map_to:"rec_type", button:"recurring"});
 //	if (true) sections.push({name:"time", height:72, type:"calendar_time", map_to:"auto"});
 //	scheduler.config.lightbox.sections = sections;
@@ -268,31 +272,16 @@ function usersched_init() {
 	// get the repeat section
 	let rs = scheduler.config.lightbox.sections[1];
 	// add category selection after description, removing repeat
-	scheduler.config.lightbox.sections.splice(1, 1, {name:"category", type:"select", height:"auto", options:scheduler.__categories, map_to:"category"});
+	scheduler.config.lightbox.sections.splice(1, 1, {name:"category", type:"select", class:"us-cat-sel", map_to:"category", options:scheduler.__categories});
 	// move repeats to the end
 	scheduler.config.lightbox.sections.push(rs);
 	// tack alerts to the end
 	if (scheduler.feature.canAlert) scheduler.config.lightbox.sections.push({name:"alerts", map_to:"text", type:"alerts_editor", button:"shide"});
-	console.log(scheduler.config.lightbox.sections);
-
+//	scheduler.config.lightbox.sections.push({name:"category", type:"usselect", class:"us-cat-sel", map_to:"category", options:scheduler.__categories});
+//	console.log(scheduler.config.lightbox.sections);
 
 	// use the left border
 	scheduler.config.left_border = true;	// fix skin css's for the border type/color
-
-
-
-	// replace the 'loading' locator function with ours
-	scheduler.detachEvent("ev_onxls:0");
-	scheduler.attachEvent("onXLS", function() {
-		if (this.config.show_loading === true) {
-			var t;
-			t = this.config.show_loading = document.createElement("DIV");
-			t.className = "dhx_loading";
-			t.style.left = Math.round((this._x - 66) / 2) + "px";
-			t.style.top = 60 + "px";
-			this._obj.appendChild(t);
-		}
-	});
 
 	if (document.getElementById("versionbar")) {
 		document.getElementById("schedulerver").innerHTML = scheduler.version;
@@ -303,22 +292,20 @@ function usersched_init() {
 	scheduler.setLoadMode(usched_mode);
 	scheduler.load(userschedlurl);
 
-	var dp = new dataProcessor(userschedlurl);
+	let dp = new dataProcessor(userschedlurl);
 	dp.init(scheduler);
 
 	//---- need some template overrides here (after scheduler init) mostly to combat terrace skin
 
 	// inhibit time display in event bar - takes up too much room
-	scheduler.templates.event_bar_date = function(start,end,event) {
-		return '';
-	};
+	scheduler.templates.event_bar_date = () => {return ''};
 
 	if (typeof dhtmlXTooltip != 'undefined') {
 		// force the event tooltip to hide when the mouse leaves the calendar area
-		var dhxcaldatahere = document.getElementById("scheduler_here");
-		var dhxcaldatas = dhxcaldatahere.getElementsByClassName("dhx_cal_data");
-		var dhxcaldata = dhxcaldatas[0];
-		dhxcaldata.onmouseout = function() { dhtmlXTooltip.hide(); };
+		let dhxcaldatahere = document.getElementById("scheduler_here");
+		let dhxcaldatas = dhxcaldatahere.getElementsByClassName("dhx_cal_data");
+		let dhxcaldata = dhxcaldatas[0];
+		dhxcaldata.onmouseout = () => {dhtmlXTooltip.hide()};
 	}
 
 }

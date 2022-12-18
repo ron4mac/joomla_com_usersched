@@ -1,15 +1,20 @@
+table.ev_table {
+	width: 100%;
+	border-spacing: 0 0.5rem;
+	border-collapse: inherit;
+}
 table.ev_table tr, table.ev_table td {
-	border:none;
+	border: none;
 }
 table.ev_table td {
-	background-color: #FFE;
-	border-width: 0 0 1px 5px;
+	background-color: #FFF;
+	border-width: 0 0 2px 6px;
 	border-color: #C7D6DC;
 	border-style: solid;
 }
 li.ev_td_li {
-	margin-right: 2em;
-	line-height: 1.3em;
+	margin-right: 2rem;
+	line-height: 1.3rem;
 }
 li.ev_td_li .usch-alert {
 	color: red;
@@ -17,6 +22,13 @@ li.ev_td_li .usch-alert {
 }
 div.userschedver {
 	color: #999;
-	font-size: 0.6em;
+	font-size: 0.6rem;
 	line-height: 1;
+}
+table.ev_table .evt-desc {
+	line-height: 2rem;
+	font-weight: bold;
+}
+table.ev_table ul {
+	margin-bottom: 0;
 }

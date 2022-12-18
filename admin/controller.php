@@ -6,6 +6,7 @@ use Joomla\CMS\Language\Text;
 
 JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched.php');
 JLoader::register('UserSchedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usersched.php');
+//JLoader::registerPrefix('RJUser', JPATH_LIBRARIES . '/rjuser');
 
 class UserschedController extends JControllerLegacy
 {

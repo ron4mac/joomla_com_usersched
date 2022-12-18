@@ -18,6 +18,9 @@
 }
 */
 
+.dhx_cal_light_wide .dhx_wrap_section {
+	margin-bottom: 10px;
+}
 .dhx_cal_navline div, .dhx_cal_navline .dhx_cal_prev_button, .dhx_cal_navline .dhx_cal_next_button {
 	top: 22px;
 }
@@ -43,4 +46,12 @@
 }
 #alertlead_val {
 	width: 3rem;
+}
+#alertmethod, #alertlead_mul {
+	padding-right:30px;
+	background-position-y: 0;
+}
+select.us-cat-sel {
+	padding-right:30px;
+	margin-bottom:0;
 }

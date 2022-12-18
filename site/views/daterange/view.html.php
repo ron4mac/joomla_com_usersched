@@ -101,8 +101,8 @@ class UserschedViewDaterange extends UserschedView
 	protected function formattedText ($txt)
 	{
 		$lines = explode("\n",rtrim($txt));
-		$ft = '<b style="line-height:2em">'.array_shift($lines).'</b><br />';
-		$ft .= implode('<br />',$lines);
+		$ft = '<span class="evt-desc">'.array_shift($lines).'</span>';
+		if ($lines) $ft .= '<br>'.implode('<br>',$lines);
 		return $ft;
 	}
 
@@ -110,7 +110,8 @@ class UserschedViewDaterange extends UserschedView
 	{
 		$css = 'table.ev_table td.ev_td_ {border-left-color: #DDD'."}\n";;
 		foreach ($this->categories as $cat) {
-			$css .= 'table.ev_table td.ev_td_'.$cat['id'].' {border-left-color: '.$cat['bgcolor']."}\n";
+		//	$css .= 'table.ev_table td.ev_td_'.$cat['id'].' {border-left-color: '.$cat['bgcolor']."}\n";
+			$css .= 'table.ev_table td.ev_td_'.$cat['id'].' {border-color: '.$cat['bgcolor']."}\n";
 		}
 		return $css;
 	}

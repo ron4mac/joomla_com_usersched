@@ -1,3 +1,6 @@
+//'use strict';
+/*global scheduler*/
+
 scheduler.__alerts = {
 	locale: {
 		alert_title: 'Alerts',
@@ -21,8 +24,9 @@ scheduler.locale.labels.section_alerts = scheduler.__alerts.locale.alert_title;
 //	scheduler.config.lightbox.sections.splice(lsl-2,0,{ name: "alerts", height: 42, map_to: "text", type: "alerts_editor", button:"shide" });
 scheduler.locale.labels.button_shide = scheduler.__alerts.locale.alert_show;
 
-scheduler.form_blocks["alerts_editor"] = {
-	render:function(sns) {
+
+scheduler.form_blocks.alerts_editor = {
+	render:(sns) => {
 		let htm = `<div class="dhx_form_alerts" style="height:0px">
 	<form id ="alert_form">
 	<div class="sched_alertsf">
@@ -58,19 +62,19 @@ scheduler.form_blocks["alerts_editor"] = {
 `;
 		return htm;
 	},
-	set_value:function(node, value, ev) {
-		sched_fillAlert(node.firstElementChild,value,ev);
+	set_value: (node, value, ev) => {
+		scheduler.fillAlert(node.firstElementChild,value,ev);
 	},
-	get_value:function(node, ev) {
-		sched_getAlert(node.firstElementChild,ev);
+	get_value: (node, ev) => {
+		scheduler.getAlert(node.firstElementChild,ev);
 		return ev.text;
 	},
-	focus:function(node) {
-		var a = node.firstElementChild.childNodes[1];
+	focus: (node) => {
+		let a = node.firstElementChild.childNodes[1];
 		a.select();
 		a.focus();
 	},
-	button_click:function(ix, el, sect, cont){
+	button_click: (ix, el, sect, cont) => {
 		if (cont.style.height=='0px') {
 			cont.style.height = "auto";
 			el.nextSibling.innerHTML = scheduler.__alerts.locale.alert_hide;
@@ -82,13 +86,12 @@ scheduler.form_blocks["alerts_editor"] = {
 	}
 };
 
-
-function sched_fillAlert(elem,val,evt) {
+scheduler.fillAlert = (elem,val,evt) => {
 	elem.alertmethod.value = evt.alert_meth ? evt.alert_meth : 1;
 //console.log(evt);
-	var optionsSelected = evt.alert_user ? evt.alert_user.split(/,/) : [];
-	var select = elem.sel_alertusers;
-	for (var i = 0, l = select.options.length, o; i < l; i++) {
+	let optionsSelected = evt.alert_user ? evt.alert_user.split(/,/) : [];
+	let select = elem.sel_alertusers;
+	for (let i = 0, l = select.options.length, o; i < l; i++) {
 		o = select.options[i];
 		if (optionsSelected.indexOf(o.value) != -1 ) {
 			o.selected = true;
@@ -99,7 +102,7 @@ function sched_fillAlert(elem,val,evt) {
 
 //	elem.alertlead_mul.value = evt.alert_lead;
 	if (evt.alert_lead) {
-		var mlead = evt.alert_lead / 60;
+		let mlead = evt.alert_lead / 60;
 		if (mlead % 10080 === 0) { //weeks
 			elem.alertlead_mul.value = 4;
 			elem.alertlead_val.value = mlead / 10080;
@@ -119,14 +122,15 @@ function sched_fillAlert(elem,val,evt) {
 	}
 
 	//console.log(elem);console.log(val);console.log(evt);
-}
-function sched_getAlert(elem,evt) {
+};
+
+scheduler.getAlert = (elem,evt) => {
 	evt.alert_meth = elem.alertmethod.value;
 
-	var users = [];
-	var options = elem.sel_alertusers && elem.sel_alertusers.options;
-	var opt;
-	for (var i=0, iLen=options.length; i<iLen; i++) {
+	let users = [];
+	let options = elem.sel_alertusers && elem.sel_alertusers.options;
+	let opt;
+	for (let i=0, iLen=options.length; i<iLen; i++) {
 		opt = options[i];
 		if (opt.selected) {
 			users.push(opt.value || opt.text);
@@ -134,11 +138,11 @@ function sched_getAlert(elem,evt) {
 	}
 	evt.alert_user = users.join(",");
 
-	var alertlead = 0;
+	let alertlead = 0;
 	//console.log(elem.alertlead_val);
 	if (elem.alertlead_val.value) {
-		var lval = elem.alertlead_val.value;
-		switch(elem.alertlead_mul.value*1) {
+		let lval = elem.alertlead_val.value;
+		switch (elem.alertlead_mul.value*1) {
 			case 1: //minutes
 				alertlead = lval * 60;
 				break;
@@ -156,66 +160,14 @@ function sched_getAlert(elem,evt) {
 	evt.alert_lead = alertlead;
 
 	//console.log(elem);console.log(evt);
-}
-/*
-function sched_setAutoEnd () {
-	var old_setValue = scheduler.form_blocks.time.set_value;	//console.log(old_setValue.e);
-	scheduler.form_blocks.time.set_value = function(node,value,ev,config){
-			//console.log(ev);
-			var is_fd = (scheduler.date.time_part(ev.start_date)===0 && scheduler.date.time_part(ev.end_date)===0);
-			old_setValue.apply(this, arguments);
-			var s=node.getElementsByTagName("select");
-			var map = config._time_format_order;	//console.log(config);
-			ev.sdnd_adj = (ev.event_length*1) ? ev.event_length : (ev.end_date - ev.start_date)/1000;
-			//console.log('esa'+ev.sdnd_adj);
-			
-
-			function _update_lightbox_select() {
-				var nsd = new Date(s[map[3]].value,s[map[2]].value,s[map[1]].value,0,s[map[0]].value);
-				var nnd = new Date(nsd.getTime() + ev.sdnd_adj*1000);
-				s[4+map[1]].value = nnd.getDate();
-				s[4+map[2]].value = nnd.getMonth();
-				s[4+map[3]].value = nnd.getFullYear();
-				var hm = nnd.getHours() * 60 + nnd.getMinutes();
-				s[4+map[0]].value = hm;
-			}
-			function _sched_update_evtdiff() {
-				var sd = new Date(s[map[3]].value,s[map[2]].value,s[map[1]].value,0,s[map[0]].value);
-				var nd = new Date(s[map[3]+4].value,s[map[2]+4].value,s[map[1]+4].value,0,s[map[0]+4].value);
-				ev.sdnd_adj = (nd-sd)/1000;
-			}
-
-			for(var i=0; i<4; i++) {
-				s[i].onchange = function(){_update_lightbox_select();};
-			}
-			for(i=4; i<8; i++) {
-				s[i].onchange = function(){_sched_update_evtdiff();};
-			}
-		};
-	if (scheduler.form_blocks.calendar_time) {
-		var oldc_setValue = scheduler.form_blocks.calendar_time.set_value;
-		scheduler.form_blocks.calendar_time.set_value = function(node,val,evt){
-			var evLen = evt.end_date - evt.start_date;
-			var inputs = node.getElementsByTagName("input");
-			var selects = node.getElementsByTagName("select");
-			scheduler.config.event_duration = 60;
-			scheduler.config.auto_end_date = true;
-//			oldc_setValue.apply(this, arguments);
-			//console.log(evLen,inputs,selects,val,evt);
+};
 
 
-			function _update_minical_select() {
-				start_date = scheduler.date.add(inputs[0]._date, selects[0].value, "minute");
-				end_date = new Date(start_date.getTime() + evLen);
-
-				inputs[1].value = scheduler.templates.calendar_time(end_date);
-				inputs[1]._date = scheduler.date.date_part(new Date(end_date));
-
-				//selects[1].value = end_date.getHours() * 60 + end_date.getMinutes();
-			}
-
-			oldc_setValue.apply(this, arguments);
-		};
-	}
-}
-*/
+// modify a SELECT block render to include a class (and no hard coded height)
+scheduler.form_blocks.select.render = (sns) => {
+	let html = "<div class='dhx_cal_ltext'><select class='"+sns.class+"' style='width:100%;'>";
+	for (let i = 0; i < sns.options.length; i++)
+		html+="<option value='"+sns.options[i].key+"'>"+sns.options[i].label+"</option>";
+	html+="</select></div>";
+	return html;
+};

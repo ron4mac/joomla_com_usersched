@@ -1,3 +1,6 @@
+//'use strict';
+/*global scheduler*/
+
 scheduler.bdayYrs = [];
 scheduler.attachEvent("onViewChange", function (new_mode, new_date) {
 	var ny;

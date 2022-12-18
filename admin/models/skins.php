@@ -66,8 +66,8 @@ class UserschedModelSkins extends JModelList
 			$this->_total++;
 		}
 
-		$start = $this->getState('list.start');
-		$limit = $this->getState('list.limit');
+		$start = $this->getState('list.start',0);
+		$limit = $this->getState('list.limit',0);
 //		$listOrder = $this->getState('list.ordering');
 //		$listDirn = $this->getState('list.direction');
 	//	echo $listOrder;echo $listDirn;

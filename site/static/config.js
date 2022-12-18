@@ -1,3 +1,6 @@
+//'use strict';
+/*global scheduler*/
+
 function addAlertee (elem) {
 	let pg = document.createElement("p");
 	pg.innerHTML = '<input type="hidden" name="alertee_id[]" value="-1" />\

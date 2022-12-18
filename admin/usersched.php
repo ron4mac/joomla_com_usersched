@@ -4,6 +4,8 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 
+JLoader::register('RJUserCom', JPATH_LIBRARIES . '/rjuser/com.php');
+
 // Access check.
 if (!Factory::getUser()->authorise('core.manage', 'com_usersched')) {
 	return JError::raiseWarning(404, Text::_('JERROR_ALERTNOAUTHOR'));

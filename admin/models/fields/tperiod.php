@@ -1,18 +1,16 @@
 <?php
 defined('_JEXEC') or die;
 
-jimport('joomla.form.formfield');
-
 JHtml::script('administrator/components/com_usersched/models/fields/tperiod.js');
 
-class JFormFieldTPeriod extends JFormField
+class JFormFieldTPeriod extends Joomla\CMS\Form\FormField
 {
 	protected $type = 'TPeriod';
 
 	protected function getInput()
 	{
 		// Initialize variables.
-		$options = array();
+		$options = [];
 		$attr = '';
 
 		// Initialize some field attributes.
@@ -24,7 +22,7 @@ class JFormFieldTPeriod extends JFormField
 		// Initialize JavaScript field attributes.
 		$attr .= $this->element['onchange'] ? ' onchange="' . (string) $this->element['onchange'] . '"' : '';
 
-		$sray = array('','','','');
+		$sray = ['','','',''];
 		$nn = '';
 		if ($this->value) {
 			$tval = $this->value / 60;

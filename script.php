@@ -42,6 +42,12 @@ class com_userschedInstallerScript extends InstallerScript
 			Log::add('Joomla support for SQLite(3) is required for this component.', Log::WARNING, 'jerror');
 			return false;
 		}
+		// ensure that the RJUser library is installed
+		include JPATH_LIBRARIES . '/rjuser/com.php';
+		if (!class_exists('RJUserCom')) {
+			Log::add('The <a href="https://github.com/ron4mac/joomla_lib_rjuser" target="_blank">RJUser Library</a> is required for this component.', Log::WARNING, 'jerror');
+			return false;
+		}
 		// get the version number being installed/updated
 		if (method_exists($parent,'getManifest')) {
 			$this->release = $parent->getManifest()->version;

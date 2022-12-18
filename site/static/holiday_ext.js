@@ -1,3 +1,6 @@
+//'use strict';
+/*global scheduler*/
+
 // adds US holiday events gotten from Google's calendar API
 // Jan 2015 updated for Google API v3
 

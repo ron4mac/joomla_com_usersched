@@ -13,7 +13,7 @@ if ($this->params->get('show_page_heading', 1)) {
 }
 ?>
 <p style="font-size:1.2em"><?php echo Text::sprintf($this->message ? $this->message : 'COM_USERSCHED_RANGE_MESSAGE', $this->formattedDateTime($this->rBeg, $this->rEnd)) ?></p>
-<table align="center" width="100%" cellspacing="10" cellpadding="5" class="ev_table">
+<table align="center" class="ev_table">
 <?php
     $num_events = count($data);
     foreach ($data as $row): ;

@@ -26,7 +26,7 @@ class USchedAcheck {
 	public function processAlerts ($time)
 	{
 		// remove expired alerted sentinals (> 1 day)
-		$this->db->setQuery('DELETE FROM alerted WHERE ('.$time.' - `atime`) >= `lead`')->execute();
+		$this->db->setQuery('DELETE FROM alerted WHERE ('.$time.' - atime) >= lead')->execute();
 
 		$this->alertees = $this->getTable('alertees');
 		if (!$this->alertees) return;	// can't alert if no one to alert
@@ -36,10 +36,11 @@ class USchedAcheck {
 		$atime = $time;
 
 		// get event range
-		$fields = '*, strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end';
-		$where = 'alert_user != \'\' AND ((substr(`end_date`,1,5) == \'9999-\')OR(`t_end` > '.$atime.')) AND (t_start - alert_lead) <= ('.$atime.' + 5)';
+		$fields = '*, strtotime(start_date) AS t_start, strtotime(end_date) as t_end';
+//		$where = 'alert_user != \'\' AND ((substr(end_date,1,5) == \'9999-\')OR(t_end > '.$atime.')) AND (t_start - alert_lead) <= ('.$atime.' + 5)';
+		$where = 'alert_user != \'\' AND (t_start - alert_lead) <= '.$atime;
 		$evts = $this->getTable('events', $fields, $where);
-		//var_dump($evts);
+	//	var_dump($evts);
 												/// @@@@@@ MIGHT WANT TO GET RECURRING EVENTS SEPARATELY
 		foreach ($evts as $evt) {
 			// skip if was already alerted within timeframe
@@ -173,7 +174,7 @@ class USchedAcheck {
 	}
 
 	private function getTable ($table, $values='*', $where='')
-	{
+	{	//var_dump('SELECT '.$values.' FROM ' . $table . ($where ? (' WHERE '.$where) : ''));
 		$this->db->setQuery('SELECT '.$values.' FROM ' . $table . ($where ? (' WHERE '.$where) : ''));
 		return $this->db->loadAssocList();
 	}

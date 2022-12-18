@@ -13,6 +13,10 @@ abstract class UschedHelper
 	public static function getInstanceObject ($mid=null)	// SO
 	{
 		if (!empty(self::$instanceObj)) return self::$instanceObj;
+		self::$instanceObj = RJUserCom::getInstObject('cal_type', $mid);
+		return self::$instanceObj;
+
+/*
 		$app = Factory::getApplication();
 		if ($mid) {
 			$params = $app->getMenu()->getItem($mid)->getParams();
@@ -48,12 +52,18 @@ abstract class UschedHelper
 		file_put_contents('APPARMS.TXT',print_r($obj,true),FILE_APPEND);
 		self::$instanceObj = $obj;
 		return $obj;
+*/
 	}
 
 
 	public static function userDataPath ()
 	{
+		if (self::$udp) return self::$udp;
 		if (!self::$instanceObj) self::getInstanceObject();
+		self::$udp = RJUserCom::getStoragePath(self::$instanceObj);
+		return self::$udp;
+
+/*
 		if (self::$udp) return self::$udp;
 		self::getTypeOwner();
 		$cmp = JApplicationHelper::getComponentName().'_'.self::$instanceObj->menuid;
@@ -72,6 +82,7 @@ abstract class UschedHelper
 
 		self::$udp = self::getStorPath().'/'.$ndir.'/'.$cmp;
 		return self::$udp;
+*/
 	}
 
 
@@ -80,7 +91,7 @@ abstract class UschedHelper
 		return file_exists(self::userDataPath().'/'.$fnam);
 	}
 
-
+/*
 	public static function getDbPaths ($which, $dbname, $full=false, $cmp='')	// AO
 	{
 		$paths = [];
@@ -114,7 +125,7 @@ abstract class UschedHelper
 		}
 		return $paths;
 	}
-
+*/
 
 	public static function userAuth ($uid)
 	{
@@ -188,14 +199,14 @@ abstract class UschedHelper
 		return round($bytes, $precision) . ' ' . $units[$pow];
 	}
 
-
+/*
 	private static function getStorPath ()
 	{
 		$results = Factory::getApplication()->triggerEvent('onRjuserDatapath');
 		$dsp = isset($results[0]) ? trim($results[0]) : false;
 		return ($dsp ?: 'userstor');
 	}
-
+*/
 
 	private static function getTypeOwner ()
 	{
@@ -228,7 +239,7 @@ abstract class UschedHelper
 
 }
 
-
+/*
 class USchedInstanceObject	// SO
 {
 	protected $perms;
@@ -262,3 +273,4 @@ class USchedInstanceObject	// SO
 	}
 
 }
+*/

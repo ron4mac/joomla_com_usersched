@@ -9,14 +9,14 @@ class UserschedModelUsersched extends JModelList
 
 	protected $_total = -1;
 
-	public function __construct($config = array())
+	public function __construct($config = [])
 	{   
-		$config['filter_fields'] = array('fullname', 'username', 'userid');
+		$config['filter_fields'] = ['fullname', 'username', 'userid'];
 		parent::__construct($config);
 	}
 
 	public function getItems ()
-	{	//return array();
+	{	//return [];
 		// Get a storage key.
 		$store = $this->getStoreId('list');
 
@@ -26,12 +26,13 @@ class UserschedModelUsersched extends JModelList
 		}
 
 //		jimport('rjuserdata.userdata');
-		$scheds = array();
-		$folds = UschedHelper::getDbPaths('u','sched');	//RJUserDbs::getDbPaths('u','sched');
-		foreach ($folds as $fold) {
+		$scheds = [];
+//		$folds = UschedHelper::getDbPaths('u','sched');
+		$folds =  RJUserCom::getDbPaths('u','sched');
+		foreach ($folds as $fold=>$info) {
 			$userid = (int)substr($fold,1);
 			$user = JUser::getInstance($userid);
-			$scheds[] = array('name'=>$user->name,'uname'=>$user->username,'uid'=>$userid);
+			$scheds[] = ['name'=>$user->name,'uname'=>$user->username,'uid'=>$userid];
 		}
 		$this->_total = count($scheds);
 
