@@ -12,41 +12,18 @@
 
 			<field name="message" type="textarea"
 				cols="30"
-				description="COM_USERSCHED_DATERANGE_MSGDESC"
-				label="COM_USERSCHED_DATERANGE_MSGLABEL"
+				label="COM_USERSCHED_RANGE_MSG_LABEL"
+				description="COM_USERSCHED_RANGE_MSG_DESC"
 				rows="3"
 				hint="COM_USERSCHED_RANGE_MESSAGE"
 			/>
 
-			<field name="cal_menu" type="MenuItem"
-				label="Menu Item Connection"
-				description="Select the menu item association"
+			<field name="cal_menu" type="menuitem"
+				label="COM_USERSCHED_RANGE_MENU_REF_LABEL"
+				description="COM_USERSCHED_RANGE_MENU_REF_DESC"
 				required="required"
 			/>
-
-			<field name="cal_type" type="radio"
-				default="0"
-				description="COM_USERSCHED_CALTYPE_DESC"
-				label="COM_USERSCHED_CALTYPE_LABEL"
-			>
-				<option value="2">COM_USERSCHED_SITE_CAL</option>
-				<option value="1">COM_USERSCHED_GROUP_CAL</option>
-				<option value="0">COM_USERSCHED_USER_CAL</option>
-			</field>
-
-			<field name="site_auth" type="usergrouplist"
-				multiple="true"
-				label="Editable by:"
-				description="Select the group(s) who may edit the calendar"
-				showon="cal_type:2"
-			/>
-
-			<field name="group_auth" type="usergrouplist"
-				label="Owning group:"
-				description="Select the group who owns/edits the calendar"
-				showon="cal_type:1"
-			/>
-
+<!--
 			<field name="relative" type="radio" default="abs"
 				label="Relative/Absolute Date Range"
 				description="Should date range be relative to today or absolute dates. You can also specify dates using the php function strtotime"
@@ -55,17 +32,17 @@
 				<option value="rel">Relative</option>
 				<option value="strtotime">strtotime</option>
 			</field>
-
-			<field name='relstart' type='tperiod'
-				default="-172800"
-				label='START_RELATIVE_TO_TODAY'
-				description="JEV_RELSTART_DESC"
+-->
+			<field name="relstart" type="tperiod"
+				default="-259200"
+				label="COM_USERSCHED_RANGE_START_REL_LABEL"
+				description="COM_USERSCHED_RANGE_START_REL_DESC"
 			/>
 
-			<field name='relend' type='tperiod'
+			<field name="relend" type="tperiod"
 				default="6048000"
-				label='END_RELATIVE_TO_TODAY'
-				description="JEV_RELEND_DESC"
+				label="COM_USERSCHED_RANGE_END_REL_LABEL"
+				description="COM_USERSCHED_RANGE_END_REL_DESC"
 			/>
 
 		</fieldset>

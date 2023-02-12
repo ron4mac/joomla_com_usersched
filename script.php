@@ -1,4 +1,9 @@
 <?php
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+*/
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
@@ -7,7 +12,7 @@ use Joomla\CMS\Log\Log;
 
 class com_userschedInstallerScript extends InstallerScript
 {
-	protected $minimumJoomla = '3.8';
+	protected $minimumJoomla = '4.0';
 	protected $com_name = 'com_usersched';
 
 	public function install ($parent) 
@@ -76,7 +81,7 @@ class com_userschedInstallerScript extends InstallerScript
 	{
 		if (count($param_array) > 0) {
 			// read the existing component value(s)
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 			$db->setQuery('SELECT params FROM #__extensions WHERE name = "'.$this->com_name.'"');
 			$params = json_decode($db->loadResult(), true);
 			// add the new variable(s) to the existing one(s), replacing existing only if requested

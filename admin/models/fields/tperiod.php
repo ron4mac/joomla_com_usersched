@@ -1,7 +1,14 @@
 <?php
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+*/
 defined('_JEXEC') or die;
 
-JHtml::script('administrator/components/com_usersched/models/fields/tperiod.js');
+use Joomla\CMS\Factory;
+
+Factory::getDocument()->addScript('components/com_usersched/models/fields/tperiod.js');
 
 class JFormFieldTPeriod extends Joomla\CMS\Form\FormField
 {
@@ -42,14 +49,14 @@ class JFormFieldTPeriod extends Joomla\CMS\Form\FormField
 		}
 
 		// build the combo field
-		$html = '<input type="number" class="tpni" id="tpni_'.$this->element['name'].'" name="tpnn_'.$this->element['name'].'" value="'.$nn.'" style="width:60px" />&nbsp;';
-		$html .= '<select id="tpsi_'.$this->element['name'].'" name="tpsn_'.$this->element['name'].'" style="width:100px">';
+		$html = '<input type="number" class="tper-num" onchange="TPER.mul(this.parentNode)" onkeyup="TPER.mul(this.parentNode)" value="'.$nn.'" style="width:60px" />&nbsp;';
+		$html .= '<select class="tper-mul" onchange="TPER.mul(this.parentNode)" style="width:100px">';
 		$html .= '<option value="60"'.$sray[0].'>minutes</option>';
 		$html .= '<option value="3600"'.$sray[1].'>hours</option>';
 		$html .= '<option value="86400"'.$sray[2].'>days</option>';
 		$html .= '<option value="604800"'.$sray[3].'>weeks</option>';
 		$html .= '</select>';
-		$html .= '<input type="hidden" id="tpcv_'.$this->element['name'].'" name="jform[params]['.$this->element['name'].']" />';
+		$html .= '<input type="hidden" class="tper-valu" name="jform[params]['.$this->element['name'].']" />';
 		return $html;
 	}
 

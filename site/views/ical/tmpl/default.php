@@ -1,5 +1,11 @@
 <?php 
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+*/
 defined('_JEXEC') or die('Restricted access');
+
 $data = $this->data;	//echo'<pre>';var_dump($data); //jexit();
 $this->document->addStyleSheet('components/com_usersched/static/config.css');
 $this->document->addScript('components/com_usersched/static/config.js',true);

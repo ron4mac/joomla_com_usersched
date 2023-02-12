@@ -1,4 +1,9 @@
 <?php
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+*/
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
@@ -33,15 +38,20 @@ class UserSchedController extends BaseController
 
 	public function display ($cachable = false, $urlparams = false)
 	{
+		// need any alternate layout because 'getView()' will lose it otherwise
+		$viewLayout = $this->input->get('layout', 'default', 'string');
 		$inv = $this->input->get('view','none');
 		if ($inv == 'usersched' && $this->userid && !file_exists(UschedHelper::userDataPath().'/sched.sql3')) {
 			$this->input->set('view', 'config');
-			$iview = $this->getView('config','html');
+			$iview = $this->getView('config','html','',['layout'=>$viewLayout]);
 			$iview->instObj = $this->instanceObj;
 		}
-		$iview = $this->getView($inv,'html');
+		$iview = $this->getView($inv,'html','',['layout'=>$viewLayout]);
 		$iview->instObj = $this->instanceObj;
-		return parent::display($cachable, $urlparams);
+
+		parent::display($cachable, $urlparams);
+
+		return $this;
 	}
 
 	public function doConfig ()

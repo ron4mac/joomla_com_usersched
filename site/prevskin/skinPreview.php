@@ -1,4 +1,10 @@
 <?php
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+*/
+
 $skin = '';
 $css = '';
 if (isset($_GET['skin']) && $_GET['skin']) {

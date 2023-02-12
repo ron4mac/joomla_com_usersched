@@ -1,4 +1,9 @@
 <?php
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+*/
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
@@ -35,11 +40,12 @@ $this->document->addStylesheet($skinpath.'skin.css', $skinopts);
 $calID = base64_encode(UserSchedHelper::uState('calid'));
 
 // gather and inline needed javascript variables
-$script = 'var usched_calid = "'.$calID.'";';
-$script .= 'var usched_mode = "'.$this->settings['settings_defaultmode'].'";';
-$script .= 'var usched_base = "'.Uri::base(true).'";';
+$script = '';
+//$script .= 'var usched_calid = "'.$calID.'";';
+$script .= 'USched.mode = "'.$this->settings['settings_defaultmode'].'";';
+$script .= 'USched.base = "'.Uri::base(true).'";';
 //$script .= 'var userschedlurl = "' . JURI::base() . 'index.php?option=com_usersched&view=usersched&task=calXML&calid=' . $calID .'";';
-$script .= 'var userschedlurl = "' . Uri::base() . 'index.php?option=com_usersched&Itemid='.$this->instObj->menuid.'&format=raw&task=calXML&calid=' . urlencode($calID) .'";';
+$script .= 'USched.URL = "' . Uri::base() . 'index.php?option=com_usersched&Itemid='.$this->instObj->menuid.'&format=raw&task=calXML&calid=' . urlencode($calID) .'";';
 $script .= 'scheduler.cfg_cfg = '.$this->cfgcfg.';';
 $script .= 'scheduler.__categories = ['.implode(',',$this->categoriesJSON()).'];';
 if ($this->alertees) {
@@ -88,9 +94,9 @@ if ($this->params->get('show_page_heading', 1)) {
 <?php if ($this->canCfg) :?>
 	<img src="components/com_usersched/static/cfg16-4.png" title="Configure calendar" class="usched_act" alt="" style="left:0px;" onclick="window.location='<?php echo Route::_('index.php?option=com_usersched&task=doConfig&Itemid='.$this->mnuItm, false); ?>'" />
 <?php endif; ?>
-<?php if (false) :?>
+<?php if (true) :?>
 	<!-- <img src="components/com_usersched/static/printer-2.png" title="Print calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="scheduler.toPDF('<?=Uri::base()?>components/com_usersched/pdf/generate.php','fullcolor')" /> -->
-	<!-- <img src="components/com_usersched/static/printer-2.png" title="Print calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="printJS('scheduler_here','html')" /> -->
+	<img src="components/com_usersched/static/printer-2.png" title="Print calendar" class="usched_act" alt="" style="left:<?=$icns_left+=$icns_leftx?>px;" onclick="printJS('scheduler_here','html')" />
 <?php endif; ?>
 	<div class="dhx_cal_navline">
 <?php if (false && $is_terrace) :?>
@@ -154,5 +160,5 @@ if ($this->params->get('show_page_heading', 1)) {
 ?>
 <script type="text/javascript">
 	// set this here so it is last in the chain
-	document.addEventListener('DOMContentLoaded', function() {usersched_init();});
+	document.addEventListener('DOMContentLoaded', function() {USched.init();});
 </script>

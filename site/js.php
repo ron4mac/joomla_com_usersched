@@ -1,4 +1,10 @@
 <?php
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+*/
+
 /*	codess
 	A - admin mode
 	R - recurring events
@@ -9,6 +15,7 @@
 	M - Mobile device
 */
 $jsfiles = [];
+$needRO = false;
 $codes = $_GET['c'];$lcl = $_GET['l'];
 
 $jsfiles[] = 'scheduler/codebase/dhtmlxscheduler.js';
@@ -20,7 +27,8 @@ if (strpos($codes,'R') !== false) {
 	$jsfiles[] = 'scheduler/codebase/locale/recurring/locale_recurring_'.$lcl.'.js';
 }
 if (strpos($codes,'A') === false) {
-	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_readonly.js';
+	$needRO = true;
+	//$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_readonly.js';
 	$scpt = 'scheduler.config.readonly_form = true;';
 	//block all modifications
 	$scpt .= 'scheduler.attachEvent("onBeforeDrag",function(){return false;});';
@@ -44,12 +52,17 @@ if (strpos($codes,'J') !== false) {
 $jsfiles[] = 'static/usersched.js';
 $jsfiles[] = 'static/locale_lang_'.$lcl.'.js';
 if (strpos($codes,'H') !== false) {
+	$needRO = true;
 	$jsfiles[] = 'static/holiday_ext.js';
 }
 if (strpos($codes,'B') !== false) {
+	$needRO = true;
+	//$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_readonly.js';
 	$jsfiles[] = 'static/usrbday_ext.js';
 }
-
+if ($needRO) {
+	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_readonly.js';
+}
 $lastmod = 0;
 $totsize = 0;
 $jss = [];

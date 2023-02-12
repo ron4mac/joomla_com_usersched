@@ -1,48 +1,111 @@
+#ical-inout {
+	margin-bottom: 1rem
+}
+
 #configform input[type="submit"] {
 	float: right;
-}
-#configform input[type="checkbox"] {
-	float: left;
-	margin-right: 1em;
-}
-#configform input[type="text"] {
-/*	margin-left: 1em;*/
-	margin-bottom: 1em;
-}
-#configform input[type="file"] {
-	line-height: 1em;
-	height: 1.5em;
-	vertical-align: top;
-	margin-bottom: 6px;
-}
-#configform input.numer {
-	width: 4em;
-}
-#configform label {
-	display:block;
-	margin-bottom: 0.5em;
+	margin-top: 1rem;
 }
 #configform .clr {
 	clear:both;
 }
-#configform fieldset {
-	border:1px solid #DDD;
-	padding: 12px 8px;
-	margin-top:8px;
-}
-#configform legend {
-	border:none;
-	padding: 0 8px;
-	margin:0;
-	width:auto;
-	height:1.1em;
-	font-size:1.1em;
-	line-height:1.1em;
+
+
+
+
+
+cfg-tabs {
+	display: block;
+	clear: both;
+	margin-bottom: 0.75rem;
 }
 
-#formtabs {
-	clear: both;
+/* Style the tab */
+cfg-tabs .tab {
+	overflow: hidden;
+	border: 1px solid #ccc;
+	background-color: #f1f1f1;
+	width: fit-content;
+	border-bottom: none;
 }
+
+/* Style the buttons inside the tab */
+cfg-tabs .tab button {
+	background-color: inherit;
+	float: left;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 4px 12px;
+	transition: 0.3s;
+	font-size: 17px;
+	opacity: .5;
+	border-right: 1px solid #CCC;
+}
+cfg-tabs .tab button:last-child {
+	border-right: none;
+}
+
+/* Change background color of buttons on hover */
+cfg-tabs .tab button:hover {
+	background-color: #ddd;
+	opacity: .7;
+}
+
+/* Create an active/current tablink class */
+cfg-tabs .tab button.active {
+	background-color: #ccc;
+	opacity: 1;
+}
+
+/* Style the tab content */
+cfg-tabs .tabcontent {
+	display: none;
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+/*	border-top: none;	*/
+}
+
+/* Style some tab content elements */
+cfg-tabs .numer {
+	width: 4em;
+}
+#scales .numer, #dateform input {
+	margin-bottom: .5rem;
+}
+#modes .grid2 {
+	display: inline-grid;
+	grid-template-columns: auto auto;
+	column-gap: 2rem;
+}
+#category div {
+	display: inline-grid;
+	grid-template-columns: auto auto auto auto auto;
+	column-gap: 1rem;
+}
+.catsamp {
+	padding: 0 8px;
+	margin-bottom: 6px;
+}
+#category div.addicon, #alertee div.addicon {
+	display: block;
+	margin-top: .75rem;
+	width: 16px;
+	height: 16px;
+	background:#eee url(../static/plusbut.png) no-repeat;
+	cursor: pointer;
+}
+#alertee div {
+	display: inline-grid;
+	grid-template-columns: auto auto auto auto;
+	column-gap: 1rem;
+}
+.tabcontent .gcent {
+	text-align: center;
+}
+
+
+
 
 #configform p.subtitl {
 	font-weight: bold;
@@ -50,169 +113,6 @@
 	line-height: initial;
 }
 
-#configform div.twocol {
-	display: inline-block;
-	width: 45%;
-	vertical-align: top;
-}
-
-/* alertees configuration */
-.aetable p {
-	clear: both;
-	width: 100%;
-	margin: 0;
-}
-.aetable span {
-	float: left;
-	padding: 0 10px;
-}
-.aetable span.col1 {
-	width: 110px;
-}
-.aetable span.col2 {
-	width: 186px;
-}
-.aetable span.col3 {
-	width: 186px;
-}
-.aetable span.col4 {
-	width: 60px;
-	text-align: center;
-}
-.aetable span.col4 input {
-	float: none !important;
-	margin: 0 !important;
-}
-.aetable span .aename {
-	width: 110px;
-	margin-left: 0 !important;
-}
-.aetable span .aeemail {
-	width: 180px;
-	margin-left: 0 !important;
-}
-.aetable span .aesms {
-	width: 180px;
-	margin-left: 0 !important;
-}
-.aetable .addicon {
-	margin-left: 10px;
-	width: 16px;
-	height: 16px;
-	background:#eee url(../static/plusbut.png) no-repeat;
-	cursor: pointer;
-}
-
-.aecolumn1 {
-	position: relative;
-	left: 10px;
-}
-.aecolumn2 {
-	position: relative;
-	left: 100px;
-}
-.aecolumn3 {
-	position: relative;
-	left: 190px;
-}
-
-/* categories configuration */
-.ectable p {
-	clear: both;
-	width: 100%;
-	margin: 0;
-}
-.ectable span {
-	float: left;
-/*	padding: 0 10px;*/
-}
-
-.ectable span.col1 {
-	width: 210px;
-}
-.ectable span.col2 {
-	width: 120px;
-}
-.ectable span.col3 {
-	width: 110px;
-}
-.ectable span.col4 {
-	width: 60px;
-	text-align: center;
-}
-
-.ectable span.col4 input {
-	float: none !important;
-/*	margin: 0 !important;*/
-	margin-left: 10px;
-}
-.ectable span .ecname {
-	width: 180px;
-	margin-left: 0 !important;
-}
-.ectable span .ectcolr {
-	width: 80px;
-	margin-left: 0 !important;
-}
-.ectable span .ecbcolr {
-	width: 80px;
-	margin-left: 0 !important;
-}
-
-.ectable span.catsamp {
-	width: auto;
-	margin-left: 10px;
-	padding: 4px 8px;
-	white-space: nowrap;
-}
-
-.ectable .addicon {
-	margin-left: 10px;
-	width: 16px;
-	height: 16px;
-	background:#eee url(../static/plusbut.png) no-repeat;
-	cursor: pointer;
-}
-
-.eccolumn1 {
-	position: relative;
-	left: 10px;
-}
-.eccolumn2 {
-	position: relative;
-	left: 100px;
-}
-.eccolumn3 {
-	position: relative;
-	left: 190px;
-}
-
-/* stabber */
-a:active,
-a:focus {outline:0;}
-.stab_clr {display:block;clear:both;height:0;line-height:0;margin:0;padding:0;border:0;}
-
-/* Tabs
------------------------------------------- */
-.stabber {display:none;}
-.stabberlive {margin:4px 0;padding:0;}
-
-/* The tab navigation */
-ul.stabbernav {margin:0 0 0 8px!important;padding:0!important;list-style:none!important;list-style-image:none!important;background:none!important;line-height:normal!important;height:auto!important;text-align:left!important;}
-ul.stabbernav li {margin:0!important;padding:0!important;line-height:normal!important;list-style:none!important;list-style-image:none!important;background:none!important;display:inline!important;}
-ul.stabbernav li a {font-size:14px;margin:0 2px 0 0;padding:4px 10px 2px;color:#222;border-radius:2px 2px 0 0;border:1px solid #bbb;border-bottom:none;background:#eee url(../static/tab_bg.jpg) repeat-x 50%;}
-ul.stabbernav li a:hover {color:#c64934;border:1px solid #aaa;border-bottom:none;background:#f2f2f2;text-decoration:none;}
-ul.stabbernav li a:active,
-ul.stabbernav li a:focus {outline:0;}
-ul.stabbernav li.stabberactive a {background:#fff;border-bottom:1px solid #fff;}
-ul.stabbernav li.stabberactive a:hover {background:#fff;border-bottom:1px solid #fff;text-decoration:none;}
-ul.stabbernav li.stabberactive,
-ul.stabbernav li.stabberinactive {background:none;padding:0;margin:0;}
-
-/* The tab content */
-.stabberlive .stabbertab {text-align:left;margin:2px 0 0!important;padding:8px;border:1px solid #bbb;border-radius:2px;background:#fff;}
-.stabberlive .stabbertab h2.sheading,
-.stabberlive .stabbertabhide {display:none;}
 
 div.userschedver {
 	color: #999;

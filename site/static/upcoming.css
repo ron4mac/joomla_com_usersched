@@ -32,3 +32,7 @@ table.ev_table .evt-desc {
 table.ev_table ul {
 	margin-bottom: 0;
 }
+
+.esrch {
+	float: right;
+}

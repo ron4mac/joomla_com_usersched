@@ -1,4 +1,9 @@
 <?php
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+*/
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
@@ -15,44 +20,6 @@ abstract class UschedHelper
 		if (!empty(self::$instanceObj)) return self::$instanceObj;
 		self::$instanceObj = RJUserCom::getInstObject('cal_type', $mid);
 		return self::$instanceObj;
-
-/*
-		$app = Factory::getApplication();
-		if ($mid) {
-			$params = $app->getMenu()->getItem($mid)->getParams();
-			$menuid = $mid;
-		} else {
-			$params = $app->getParams();
-			$menuid = $app->input->getInt('Itemid', 0);
-		}
-		if (!$menuid) throw new Exception('COM_USERSCHED_MISSING_MENUID', 400);
-		$user = $app->getIdentity();
-		$uid = $user->get('id');
-		$ugrps = $user->get('groups');
-		$allperms = USchedInstanceObject::CAN_CREA + USchedInstanceObject::CAN_EDIT + USchedInstanceObject::CAN_DELE;
-		$path = '';
-		$perms = 0;
-		switch ($params->get('cal_type')) {
-			case 0:	//user
-				if ($uid) $perms = $allperms;
-				$path = '@'.$uid;
-				break;
-			case 1:	//group
-				$auth = $params->get('group_auth');
-				$path = '_'.$auth;
-				if ($uid && in_array($auth, $ugrps)) $perms = $allperms;
-				break;
-			case 2:	//site
-				$auth = $params->get('site_auth');
-				$path = '_0';
-				if ($uid && in_array($auth, $ugrps)) $perms = $allperms;
-				break;
-		}
-		$obj = new USchedInstanceObject($params->get('cal_type'), $menuid, $uid, $path, $perms);
-		file_put_contents('APPARMS.TXT',print_r($obj,true),FILE_APPEND);
-		self::$instanceObj = $obj;
-		return $obj;
-*/
 	}
 
 
@@ -62,27 +29,6 @@ abstract class UschedHelper
 		if (!self::$instanceObj) self::getInstanceObject();
 		self::$udp = RJUserCom::getStoragePath(self::$instanceObj);
 		return self::$udp;
-
-/*
-		if (self::$udp) return self::$udp;
-		self::getTypeOwner();
-		$cmp = JApplicationHelper::getComponentName().'_'.self::$instanceObj->menuid;
-		switch ((int)self::$instanceType) {
-			//case -1:
-			case 0:
-				$ndir = '@'. self::$ownerID;
-				break;
-			case 1:
-				$ndir = '_'. self::$ownerID;
-				break;
-			case 2:
-				$ndir = '_0';
-				break;
-		}
-
-		self::$udp = self::getStorPath().'/'.$ndir.'/'.$cmp;
-		return self::$udp;
-*/
 	}
 
 
@@ -91,41 +37,6 @@ abstract class UschedHelper
 		return file_exists(self::userDataPath().'/'.$fnam);
 	}
 
-/*
-	public static function getDbPaths ($which, $dbname, $full=false, $cmp='')	// AO
-	{
-		$paths = [];
-		if (!$cmp) $cmp = JApplicationHelper::getComponentName();
-		switch ($which) {
-			case 'u':
-				$char1 = '@';
-				break;
-			case 'g':
-				$char1 = '_';
-				break;
-			default:
-				$char1 = '';
-				break;
-		}
-		$dpath = JPATH_SITE.'/'.self::getStorPath().'/';
-		if (is_dir($dpath) && ($dh = opendir($dpath))) {
-			while (($file = readdir($dh)) !== false) {
-				if ($file[0]==$char1) {
-					foreach (glob($dpath.$file.'/'.$cmp.'*') as $mid) {
-						$ptf = $mid.'/'.$dbname.'.sql3';
-					if (file_exists($ptf))
-						$paths[] = $full ? $ptf : $file;
-						$ptf = $mid.'/'.$dbname.'.db3';
-						if (file_exists($ptf))
-							$paths[] = $full ? $ptf : $file;
-					}
-				}
-			}
-			closedir($dh);
-		}
-		return $paths;
-	}
-*/
 
 	public static function userAuth ($uid)
 	{
@@ -199,14 +110,6 @@ abstract class UschedHelper
 		return round($bytes, $precision) . ' ' . $units[$pow];
 	}
 
-/*
-	private static function getStorPath ()
-	{
-		$results = Factory::getApplication()->triggerEvent('onRjuserDatapath');
-		$dsp = isset($results[0]) ? trim($results[0]) : false;
-		return ($dsp ?: 'userstor');
-	}
-*/
 
 	private static function getTypeOwner ()
 	{
@@ -238,39 +141,3 @@ abstract class UschedHelper
 	}
 
 }
-
-/*
-class USchedInstanceObject	// SO
-{
-	protected $perms;
-	public $type, $menuid, $uid, $path;
-	public const CAN_CREA = 1;
-	public const CAN_EDIT = 2;
-	public const CAN_DELE = 4;
-
-	public function __construct ($type, $menuid, $uid, $path, $perms)
-	{
-		$this->type = $type;
-		$this->menuid = $menuid;
-		$this->uid = $uid;
-		$this->path = $path;
-		$this->perms = $perms;
-	}
-
-	public function canCreate ()
-	{
-		return ($this->perms & self::CAN_CREA);
-	}
-
-	public function canEdit ()
-	{
-		return ($this->perms & self::CAN_EDIT);
-	}
-
-	public function canDelete ()
-	{
-		return ($this->perms & self::CAN_DELE);
-	}
-
-}
-*/

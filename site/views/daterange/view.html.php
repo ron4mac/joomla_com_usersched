@@ -1,5 +1,12 @@
 <?php
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+*/
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Factory;
 
 require_once JPATH_COMPONENT.'/helpers/events.php';
 require_once JPATH_COMPONENT.'/views/uschedview.php';
@@ -8,74 +15,86 @@ class UserschedViewDaterange extends UserschedView
 {
 	protected $rBeg;
 	protected $rEnd;
+	protected $isSearch = false;
 
 	function display ($tpl = null)
 	{
 		$this->message = $this->params->get('message');
-
+//echo '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'.$this->getLayout().'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@';
 		$m = $this->getModel();
+		if (!$m->hasData()) { parent::display('nope'); return; }
 
 		$this->document->addStyleSheet('components/com_usersched/static/upcoming.css');
-		if ($m->hasData()) {
-			//$this->alertees = $m->getUdTable('alertees','',true);
-			$this->categories = $m->getUdTable('categories');
-			// if not registered, hide private categories
-			$private = [-1];
-			if ($this->user->id == 0) {
-				//var_dump($this->categories);
-				foreach ($this->categories as $cat) {
-					if (preg_match('#\(.+\)#',trim($cat['name']))) {
-						$private[] = $cat['id'];
-					}
-				}
-				//var_dump($private);
-			}
-			$cfg = $m->getUdTable('options','name = "config"',false);
-			// get event range
-			$curTime = time();
-			$this->rBeg = $curTime + $this->params->get('relstart');
-			$this->rEnd = $curTime + $this->params->get('relend');
-		//	$fields = 'strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, text, category';
-	//		$fields = 'strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, *';
-			$fields = 'strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, *';
-			$where = 'category NOT IN ('.implode(',',$private).') AND (t_start>'.$this->rBeg.' OR end_date LIKE \'9999%\' OR t_end>'.$this->rBeg.') AND t_start<'.$this->rEnd.' ORDER BY t_start';
-			$evts = $m->getUdTable('events',$where,true,$fields);
-			bugout('[-]'.$where,$evts);
-			foreach ($evts as $k=>$evt) {
-				if ($evt['rec_type']) {
-					// check for deleted individual instances of repeated events
-					if ($evt['rec_type'] == 'none') {
-						// remove this from the event list
-						unset($evts[$k]);
-						// find and remove the associated event instance
-						foreach ($evts as $ek=>$ue) {
-							if ($evt['event_pid'] == $ue['event_id'] && $evt['event_length'] == $ue['t_start']) {
-								unset($evts[$ek]);
-							}
-						}
-						continue;
-					}
-					if (recursNow($evt, $this->rBeg, $this->rEnd, false)) {
-						// adjust end to reflect event length
-						$evt['t_end'] = $evt['t_start'] + $evt['event_length'];
-						//replace with adjusted event
-						$evts[$k]=$evt;
-					}
-					else unset($evts[$k]);
-				}
-			}
+		$this->categories = $m->getUdTable('categories');
 
-			// turn urls into links
-			foreach ($evts as $k=>$evt) {
-				JHtmlUsersched::makeLinks($evts[$k]['text']);
-			}
-
-			usort($evts, function ($a,$b) { if ($a['t_start']==$b['t_start']) return 0; return ($a['t_start'] < $b['t_start']) ? -1 : 1; });
+		if ($this->getLayout()=='search') {
+			$this->isSearch = true;
+			$this->sterm = Factory::getApplication()->input->get('sterm', '__', 'string');
+			$evts = $m->evtSearch($this->sterm);
 			$this->data = $evts;
 			parent::display($tpl);
-		} else {
-			parent::display('nope');
+			return;
 		}
+
+		//$this->alertees = $m->getUdTable('alertees','',true);
+		// if not registered, hide private categories
+		$private = [];
+		if ($this->user->id == 0) {
+			//var_dump($this->categories);
+			foreach ($this->categories as $cat) {
+				if (preg_match('#\(.+\)#',trim($cat['name']))) {
+					$private[] = $cat['id'];
+				}
+			}
+			//var_dump($private);
+		}
+		$cfg = $m->getUdTable('options','name = "config"',false);
+		// get event range
+		$curTime = time();
+		$this->rBeg = $curTime + $this->params->get('relstart');		//echo'<xmp>';var_dump($this->params);echo'</xmp>';
+		$this->rEnd = $curTime + $this->params->get('relend');
+	//	$fields = 'strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, text, category';
+//		$fields = 'strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, *';
+		$fields = 'strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, *';
+		$where = '';
+		if ($private) $where .= 'category NOT IN ('.implode(',',$private).') AND ';
+		$where = '(t_start>'.$this->rBeg.' OR end_date LIKE \'9999%\' OR t_end>'.$this->rBeg.') AND t_start<'.$this->rEnd.' ORDER BY t_start';
+//			$where = '(t_start>'.$this->rBeg.' OR t_end>'.$this->rBeg.') AND t_start<'.$this->rEnd.' ORDER BY t_start';
+		$evts = $m->getUdTable('events', $where, true, $fields);
+	//	bugout('[-]'.$where,$evts);
+		foreach ($evts as $k=>$evt) {
+			bugout('ts:te', [$evt['start_date'],$evt['t_start'],$evt['end_date'],$evt['t_end']]);
+			if ($evt['rec_type']) {
+				// check for deleted individual instances of repeated events
+				if ($evt['rec_type'] == 'none') {
+					// remove this from the event list
+					unset($evts[$k]);
+					// find and remove the associated event instance
+					foreach ($evts as $ek=>$ue) {
+						if ($evt['event_pid'] == $ue['event_id'] && $evt['event_length'] == $ue['t_start']) {
+							unset($evts[$ek]);
+						}
+					}
+					continue;
+				}
+				if (recursNow($evt, $this->rBeg, $this->rEnd, false)) {
+					// adjust end to reflect event length
+					$evt['t_end'] = $evt['t_start'] + $evt['event_length'];
+					//replace with adjusted event
+					$evts[$k]=$evt;
+				}
+				else unset($evts[$k]);
+			}
+		}
+
+		// turn urls into links
+		foreach ($evts as $k=>$evt) {
+			JHtmlUsersched::makeLinks($evts[$k]['text']);
+		}
+
+		usort($evts, function ($a,$b) { if ($a['t_start']==$b['t_start']) return 0; return ($a['t_start'] < $b['t_start']) ? -1 : 1; });
+		$this->data = $evts;
+		parent::display($tpl);
 	}
 
 	protected function formattedDateTime ($from, $to=0)

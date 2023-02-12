@@ -3,7 +3,22 @@
 
 scheduler.bdayYrs = [];
 scheduler.attachEvent("onViewChange", function (new_mode, new_date) {
-	var ny;
+	let ny;
+	const getBdays = (yr) => {
+		let currentURL = window.location;
+		let live_site = currentURL.protocol+'//'+currentURL.host+USched.base;
+		if (scheduler.bdayYrs.indexOf(yr)==-1) {
+			scheduler.bdayYrs.push(yr);
+			let url = "/index.php?option=com_usersched&format=raw&task=ajax.birthdays&y="+yr;
+			fetch(live_site + url)
+			.then((resp) => { if (!resp.ok) { throw new Error('Network response was not OK'); } return resp.json(); })
+			.then((data) => {
+				let evs = scheduler.json.parse(data);
+				scheduler._process_loading(evs);
+			})
+			.catch((error) => { console.error('There has been a problem with your fetch operation:', error); });
+		}
+	};
 	getBdays(new_date.getFullYear());
 	switch (new_mode) {
 		case "day":
@@ -26,30 +41,8 @@ scheduler.attachEvent("onViewChange", function (new_mode, new_date) {
 			break;
 		default:
 			// here we'll just use a canon and make sure we have the prev and next years' birthdays
-			var cy = new_date.getFullYear();
+			let cy = new_date.getFullYear();
 			getBdays(cy-1);
 			getBdays(cy+1);
 	}
 });
-
-function getBdays (yr) {
-	var currentURL = window.location;
-	var live_site = currentURL.protocol+'//'+currentURL.host+usched_base;
-	if (scheduler.bdayYrs.indexOf(yr)==-1) {
-		scheduler.bdayYrs.push(yr);
-		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function(e) {
-			if (this.readyState < 4) { return; }
-			if (this.status !== 200) {
-				console.log(this.statusText || this.status);
-			} else if (this.status === 200) {
-				var gevents = JSON.parse(this.response);	//[];
-				var evs = scheduler.json.parse(gevents);
-				scheduler._process_loading(evs);
-			}
-		};
-		var url = "/index.php?option=com_usersched&format=raw&task=ajax.birthdays&y="+yr;
-		xhr.open('GET', live_site + url);
-		xhr.send();
-	}
-}

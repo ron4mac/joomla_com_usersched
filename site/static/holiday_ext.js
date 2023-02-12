@@ -5,58 +5,53 @@
 // Jan 2015 updated for Google API v3
 
 scheduler.gHolyYrs = [];
-scheduler.attachEvent("onViewChange", function (new_mode, new_date){
-	getGoogleHolidays(new_date.getFullYear());
+scheduler.attachEvent("onViewChange", function (new_mode, new_date) {
+	let ny;
+	const getHolidays = (yr) => {
+		if (scheduler.gHolyYrs.indexOf(yr)==-1) {
+			scheduler.gHolyYrs.push(yr);
+			let url = "/index.php?option=com_usersched&format=raw&task=ajax.holidays&yr="+yr+"&rg=usa__en";
+			let currentURL = window.location;
+			let live_site = currentURL.protocol+'//'+currentURL.host+USched.base;
+			fetch(live_site + url)
+			.then((resp) => { if (!resp.ok) { throw new Error('Network response was not OK'); } return resp.json(); })
+			.then((data) => {
+				let gevents = [], items = data.items, ix;
+				for (ix=0; ix<items.length; ix++) {
+					let item = items[ix];
+					gevents.push({text:item.summary,start_date:item.start.date,end_date:item.end.date,xevt:"isHoliday",readonly:true});
+				}
+				let evs = scheduler.json.parse(gevents);
+				scheduler._process_loading(evs);
+			})
+			.catch((error) => { console.error('There has been a problem with your fetch operation:', error); });
+		}
+	};
+
+	getHolidays(new_date.getFullYear());
 	switch (new_mode) {
 		case "day":
 			break;
 		case "week":
-			var ny = new Date(new_date);
+			ny = new Date(new_date);
 			ny.setDate(ny.getDate()-7);
-			getGoogleHolidays(ny.getFullYear());
+			getHolidays(ny.getFullYear());
 			ny.setDate(ny.getDate()+14);
-			getGoogleHolidays(ny.getFullYear());
+			getHolidays(ny.getFullYear());
 			break;
 		case "month":
-			var ny = new Date(new_date);
+			ny = new Date(new_date);
 			ny.setMonth(ny.getMonth()-1);
-			getGoogleHolidays(ny.getFullYear());
+			getHolidays(ny.getFullYear());
 			ny.setMonth(ny.getMonth()+2);
-			getGoogleHolidays(ny.getFullYear());
+			getHolidays(ny.getFullYear());
 			break;
 		case "year":
 			break;
 		default:
 			// here we'll just use a canon and make sure we have the prev and next years' holidays
-			var cy = new_date.getFullYear();
-			getGoogleHolidays(cy-1);
-			getGoogleHolidays(cy+1);
+			let cy = new_date.getFullYear();
+			getHolidays(cy-1);
+			getHolidays(cy+1);
 	}
 });
-
-function getGoogleHolidays (yr) {
-	if (scheduler.gHolyYrs.indexOf(yr)==-1) {
-		scheduler.gHolyYrs.push(yr);
-		var url = "/index.php?option=com_usersched&format=raw&task=ajax.holidays&yr="+yr+"&rg=usa__en";
-		var currentURL = window.location;
-		var live_site = currentURL.protocol+'//'+currentURL.host+usched_base;
-		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function(e) {
-			if (this.readyState < 4) { return; }
-			if (this.status !== 200) {
-				console.log(this.statusText || this.status);
-			} else if (this.status === 200) {
-				var data = JSON.parse(this.response);
-				var gevents = [], items = data.items, ix;
-				for (ix=0; ix<items.length; ix++) {
-					var item = items[ix];
-					gevents.push({text:item.summary,start_date:item.start.date,end_date:item.end.date,xevt:"isHoliday"});
-				}
-				var evs = scheduler.json.parse(gevents);
-				scheduler._process_loading(evs);
-			}
-		};
-		xhr.open('GET', live_site + url);
-		xhr.send();
-	}
-}

@@ -1,4 +1,9 @@
 <?php
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+*/
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
@@ -7,7 +12,7 @@ use Joomla\CMS\Component\ComponentHelper;
 JLoader::register('UserSchedHelper', JPATH_COMPONENT . '/helpers/usersched.php');
 JLoader::register('JHtmlUsersched', JPATH_COMPONENT . '/helpers/html/usersched.php');
 
-class UserschedView extends JViewLegacy
+class UserschedView extends Joomla\CMS\MVC\View\HtmlView
 {
 	protected $cOpts;						// component options
 	protected $show_versions, $version;		// settings for version display
@@ -32,7 +37,7 @@ class UserschedView extends JViewLegacy
 		$calid = UserSchedHelper::uState('calid');	//var_dump($calid);
 		list($this->cal_type, $this->auth) = explode(':',$calid?$calid:'-1:');
 		// get the calendar instance params
-		$this->params = Factory::getApplication()->getParams();
+		$this->params = $app->getParams();
 	}
 
 }

@@ -1,4 +1,9 @@
 <?php
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+*/
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
@@ -59,7 +64,7 @@ class UserSchedControllerAjax extends JControllerLegacy
 			$bday = strtotime($dob);
 			$nxd = $bday + 86400;
 			if ($bday) {
-				$evts[] = ['text'=>$u->name,'start_date'=>$yr.date('-m-d',$bday),'end_date'=>$yr.date('-m-d',$nxd),'xevt'=>'isBrthday'];
+				$evts[] = ['text'=>$u->name,'start_date'=>$yr.date('-m-d',$bday),'end_date'=>$yr.date('-m-d',$nxd),'xevt'=>'isBrthday','readonly'=>true];
 			}
 		};
 		// send the events to the client
@@ -112,7 +117,9 @@ class UserSchedControllerAjax extends JControllerLegacy
 	// cron job access here to send alerts
 	public function cron ()
 	{
-$dbs = RJUserCom::getDbPaths(null, 'sched', true);
+		$dbug = strpos($this->input->server->get('HTTP_USER_AGENT'), 'Wget') === false;
+
+		$dbs = RJUserCom::getDbPaths(null, 'sched', true);
 
 		// get the storage location path
 		$results = Factory::getApplication()->triggerEvent('onRjuserDatapath');
@@ -122,13 +129,15 @@ $dbs = RJUserCom::getDbPaths(null, 'sched', true);
 		$config = new JConfig();
 		$xtime = time();
 
+		if ($dbug) echo'<pre>';
 		foreach ($dbs as $dbp=>$inst) {
 			foreach ($inst as $info) {
-				$acheck = new USchedAcheck($info['path'], $config);
+				$acheck = new USchedAcheck($info['path'], $config, $dbug);
 				$acheck->processAlerts($xtime);
 				unset($acheck);
 			}
 		}
+		if ($dbug) echo'</pre>';
 /*
 		return;
 

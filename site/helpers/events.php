@@ -1,4 +1,9 @@
 <?php
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+*/
 defined('_JEXEC') or die;
 
 function bugout ($msg, $vars='') {
@@ -34,37 +39,38 @@ function recursNow (&$evt, $rBeg, $rEnd, $lasto=true) {
 	$divsr = 1;
 	switch ($type) {
 		case 'day':
-			$tyc = 'D';
 			$divsr = $count * 86400;
 			$pdelta = (int)(($rBeg - $evt['t_start']) / $divsr);
 			bugout($rBeg.':'.$evt['t_start'].':'.$pdelta.':'.$count);
 			if ($pdelta<0) {
-				$dt->sub(new DateInterval('P'.-($pdelta*$count).$tyc));
+				$dt->sub(new DateInterval('P'.-($pdelta*$count).'D'));
 			} else {
-				$dt->add(new DateInterval('P'.($pdelta*$count).$tyc));
+				$dt->add(new DateInterval('P'.($pdelta*$count).'D'));
 			}
 			break;
 		case 'week':
-			$tyc = 'W';
+			// calc time between instances
 			$divsr = $count * 604800;
-			$pdelta = (int)(($rBeg - $evt['t_start']) / $divsr);
-//			bugout($rBeg.':'.$evt['t_start'].':'.$pdelta.':'.$count);
-			$dt->add(new DateInterval('P'.($pdelta*$count).$tyc));
+			// calc number of instances before this date range
+//			$pdelta = (int)(($rBeg - $evt['t_start']) / $divsr);
+			$pdelta = (int)ceil(($rBeg - $evt['t_start']) / $divsr);
+			bugout('diff ' . $rBeg - $evt['t_start']);
+			bugout($rBeg.':'.$evt['t_start'].':'.$pdelta.':'.$count);
+			// add prior occurences to arrive at next occurence data
+			$dt->add(new DateInterval('P'.($pdelta*$count).'W'));
 			break;
 		case 'month':
-			$tyc = 'M';
 			$cdt = new R_DateTime(date('Y-m-d H:i',$rBeg));
 			$dim = ($cdt->getFullYear() - $dt->getFullYear()) * 12;
 			$dim += $cdt->getMonth() - $dt->getMonth();
 			$nop = (int) ($dim / $count);
-			$dt->add(new DateInterval('P'.($nop*$count).$tyc));
+			$dt->add(new DateInterval('P'.($nop*$count).'M'));
 			break;
 		case 'year':
-			$tyc = 'Y';
 			$cdt = new R_DateTime(date('Y-m-d H:i',$rBeg));
 			$diy = $cdt->getFullYear() - $dt->getFullYear();
 			$nop = (int) ($diy / $count);
-			$dt->add(new DateInterval('P'.($nop*$count).$tyc));
+			$dt->add(new DateInterval('P'.($nop*$count).'Y'));
 			break;
 	}
 
@@ -74,7 +80,7 @@ function recursNow (&$evt, $rBeg, $rEnd, $lasto=true) {
 		//!! need to handle monday as begin of week
 	}
 
-//	bugout( '== '. $dt->format('Y-m-d H:i D') );
+	bugout( '== '. $dt->format('Y-m-d H:i D') );
 
 	if ($count2) {
 		$wk = $count2;
@@ -113,10 +119,12 @@ function recursNow (&$evt, $rBeg, $rEnd, $lasto=true) {
 
 	if ($closetime<$rBeg || $closetime>$rEnd) return false;
 
-	bugout( $rBeg-$closetime.'-- '.date('Y-m-d H:i',$rBeg).' - '. $dt->format('Y-m-d H:i D') );
+	bugout( $rBeg-$closetime.' -- '.date('Y-m-d H:i',$rBeg).' - '. $dt->format('Y-m-d H:i D') );
 
+	// adjust the event for correct instance display
 	$evt['t_start'] = $closetime;
 	$evt['start_date'] = $dt->format('Y-m-d H:i');
+
 	return true;
 }
 
