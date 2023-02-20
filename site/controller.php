@@ -98,12 +98,13 @@ class UserSchedController extends BaseController
 	}
 
 /*	ajax call from client scheduler js (setup in view default) */
+
 	public function calXML ()
 	{
 		require_once 'scheduler/codebase/connector/scheduler_connector.php';
 		require_once 'scheduler/codebase/connector/db_sqlite3.php';
 
-		if (defined('RJC_DEV')) {
+		if (RJC_DEV) {
 			Log::addLogger(['text_file' => 'usersched.log.php'], Log::INFO, 'usersched');
 			$l = print_r($_GET,true).print_r($_POST,true);
 			Log::add($l, Log::INFO, 'usersched');
@@ -113,7 +114,7 @@ class UserSchedController extends BaseController
 		$res = new SQLite3($dbpath);
 
 		$this->scheduler = new schedulerConnector($res, 'SQLite3');
-		if (defined('RJC_DEV')) $this->scheduler->enable_log(JPATH_SITE.'/tmp/userschedconnlog.txt');
+		if (RJC_DEV) $this->scheduler->enable_log(JPATH_SITE.'/tmp/userschedconnlog.txt');
 		$this->scheduler->event->attach('beforeProcessing', [$this,'delete_related']);
 		$this->scheduler->event->attach('afterProcessing', [$this,'insert_related']);
 		$this->scheduler->event->attach('beforeProcessing', [$this,'set_event_user']);

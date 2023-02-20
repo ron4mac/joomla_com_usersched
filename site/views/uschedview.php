@@ -7,6 +7,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\Application\Web\WebClient;
 use Joomla\CMS\Component\ComponentHelper;
 
 JLoader::register('UserSchedHelper', JPATH_COMPONENT . '/helpers/usersched.php');
@@ -19,10 +20,15 @@ class UserschedView extends Joomla\CMS\MVC\View\HtmlView
 	protected $user, $cal_type, $auth;		// user and calendar/authid info
 	protected $params;						// calendar instance (menu item) parameters
 	protected $mnuItm;						// menu id for this instance
+	protected $mobile = false;				// when client is mobile
 
 	public function __construct ($config=[])
 	{
 		parent::__construct($config);
+		//get the client platform
+		$wc = new WebClient();
+		$this->mobile = $wc->mobile;
+
 		if (!$this->document) $this->document = Factory::getDocument();
 		// get the menu id
 		$app = Factory::getApplication();

@@ -119,7 +119,7 @@ class UserSchedHelper
 	public static function getGroupTitle ($gid)
 	{
 		// Get the title of the group.
-		$db = Factory::getDbo();
+		$db = Factory::getDatabase();
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('title'));
 		$query->from($db->quoteName('#__usergroups'));

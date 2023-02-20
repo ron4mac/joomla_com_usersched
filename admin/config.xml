@@ -74,15 +74,13 @@
 	</fieldset>
 
 	<fieldset name="component" label="COM_CONFIG_COMPOPTIONS_FIELDSET_LABEL">
-	    <field name="standard_skin" type="list" default=""
-	           label="Standard skin:"
-	           description="The standard skin (as default)">
-	      <option value="">-default-</option>
-	      <option value="_material">Material</option>
-	      <option value="_flat">Flat</option>
-	      <option value="_glossy">Glossy</option>
-	      <option value="_classic">Classic</option>
-	    </field>
+		<field name="standard_skin"
+			type="folderlist"
+			directory="components/com_usersched/skins"
+			hide_none="1"
+			default=""
+			label="Standard skin:"
+			description="The standard skin (as default)" />
 		<field
 			name="default_skin"
 			type="folderlist"

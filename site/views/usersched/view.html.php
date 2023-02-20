@@ -11,6 +11,8 @@ require_once JPATH_COMPONENT.'/views/uschedview.php';
 
 class UserschedViewUsersched extends UserschedView
 {
+	protected $tabs = [];
+	protected $plugs = ['readonly' => true];
 	protected $config = [
 	'default_date' => '%j %M %Y',
 	'month_date' => '%F %Y',
@@ -94,19 +96,17 @@ class UserschedViewUsersched extends UserschedView
 		$m = $this->getModel();
 		$this->alertees = $m->getUdTable('alertees'); $this->alertees = $this->alertees ?: [];	//if (!$this->alertees) $this->alertees = [];
 		$this->categories = $m->getUdTable('categories'); $this->categories = $this->categories ?: [];	//if (!$this->categories) $this->categories = [];
-		$cfg = $m->getUdTable('options','name = "config"',false);
+		$cfg = $m->getUdTable('options', 'name = "config"', false);
 		if ($cfg) {
 			$this->settings = unserialize($cfg['value']);
-			$this->applyCfg($cfg['value']);
+			$this->applyCfg($this->settings);
 			$this->cfgcfg = json_encode($this->config);
 			parent::display($tpl);
 		}
 	}
 
-	protected function applyCfg ($cfg)
+	protected function applyCfg ($s)
 	{
-		$s = unserialize($cfg);
-		
 		$this->config['separate_short_events'] = $s['settings_collision'];
 		$this->config['max_month_events'] = $s['settings_eventnumber'];
 
@@ -126,6 +126,25 @@ class UserschedViewUsersched extends UserschedView
 		$this->config['first_hour'] = $s['templates_starthour'];
 		$this->config['last_hour'] = $s['templates_endhour'];
 		$this->config['agenda_end'] = $s['templates_agendatime'];
+
+		// setup tabs
+		if ($s['settings_agenda']) {
+			$this->tabs[] = 'agenda';
+			$this->plugs['agenda_view'] = true;
+		}
+		if ($s['settings_day']) $this->tabs[] = 'day';
+		if ($s['settings_week']) $this->tabs[] = 'week';
+		if ($s['settings_month']) $this->tabs[] = 'month';
+		if ($s['settings_year']) {
+			$this->tabs[] = 'year';
+			$this->plugs['year_view'] = true;
+		}
+		// month view at minimum
+		if (!$this->tabs) $this->tabs[] = 'month';
+
+		// any other needed plugins
+		if ($s['settings_repeat']) $this->plugs['recurring'] = true;
+		if ($s['settings_expand']) $this->plugs['expand'] = true;
 	}
 
 	protected function categoriesJSON ()
@@ -144,11 +163,11 @@ class UserschedViewUsersched extends UserschedView
 		if ($this->categories)
 		foreach ($this->categories as $cat) {
 			$css .= '.dhx_cal_event div.evCat'.$cat['id']
-			.',.dhx_cal_event_line.evCat'.$cat['id']
-			.',.dhx_cal_event_clear.evCat'.$cat['id']
+			.',.dhx_cal_event_line.dhx_cal_event_line_start.dhx_cal_event_line_end.evCat'.$cat['id']
+			.',.dhx_cal_event_clear.dhx_cal_event_line_start.dhx_cal_event_line_end.evCat'.$cat['id']
 			.' {background-image:none;';
-			if ($cat['bgcolor']) $css .= 'background-color:'.$cat['bgcolor'].' !important;';
-			if ($cat['txcolor']) $css .= 'color:'.$cat['txcolor'].' !important;';
+			if ($cat['bgcolor']) $css .= 'background-color:'.$cat['bgcolor'].';';
+			if ($cat['txcolor']) $css .= 'color:'.$cat['txcolor'].';';
 			$css .= "}\n";
 		}
 		return $css;

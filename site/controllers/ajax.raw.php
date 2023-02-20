@@ -11,6 +11,7 @@ use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Http\HttpFactory;
 use Joomla\CMS\Component\ComponentHelper;
 
+JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched.php');
 JLoader::register('USchedAcheck', JPATH_COMPONENT.'/alertcheck.php');
 
 class UserSchedControllerAjax extends JControllerLegacy
@@ -28,7 +29,7 @@ class UserSchedControllerAjax extends JControllerLegacy
 
 		$yr = $this->input->get('y');
 		// get the database
-		$db = Factory::getDbo();
+		$db = Factory::getDatabase();
 		// set groups to just get registered users
 		$groups = [2];
 		// set a where clause for appropriate filtering
@@ -162,5 +163,56 @@ class UserSchedControllerAjax extends JControllerLegacy
 */
 	}
 	
-	
+	// my own backend for scheduler 6.x
+	public function calJ6 ()
+	{
+		try {
+			$m = $this->getModel('backend');
+			switch ($_SERVER['REQUEST_METHOD']) {
+				case 'GET':
+					if (RJC_DEV) file_put_contents('LOG.txt', 'G '.print_r($_GET,true)."\n", FILE_APPEND);
+					$result = $m->read($_GET);
+					break;
+				case 'POST':
+					// with Joomla: ->input->json->getraw()
+					$json = $this->input->json->getraw();
+					if (RJC_DEV) file_put_contents('LOG.txt', 'I '.print_r($json,true)."\n", FILE_APPEND);
+					$requestPayload = json_decode($json);
+					$id = $requestPayload->id;
+					$action = $requestPayload->action;
+					$body = (array) $requestPayload->data;
+
+					$result = [
+						'action' => $action
+					];
+
+					if ($action == 'inserted') {
+						$databaseId = $m->create($body);
+						$result['tid'] = $databaseId;
+						// delete a single occurrence from recurring series
+						if (!empty($body['rec_type']) && $body['rec_type'] === 'none') {
+							$result['action'] = 'deleted';//!
+						}
+					} elseif ($action == 'updated') {
+						$m->update($body, $id);
+					} elseif ($action == 'deleted') {
+						$m->delete($id);
+					}
+					break;
+				default: throw new Exception('Unexpected Method'); break;
+			}
+		} catch (Exception $e) {
+			http_response_code(500);
+			$result = [
+				'action' => 'error',
+				'message' => $e->getMessage()
+			];
+		}
+
+		header('Access-Control-Allow-Origin: *');
+		header('Access-Control-Allow-Methods: *');
+		header('Content-Type: application/json');
+		echo json_encode($result);
+	}
+
 }

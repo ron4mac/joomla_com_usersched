@@ -105,6 +105,28 @@ div.userschedver {
 div.schedulerver {
 	float: right;
 }
+
+/* lightbox alert settings */
+.dhx_cal_lsection div.dhx_custom_button .dhx_custom_button_shide {
+    display: none;
+}
+.dhx_form_alerts {
+	margin-left: 117px;
+	overflow: hidden;
+}
+div.sched_alrthd {
+	min-height: 32px;
+	margin-left: 117px;
+	padding: 8px;
+}
+div.sched_alertsf {
+	display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+div.sched_alertsf select {
+	width: calc(100% - 20px);
+}
 div.sched_alerts {
 	padding-left: 10px;
 }
@@ -119,6 +141,13 @@ div.sched_alrtatr .alrt_lead {
 div.sched_alrtatr #alertlead_mul {
 	vertical-align: text-bottom;
 }
+div.sched_alrtatrxl .alrt_lead {
+	font-size: small;
+	width: 6rem;
+}
+
+
+/* calendar loading graphic */
 .dhx_loading{
 	position:absolute;
 	width:66px;

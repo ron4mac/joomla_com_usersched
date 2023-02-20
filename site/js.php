@@ -18,13 +18,13 @@ $jsfiles = [];
 $needRO = false;
 $codes = $_GET['c'];$lcl = $_GET['l'];
 
-$jsfiles[] = 'scheduler/codebase/dhtmlxscheduler.js';
-$jsfiles[] = 'scheduler/codebase/locale/locale_'.$lcl.'.js';
-if (strpos($codes,'Y') !== false) $jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_year_view.js';
-if (strpos($codes,'G') !== false) $jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_agenda_view.js';
+//$jsfiles[] = 'scheduler/codebase/dhtmlxscheduler.js';
+//$jsfiles[] = 'scheduler/codebase/locale/locale_'.$lcl.'.js';
+//if (strpos($codes,'Y') !== false) $jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_year_view.js';
+//if (strpos($codes,'G') !== false) $jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_agenda_view.js';
 if (strpos($codes,'R') !== false) {
-	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_recurring.js';
-	$jsfiles[] = 'scheduler/codebase/locale/recurring/locale_recurring_'.$lcl.'.js';
+//	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_recurring.js';
+//	$jsfiles[] = 'scheduler/codebase/locale/recurring/locale_recurring_'.$lcl.'.js';
 }
 if (strpos($codes,'A') === false) {
 	$needRO = true;
@@ -37,14 +37,14 @@ if (strpos($codes,'A') === false) {
 	$scpt .= 'scheduler.config.dblclick_create = false;';
 	$jsfiles[] = ['s'=>$scpt];
 }
-$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_minical.js';
+//$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_minical.js';
 if (strpos($codes,'M') !== false) {
-	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_quick_info.js';
+//	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_quick_info.js';
 } else {
-	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_tooltip.js';
+//	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_tooltip.js';
 }
-$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_expand.js';
-$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_pdf.js';
+//$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_expand.js';
+//$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_pdf.js';
 if (strpos($codes,'J') !== false) {
 	$jsfiles[] = 'static/rjc_ext.js';
 	$jsfiles[] = 'static/locale_alerts_'.$lcl.'.js';
@@ -61,7 +61,7 @@ if (strpos($codes,'B') !== false) {
 	$jsfiles[] = 'static/usrbday_ext.js';
 }
 if ($needRO) {
-	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_readonly.js';
+//	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_readonly.js';
 }
 $lastmod = 0;
 $totsize = 0;

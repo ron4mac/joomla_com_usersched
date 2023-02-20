@@ -17,7 +17,7 @@
 	border-left: 1px solid #e0e0e0;
 }
 */
-/*
+
 .dhx_cal_light_wide .dhx_wrap_section {
 	margin-bottom: 10px;
 }
@@ -35,6 +35,9 @@
 	display: flex;
 	flex-wrap: wrap;
 }
+/*#alert_form {
+	padding-top: 8px;
+}*/
 .sched_alrtatru, .sched_alrtatrm {
 	margin-right: 2rem;
 }
@@ -52,21 +55,3 @@ select.us-cat-sel {
 	padding-right:30px;
 	margin-bottom:0;
 }
-*/
-
-.dhx_cal_navline {
-	margin-top: 8px;
-}
-.dhx_cal_event_clear, .dhx_cal_event_line {
-	padding: 1px 4px;
-	margin-left: 1px;
-}
-
-@media screen and (max-width: 600px) {
-.dhx_cal_navline {
-	margin-top: 0;
-}
-.scheduler_popup_controls {
-	display: inline-grid;
-}
-}/** 600px **/

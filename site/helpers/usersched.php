@@ -65,7 +65,7 @@ abstract class UserSchedHelper {
 
 	public static function groupTitle ($gid)
 	{
-		$db = Factory::getDbo();
+		$db = Factory::getDatabase();
 		$db->setQuery(
 			'SELECT `title`' .
 			' FROM `#__usergroups`' .

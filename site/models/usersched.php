@@ -104,7 +104,7 @@ class UserSchedModelUserSched extends JModelLegacy
 
 	public function getUdTable ($table, $where=false , $all=true, $values='*')
 	{
-		$db = $this->getDbo();
+		$db = $this->getDatabase();
 		$db->setQuery('SELECT '.$values.' FROM ' . $table . ($where ? (' WHERE '.$where) : ''));
 		if ($all) {
 			return $db->loadAssocList();
@@ -230,7 +230,7 @@ class UserSchedModelUserSched extends JModelLegacy
 			if ($data->get($int)) $blank[$int] = $data->getInt($int);
 		}
 
-		$db = $this->getDbo();
+		$db = $this->getDatabase();
 		$cfg = $db->quote(serialize($blank));
 		if ($this->dbinit) {
 			$db->setQuery('INSERT INTO `options` (`name`,`value`) VALUES ("config",'.$cfg.')');
@@ -349,7 +349,7 @@ class UserSchedModelUserSched extends JModelLegacy
 	private function buildDB ($db, $cfg=false)
 	{
 		$sql = explode(';',file_get_contents(JPATH_COMPONENT_ADMINISTRATOR.'/models/sched.sql'));
-		$db = $this->getDbo();
+		$db = $this->getDatabase();
 		foreach ($sql as $x) {
 			$db->setQuery($x)->execute();
 		}
