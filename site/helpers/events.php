@@ -1,8 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.2.0
 */
 defined('_JEXEC') or die;
 
@@ -30,7 +31,7 @@ function gatherEvents ($ddb, $rBeg, $rEnd, $useLead=true, $useRecur=true, $where
 		$lasto - if true, return last possible occurance, otherwise return the first possible
 	lead time is not used for calculation, so adjust $rBeg $rEnd to account for lead time if necessary
 */
-function recursNow (&$evt, $rBeg, $rEnd, $lasto=true) {
+function recursNow (&$evt, $rBeg, $rEnd, $lasto=true) {	$lasto=false;
 	list($rec_pattern, $xtra) = array_pad(explode('#', $evt['rec_type']),2,null);
 	list($type,$count,$day,$count2,$daysl) = array_pad(explode('_', $rec_pattern),5,null);
 //	bugout('',array($type,$count,$day,$count2,$daysl,$xtra));
@@ -62,7 +63,8 @@ function recursNow (&$evt, $rBeg, $rEnd, $lasto=true) {
 		case 'month':
 			$cdt = new R_DateTime(date('Y-m-d H:i',$rBeg));
 			$dim = ($cdt->getFullYear() - $dt->getFullYear()) * 12;
-			$dim += $cdt->getMonth() - $dt->getMonth();
+			$dim += $dim ? ($cdt->getMonth() - $dt->getMonth()) : ($dt->getMonth() - $cdt->getMonth());
+			var_dump($cdt->getFullYear(),$dt->getFullYear(),$cdt->getMonth(),$dt->getMonth(),$dim,$count);if ($dim<0) { jexit();}
 			$nop = (int) ($dim / $count);
 			$dt->add(new DateInterval('P'.($nop*$count).'M'));
 			break;

@@ -11,9 +11,6 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 
-// get the cdn version of dhtmlx scheduler that will be used
-$dhxver = $this->params->get('dhtmlx_version', '6.0');
-
 // determine needed CSS files and add them to head
 $is_terrace = true;
 $skin = $this->params->get('default_skin');
@@ -30,14 +27,14 @@ if ($skin) {
 		}
 	} else {
 	//	$this->document->addStylesheet('components/com_usersched/scheduler/codebase/dhtmlxscheduler_'.$skin.'.css', $skinopts);
-		$this->document->addStylesheet('https://cdn.dhtmlx.com/scheduler/'.$dhxver.'/dhtmlxscheduler_'.$skin.'.css');
+		$this->document->addStylesheet('https://cdn.dhtmlx.com/scheduler/6.0/dhtmlxscheduler_'.$skin.'.css');
 		if (!in_array($skin, ['material','flat','contrast_black','contrast_white'])) $is_terrace = false;
 	}
 } else {
 //	$this->document->addStylesheet('components/com_usersched/scheduler/codebase/dhtmlxscheduler.css', $skinopts);
-	$this->document->addStylesheet('https://cdn.dhtmlx.com/scheduler/'.$dhxver.'/dhtmlxscheduler.css');
+	$this->document->addStylesheet('https://cdn.dhtmlx.com/scheduler/6.0/dhtmlxscheduler.css');
 }
-			$this->document->addStylesheet('components/com_usersched/static/usersched.'.$dhxver.'.css', $skinopts);
+			$this->document->addStylesheet('components/com_usersched/static/usersched.6.0.css', $skinopts);
 			//$this->document->addStylesheet($skinpath.'skin.css', $skinopts);
 			if (JFile::exists($skinpath.'skin.css')) {
 				$this->document->addStylesheet($skinpath.'skin.css');
@@ -91,7 +88,7 @@ if ($this->canCfg) $jscodes .= 'A';
 
 $jawc = new JApplicationWebClient();
 if ($jawc->mobile) $jscodes .= 'M';
-$this->document->addScript('https://cdn.dhtmlx.com/scheduler/'.$dhxver.'/dhtmlxscheduler.js');
+$this->document->addScript('https://cdn.dhtmlx.com/scheduler/6.0/dhtmlxscheduler.js');
 $this->document->addScript('components/com_usersched/js.php?'.$jscodes, $skinopts);
 
 

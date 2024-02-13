@@ -1,12 +1,12 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.2.0
 */
 defined('_JEXEC') or die;
 
-//require_once JPATH_COMPONENT.'/helpers/usersched.php';
 require_once JPATH_COMPONENT.'/views/uschedview.php';
 
 class UserschedViewUsersched extends UserschedView
@@ -98,10 +98,12 @@ class UserschedViewUsersched extends UserschedView
 		$this->categories = $m->getUdTable('categories'); $this->categories = $this->categories ?: [];	//if (!$this->categories) $this->categories = [];
 		$cfg = $m->getUdTable('options', 'name = "config"', false);
 		if ($cfg) {
+			$dhxver = $this->params->get('dhtmlx_version', '7.0');
+			if ((int)$dhxver > 6) $this->plugs['export_api'] = true;
 			$this->settings = unserialize($cfg['value']);
 			$this->applyCfg($this->settings);
 			$this->cfgcfg = json_encode($this->config);
-			parent::display($tpl);
+			parent::display($tpl.$dhxver);
 		}
 	}
 

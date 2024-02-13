@@ -4,24 +4,24 @@
 scheduler.__alerts = {
 	locale: {
 		alert_title: 'Alerts',
-		alert_users: "Alert users",
-		alert_method: "Alert method",
-		alert_email: "Email",
-		alert_SMS: "SMS",
-		alert_both: "Both",
-		alert_lead: "Alert lead",
-		alert_minutes: "minute(s)",
-		alert_hours: "hour(s)",
-		alert_days: "day(s)",
-		alert_weeks: "week(s)",
-		alert_show: "Show",
-		alert_hide: "Hide"
+		alert_users: 'Alert users',
+		alert_method: 'Alert method',
+		alert_email: 'Email',
+		alert_SMS: 'SMS',
+		alert_both: 'Both',
+		alert_lead: 'Alert lead',
+		alert_minutes: 'minute(s)',
+		alert_hours: 'hour(s)',
+		alert_days: 'day(s)',
+		alert_weeks: 'week(s)',
+		alert_show: 'Show',
+		alert_hide: 'Hide'
 	}
 };
 
 scheduler.locale.labels.section_alerts = scheduler.__alerts.locale.alert_title;
 //	var lsl = scheduler.config.lightbox.sections.length;
-//	scheduler.config.lightbox.sections.splice(lsl-2,0,{ name: "alerts", height: 42, map_to: "text", type: "alerts_editor", button:"shide" });
+//	scheduler.config.lightbox.sections.splice(lsl-2,0,{ name: 'alerts', height: 42, map_to: 'text', type: 'alerts_editor', button:'shide' });
 
 scheduler.locale.labels.button_shide = scheduler.__alerts.locale.alert_show;
 
@@ -29,14 +29,14 @@ scheduler.locale.labels.button_shide = scheduler.__alerts.locale.alert_show;
 scheduler.form_blocks.alerts_editor = {
 	render:(sns) => {
 		let htm = `<div class="sched_alrthd"><span>Alertees: </span><span></span></div>
-<div class="dhx_form_alerts" style="height:0px">
+<div class="dhx_form_alerts" style="height:0px;display:none">
 	<form id ="alert_form">
 		<div class="sched_alertsf">
-			<div class="sched_alrtatru">
+			<div id="sel_alertusers" class="sched_alrtatru">
 				<label>${scheduler.__alerts.locale.alert_users}</label>
-				<select id="sel_alertusers" name="sel_alertusers[]" multiple="multiple" size="3" onchange="scheduler.form_blocks.alerts_editor.updtae(this)" class="alrt_users">
+				<div class="us-checklist">
 					${scheduler.alertWho}
-				</select>
+				</div>
 			</div>
 			<div class="sched_alrtatrm">
 				<label>${scheduler.__alerts.locale.alert_method}</label>
@@ -64,13 +64,13 @@ scheduler.form_blocks.alerts_editor = {
 	},
 	aecntelm: null,
 	updtae: (sel) => {
-		aecntelm.innerHTML = sel.selectedOptions.length || "None";
+		aecntelm.innerHTML = sel.parentElement.querySelectorAll('.us-ckund:checked').length || 'None';
 	},
 	set_value: (node, value, ev) => {
 //	console.log(node,value,ev);
 		scheduler.fillAlert(node.nextElementSibling.firstElementChild,value,ev);
 		aecntelm = node.children[1];
-		aecntelm.innerHTML = scheduler.alertees ? scheduler.alertees : "None";
+		aecntelm.innerHTML = scheduler.alertees ? scheduler.alertees : 'None';
 	},
 	get_value: (node, ev) => {
 		scheduler.getAlert(node.nextElementSibling.firstElementChild,ev);
@@ -86,10 +86,12 @@ scheduler.form_blocks.alerts_editor = {
 		let cont = document.getElementById('alert_form').parentElement;
 		let btnd = btn.children[1];
 		if (cont.style.height=='0px') {
-			cont.style.height = "auto";
+			cont.style.display = 'block';
+			cont.style.height = 'auto';
 			btnd.innerHTML = scheduler.__alerts.locale.alert_hide;
 		} else {
-			cont.style.height = "0px";
+			cont.style.display = 'none';
+			cont.style.height = '0px';
 			btnd.innerHTML = scheduler.__alerts.locale.alert_show;
 		}
 		scheduler.setLightboxSize();
@@ -99,16 +101,16 @@ scheduler.form_blocks.alerts_editor = {
 scheduler.fillAlert = (elem,val,evt) => {
 	elem.alertmethod.value = evt.alert_meth ? evt.alert_meth : 1;
 //console.log(evt);
-	let optionsSelected = evt.alert_user ? evt.alert_user.split(/,/) : [];
-	let select = elem.sel_alertusers;
+	let alertees = evt.alert_user ? evt.alert_user.split(/,/) : [];
+	let select = elem.querySelectorAll('.us-ckund');
 	scheduler.alertees = 0;
-	for (let i = 0, l = select.options.length, o; i < l; i++) {
-		o = select.options[i];
-		if (optionsSelected.indexOf(o.value) != -1 ) {
-			o.selected = true;
+	for (let i = 0, l = select.length, o; i < l; i++) {
+		o = select[i];
+		if (alertees.indexOf(o.value) != -1 ) {
+			o.checked = true;
 			scheduler.alertees++;
 		} else {
-			o.selected = false;
+			o.checked = false;
 		}
 	}
 
@@ -140,15 +142,13 @@ scheduler.getAlert = (elem,evt) => {
 	evt.alert_meth = elem.alertmethod.value;
 
 	let users = [];
-	let options = elem.sel_alertusers && elem.sel_alertusers.options;
+	let options = elem.querySelectorAll('.us-ckund:checked');
 	let opt;
 	for (let i=0, iLen=options.length; i<iLen; i++) {
 		opt = options[i];
-		if (opt.selected) {
-			users.push(opt.value || opt.text);
-		}
+		users.push(opt.value || opt.text);
 	}
-	evt.alert_user = users.join(",");
+	evt.alert_user = users.join(',');
 
 	let alertlead = 0;
 	//console.log(elem.alertlead_val);
@@ -177,10 +177,10 @@ scheduler.getAlert = (elem,evt) => {
 
 // modify a SELECT block render to include a class (and no hard coded height)
 scheduler.form_blocks.select.render = (sns) => {
-	let html = "<div class='dhx_cal_ltext'><select class='"+sns.class+"' style='width:100%;'>";
+	let html = '<div class="dhx_cal_ltext"><select class="'+sns.class+'" style="width:100%;">';
 	for (let i = 0; i < sns.options.length; i++)
-		html+="<option value='"+sns.options[i].key+"'>"+sns.options[i].label+"</option>";
-	html+="</select></div>";
+		html+='<option value="'+sns.options[i].key+'">'+sns.options[i].label+'</option>';
+	html+='</select></div>';
 	return html;
 };
 
@@ -190,7 +190,7 @@ scheduler.___modalbox = scheduler.modalbox;
 scheduler.modalbox = (parms) => {
 	console.log(parms);
 	if (scheduler.$container.offsetWidth < 700 && parms.width) {
-		parms.width = "300px";
+		parms.width = '300px';
 	}
 	scheduler.___modalbox(parms);
 }

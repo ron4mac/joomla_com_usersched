@@ -1,8 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.2.0
 */
 defined('_JEXEC') or die;
 
@@ -41,7 +42,7 @@ class USchedAcheck {
 		if (!$this->alertees) return;	// can't alert if no one to alert
 
 		// remove expired alerted sentinals (> 1 day)
-		$this->db->setQuery('DELETE FROM alerted WHERE ('.$time.' - atime + 5)>'.DAYSECS)->execute();
+		$this->db->setQuery('DELETE FROM alerted WHERE ('.$time.' - atime + 5)> lead'/*.DAYSECS*/)->execute();
 
 		$alerted = $this->getTable('alerted');
 

@@ -1,8 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.2.0
 */
 defined('_JEXEC') or die;
 
@@ -28,7 +29,7 @@ class UserSchedModelBackend extends UserSchedModelUserSched
 		}
 		$events = $this->dbex($queryText, $queryParams, 2);
 		foreach ($events as $index=>$event){
-			$events[$index]['text'] = htmlentities($event['text']);
+	//		$events[$index]['text'] = htmlentities($event['text']);
 		}
 		return $events;
 	}
@@ -47,22 +48,9 @@ class UserSchedModelBackend extends UserSchedModelUserSched
 			`alert_lead`,
 			`alert_user`,
 			`alert_meth`)
-			VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
-		$queryParams = [
-			$event['start_date'],
-			$event['end_date'],
-			!empty($event['category']) ? $event['category'] : 0,
-			$event['text'],
-			!empty($event['event_pid']) ? $event['event_pid'] : 0,
-			!empty($event['event_length']) ? $event['event_length'] : 0,
-			!empty($event['rec_type']) ? $event['rec_type'] : '',
-			!empty($event['user']) ? $event['user'] : 0,
-			!empty($event['alert_lead']) ? $event['alert_lead'] : 0,
-			!empty($event['alert_user']) ? $event['alert_user'] : '',
-			!empty($event['alert_meth']) ? $event['alert_meth'] : 0
-			];
+			VALUES (?,?,?,?,?,?,?,?,?,?,?)';
 
-		$this->dbex($queryText, $queryParams);
+		$this->dbex($queryText, $this->qValues($event));
 		return $this->db->lastInsertId();
 	}
 
@@ -82,20 +70,6 @@ class UserSchedModelBackend extends UserSchedModelUserSched
 			`alert_meth`=?
 			WHERE `event_id`=?';
 
-		$queryParams = [
-			$event['start_date'],
-			$event['end_date'],
-			!empty($event['category']) ? $event['category'] : 0,
-			$event['text'],
-			!empty($event['event_pid']) ? $event['event_pid'] : 0,
-			!empty($event['event_length']) ? $event['event_length'] : 0,
-			!empty($event['rec_type']) ? $event['rec_type'] : '',
-			!empty($event['user']) ? $event['user'] : 0,
-			!empty($event['alert_lead']) ? $event['alert_lead'] : 0,
-			!empty($event['alert_user']) ? $event['alert_user'] : '',
-			!empty($event['alert_meth']) ? $event['alert_meth'] : 0,
-			$id
-		];
 		if (!empty($event['rec_type']) && $event['rec_type'] != 'none') {
 			//all modified occurrences must be deleted when you update recurring series
 			//https://docs.dhtmlx.com/scheduler/server_integration.html#savingrecurringevents
@@ -103,7 +77,7 @@ class UserSchedModelBackend extends UserSchedModelUserSched
 			$this->dbex($subQueryText, [$id]);
 		}
 
-		$this->dbex($queryText, $queryParams);
+		$this->dbex($queryText, $this->qValues($event, $id));
 	}
 
 	public function delete ($id)
@@ -130,6 +104,25 @@ class UserSchedModelBackend extends UserSchedModelUserSched
 			$queryText = 'DELETE FROM `events` WHERE `event_id`=? ;';
 			$this->dbex($queryText, [$id]);
 		}
+	}
+
+	private function qValues ($evt, $xtra=null)
+	{
+		$vals = [
+			$evt['start_date'],
+			$evt['end_date'],
+			$evt['category'] ?? 0,
+			$evt['text'],
+			$evt['event_pid'] ?? 0,
+			$evt['event_length'] ?? 0,
+			$evt['rec_type'] ?? '',
+			$evt['user'] ?? 0,
+			$evt['alert_lead'] ?? 0,
+			$evt['alert_user'] ?? '',
+			$evt['alert_meth'] ?? 0
+			];
+		if ($xtra) $vals[] = $xtra;
+		return $vals;
 	}
 
 	private function dbex ($qt, $qp, $ftch=false)

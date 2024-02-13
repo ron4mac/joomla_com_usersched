@@ -1,8 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.2.0
 */
 defined('_JEXEC') or die;
 
@@ -11,7 +12,7 @@ use Joomla\Database\DatabaseDriver;
 
 require_once JPATH_COMPONENT.'/helpers/usersched.php';
 
-class UserSchedModelUserSched extends JModelLegacy
+class UserSchedModelUserSched extends Joomla\CMS\MVC\Model\BaseDatabaseModel
 {
 	protected $dbinit = false;
 

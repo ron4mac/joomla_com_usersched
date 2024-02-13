@@ -1,0 +1,80 @@
+/* a container for the usersched instance */
+#usched_container {
+	position: relative;
+}
+/* raise above everything else for expand purposes */
+div.dhx_cal_container {
+	z-index: 14;
+}
+
+/* provide a bit more space at the top for tool icons */
+.dhx_cal_navline {
+	height:75px;
+	padding-top:25px;
+}
+
+/* for our additions to the calendar */
+/* a space at the top of the calendar for tool buttons */
+.uschedtools {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 15;
+}
+
+img.usched_act {
+/*	z-index: 100;
+	position: absolute;
+	top: 3px;*/
+	margin-right: .5rem;
+	cursor: pointer;
+}
+/*
+div.dhx_custom_button_shide {
+	background: url('alarm-clock18.png') no-repeat 0 2px;
+	width: 20px;
+	margin-right: 10px;
+}*/
+
+/* versions display below the calendar */
+.userschedver, .schedulerver {
+	color: #999;
+	font-size: 0.6em;
+	line-height: 1;
+	padding-top: 1px;
+}
+.userschedver {
+	float: left;
+}
+.schedulerver {
+	float: right;
+}
+
+/* our custom lightbox additions */
+.sched_alrtatru .us-ckund {
+	display: none;
+}
+.sched_alrtatru .us-ckund:checked + label {
+	background-color: blue;
+	color:yellow;
+}
+.sched_alrtatru .us-checklist label {
+	padding: 1px 4px;
+}
+.sched_alrtatru .us-checklist {
+	display: inline-flex;
+	gap: 4px;
+	padding: 4px;
+	border: 1px dotted #BBB;
+}
+.sched_alrtatrxl .alrt_lead {
+	width: 4rem;
+}
+
+/* override some dhtmlx css to correct some deficiencies */
+/*.dhx_cal_event_clear:before {
+	display: none;
+}*/
+.dhx_repeat_text {
+	width: 38px;
+}

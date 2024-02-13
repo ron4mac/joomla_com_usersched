@@ -6,7 +6,7 @@ var USched = {
 		let old_setValue = scheduler.form_blocks.time.set_value;
 		scheduler.form_blocks.time.set_value = function (node,value,ev,config) {
 				old_setValue.apply(this, arguments);
-				let s = node.getElementsByTagName("select");
+				let s = node.getElementsByTagName('select');
 				let map = config._time_format_order;	//console.log(config);
 				ev.sdnd_adj = (ev.event_length*1) ? ev.event_length : (ev.end_date - ev.start_date)/1000;
 
@@ -37,13 +37,13 @@ var USched = {
 			let oldc_setValue = scheduler.form_blocks.calendar_time.set_value;
 			scheduler.form_blocks.calendar_time.set_value = function (node,val,evt) {
 					var evLen = evt.end_date - evt.start_date;
-					var inputs = node.getElementsByTagName("input");
-					var selects = node.getElementsByTagName("select");
+					var inputs = node.getElementsByTagName('input');
+					var selects = node.getElementsByTagName('select');
 					scheduler.config.event_duration = 60;
 					scheduler.config.auto_end_date = true;
 
 					function _update_minical_select() {
-						let start_date = scheduler.date.add(inputs[0]._date, selects[0].value, "minute");
+						let start_date = scheduler.date.add(inputs[0]._date, selects[0].value, 'minute');
 						let end_date = new Date(start_date.getTime() + evLen);
 
 						inputs[1].value = scheduler.templates.calendar_time(end_date);
@@ -60,6 +60,13 @@ var USched = {
 			if (obj2.hasOwnProperty(p))
 				obj1[p] = typeof obj2[p] === 'object' ? USched.mergeObjs(obj1[p], obj2[p]) : obj2[p];
 		return obj1;
+	},
+
+	printView: () => {
+		if (!scheduler.expanded) {
+			if (!confirm('Printing is best done from the expanded view. Print anyway?')) return;
+		}
+		scheduler.exportToPDF({format:'full',orientation:'landscape',header:'<style>.dhx_expand_icon{display:none}</style>'});
 	},
 
 	init: () => {
@@ -98,32 +105,84 @@ var USched = {
 
 		scheduler.keys.edit_save = -1;	//keep enter/return key from saving event
 
+
+			scheduler.templates.event_class = function(start, end, event){
+				return "";
+				return event.classname || "red";
+			};
+
+
 		// the built-in auto_end_date does not work as well as my method (see setAutoEnd)
 		scheduler.config.event_duration = 60; 
 //		scheduler.config.auto_end_date = true;
 
-		if (document.getElementById("versionbar")) {
-			document.getElementById("schedulerver").innerHTML = scheduler.version;
+		if (document.getElementById('versionbar')) {
+			document.getElementById('schedulerver').innerHTML = scheduler.version;
 		}
 
+		const compactView = {
+			xy: {
+				nav_height: 100
+			},
+			config: {
+				header: {
+					rows: [
+						{ cols: ["prev","date","next"] },
+						{ cols: ["day","week","month","spacer","today"] }
+					]
+				}
+			},
+			templates: {
+				month_scale_date: scheduler.date.date_to_str("%D"),
+				week_scale_date: scheduler.date.date_to_str("%D, %j"),
+				event_bar_date: function(start,end,ev) { return ""; }
+			}
+		};
+		const fullView = {
+			xy: {
+				nav_height: 80
+			},
+			config: {
+				header: ["day","week","month","date","prev","today","next"]
+			},
+			templates: {
+				month_scale_date: scheduler.date.date_to_str("%l"),
+				week_scale_date: scheduler.date.date_to_str("%l, %F %j"),
+				event_bar_date: function(start,end,ev) { return "• <b>"+scheduler.templates.event_date(start)+"</b> "; }
+			}
+		};
+
+		let dsets = USched.mobile ? compactView : fullView;
+		scheduler.utils.mixin(scheduler.config, dsets.config, true);
+		scheduler.utils.mixin(scheduler.templates, dsets.templates, true);
+		scheduler.utils.mixin(scheduler.xy, dsets.xy, true);
+
+/*
 		// do some things to accomodate a mobile device
 		if (USched.mobile) {
-		//	scheduler.xy.nav_height = 80;
+			scheduler.xy.nav_height = 80;
 			scheduler.config.header = {
 				rows: [
-					{cols: ["prev","date","next",]},
-					{cols: ["week","month","year","spacer","today"]}
+					{cols: ['prev','spacer','date','next']},
+					{cols: ['week','month','year','spacer','today']}
 				]
 			};
 
 			scheduler.config.responsive_lightbox = true;
 
-			const formatMonthScale = scheduler.date.date_to_str("%D");
+			const formatMonthScale = scheduler.date.date_to_str('%D');
 			scheduler.templates.month_scale_date = (date) => formatMonthScale(date);
-			const formatWeekScale = scheduler.date.date_to_str("%d");
+			const formatWeekScale = scheduler.date.date_to_str('%d');
 			scheduler.templates.week_scale_date = (date) => formatWeekScale(date);
 
+		} else {
+			scheduler.config.header = {
+				rows: [
+					{cols: ['week','month','year','date','prev','today','next']}
+				]
+			};
 		}
+*/
 
 		let plugs = USched.plugs;		//{recurring: true, readonly: true, expand: true, year_view: true};
 		if (USched.mobile) {
@@ -140,35 +199,67 @@ var USched = {
 		// experiment here
 	//	scheduler.config.fix_tab_position = false;
 
+// probably important to catch errors saving data
+scheduler.attachEvent('onSaveError', function(ids, resp){
+	console.error(ids, resp);
+//	let jsn = JSON.parse(resp.response);
+//	alert("Failed to save/update event data");
+//	scheduler.message({type:"error", text:"Failed to save/update event data", expire:5000});
+	scheduler.alert({text: 'Failed to save/update event data.<br>Please refresh the view.', title: 'ERROR', ok: 'Ok'});
+})
+// and this
+scheduler.attachEvent('onError', function(errorMessage){
+    scheduler.message({
+        text:'Error: ' + errorMessage
+    });
+    return true;
+});
 
 
 
-		scheduler.init("scheduler_here", new Date(), USched.mode);
+
+		scheduler.init('scheduler_here', new Date(), USched.mode);
 
 
 		// need to mess with sections AFTER init
 		// setup the category label
-		scheduler.locale.labels.section_category = "Category";
+		scheduler.locale.labels.section_category = 'Category';
 		// set the height of the description
 //		scheduler.config.lightbox.sections[0].height = 60;
 		// get the repeat section
 		let rs = scheduler.config.lightbox.sections[1];
 		// add category selection after description, removing repeat
-		scheduler.config.lightbox.sections.splice(1, 1, {name:"category", type:"select", class:"us-cat-sel", map_to:"category", options:scheduler.__categories});
+		scheduler.config.lightbox.sections.splice(1, 1, {name:'category', type:'select', class:'us-cat-sel', map_to:'category', options:scheduler.__categories});
 		// move repeats to the end
 		scheduler.config.lightbox.sections.push(rs);
 		// tack alerts to the end
-		if (scheduler.feature.canAlert) scheduler.config.lightbox.sections.push({name:"alerts", map_to:"auto", type:"alerts_editor", button:"shide"});
+		if (scheduler.feature.canAlert) scheduler.config.lightbox.sections.push({name:'alerts', map_to:'auto', type:'alerts_editor', button:'shide'});
 
+		// add calendar tools
+		const toolb = document.querySelector('.uschedtools');
+		// insert config button/icon
+		//if (USched.cfgBTN) {
+			//let cfgb = document.createElement("div");
+			//cfgb.innerHTML = USched.cfgBTN;
+		//	toolb.innerHTML += USched.cfgBTN;
+			//scheduler.$container.appendChild(cfgb);
+		//}
 
-		// insert config button/icon in calendar block
-		if (USched.cfgURL) {
-			let cfgb = document.createElement("div");
-			cfgb.innerHTML = USched.cfgURL;
-			scheduler.$container.appendChild(cfgb);
+		// insert print button/icon
+		//if (true) {
+			//let prnb = document.createElement("div");
+			//prnb.innerHTML = USched.prnBTN;
+		//	toolb.innerHTML += USched.prnBTN;
+			//prnb.style.position = "absolute";
+			//scheduler.$container.appendChild(prnb);
+		//}
+
+		if (toolb) {
+			if (USched.cfgBTN) toolb.innerHTML += USched.cfgBTN;
+			toolb.innerHTML += USched.prnBTN;
 		}
 
-		scheduler.setLoadMode("month");
+		scheduler.setLoadMode('month');
 		scheduler.load(USched.URL);
 
 //		let dp = new dataProcessor(USched.URL);
@@ -182,8 +273,8 @@ var USched = {
 
 		if (typeof scheduler.dhtmlXTooltip != 'undefined') {
 			// force the event tooltip to hide when the mouse leaves the calendar area
-			let dhxcaldatahere = document.getElementById("scheduler_here");
-			let dhxcaldatas = dhxcaldatahere.getElementsByClassName("dhx_cal_data");
+			let dhxcaldatahere = document.getElementById('scheduler_here');
+			let dhxcaldatas = dhxcaldatahere.getElementsByClassName('dhx_cal_data');
 			let dhxcaldata = dhxcaldatas[0];
 			dhxcaldata.onmouseout = () => {scheduler.dhtmlXTooltip.hide()};
 		}
@@ -205,6 +296,6 @@ scheduler.xy.scroll_width = 0;
 // add category class for styling
 scheduler.templates.event_class = function(start, end, event) {
 	if (event.xevt) return event.xevt;
-	if (event.category) return "evCat"+event.category;
-	return "";
+	if (event.category) return 'evCat'+event.category;
+	return '';
 };

@@ -1,20 +1,21 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.2.0
 */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Http\HttpFactory;
+use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Component\ComponentHelper;
 
-JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched.php');
-JLoader::register('USchedAcheck', JPATH_COMPONENT.'/alertcheck.php');
+\JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched.php');
+\JLoader::register('USchedAcheck', JPATH_COMPONENT.'/alertcheck.php');
 
-class UserSchedControllerAjax extends JControllerLegacy
+class UserSchedControllerAjax extends Joomla\CMS\MVC\Controller\BaseController
 {
 	//	ajax call from client scheduler for user birthdays
 	public function birthdays ()
@@ -29,7 +30,7 @@ class UserSchedControllerAjax extends JControllerLegacy
 
 		$yr = $this->input->get('y');
 		// get the database
-		$db = Factory::getDatabase();
+		$db = Factory::getContainer()->get('DatabaseDriver');
 		// set groups to just get registered users
 		$groups = [2];
 		// set a where clause for appropriate filtering
@@ -57,6 +58,12 @@ class UserSchedControllerAjax extends JControllerLegacy
 		// fire the query to get user birthdays
 		$db->setQuery( $query );
 		$rows = $db->loadObjectList();
+
+if (!$rows) {
+	echo json_encode(['NOPE']);
+	return;
+}
+
 		// turn them into calendar events
 		$evts = [];
 		foreach ($rows as $u) {
@@ -202,11 +209,17 @@ class UserSchedControllerAjax extends JControllerLegacy
 				default: throw new Exception('Unexpected Method'); break;
 			}
 		} catch (Exception $e) {
-			http_response_code(500);
+			$emsg = $e->getMessage();
+			UschedHelper::loggit($emsg,true);
+			header("HTTP/1.1 500 Failure");
+		header('Content-Type: application/json');
+			//http_response_code(500);
 			$result = [
 				'action' => 'error',
-				'message' => $e->getMessage()
+				'message' => $emsg
 			];
+			echo json_encode($result);
+			exit();
 		}
 
 		header('Access-Control-Allow-Origin: *');

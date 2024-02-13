@@ -1,8 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.2.0
 */
 defined('_JEXEC') or die;
 
@@ -14,6 +15,8 @@ class com_userschedInstallerScript extends InstallerScript
 {
 	protected $minimumJoomla = '4.0';
 	protected $com_name = 'com_usersched';
+	protected $deleteFolders = ['components/com_usersched/pdf'];
+	protected $deleteFiles = ['components/com_usersched/cron.php','components/com_usersched/cront.php','components/com_usersched/alertchk.php'];
 
 	public function install ($parent) 
 	{
@@ -27,13 +30,13 @@ class com_userschedInstallerScript extends InstallerScript
 	public function update ($parent) 
 	{
 		// delete old unused files
-		$site_path = $parent->parent->getPath('extension_site');
-		if ($site_path) {
-			$site_path .= '/';
-			JFile::delete($site_path.'cron.php');
-			JFile::delete($site_path.'cront.php');
-			JFile::delete($site_path.'alertchk.php');
-		}
+	//	$site_path = $parent->parent->getPath('extension_site');
+	//	if ($site_path) {
+	//		$site_path .= '/';
+	//		JFile::delete($site_path.'cron.php');
+	//		JFile::delete($site_path.'cront.php');
+	//		JFile::delete($site_path.'alertchk.php');
+	//	}
 	}
 
 	public function preflight ($type, $parent) 

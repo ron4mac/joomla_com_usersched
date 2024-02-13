@@ -1,12 +1,14 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.2.0
 */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Log\Log;
 
 abstract class UschedHelper
 {
@@ -15,6 +17,12 @@ abstract class UschedHelper
 	protected static $ownerID = null;
 	protected static $udp = null;
 
+	public static function loggit ($msg, $err=false)
+	{
+		Log::addLogger(['text_file' => 'com_usersched.log.php'], Log::ALL, ['com_usersched']);
+		Log::add($msg, $err ? Log::ERROR : Log::INFO, 'com_usersched');
+	}
+	
 	public static function getInstanceObject ($mid=null)	// SO
 	{
 		if (!empty(self::$instanceObj)) return self::$instanceObj;

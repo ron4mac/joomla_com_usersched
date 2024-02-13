@@ -1,8 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.2.0
 */
 defined('_JEXEC') or die;
 
@@ -11,11 +12,10 @@ use Joomla\CMS\Log\Log;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Session\Session;
-use Joomla\CMS\MVC\Controller\BaseController;
 
-JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched.php');
+\JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched.php');
 
-class UserSchedController extends BaseController
+class UserSchedController extends Joomla\CMS\MVC\Controller\BaseController
 {
 	protected $instanceObj;
 	protected $theView;
@@ -71,6 +71,15 @@ class UserSchedController extends BaseController
 		$m = $this->getModel();
 		$m->saveConfig($this->input->post);
 		$this->setRedirect(Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->mnuItm, false), Text::_('COM_USERSCHED_CFG_SAVED'));
+	}
+
+	public function printView ()
+	{
+		$this->input->set('tmpl','component');
+		$view = $this->getView('print', 'html');
+		$view->setModel($this->getModel('usersched'), true);
+		$view->post = $this->input->post;
+		$view->display();
 	}
 
 	public function impical ()

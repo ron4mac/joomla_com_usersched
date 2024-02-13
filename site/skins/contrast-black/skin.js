@@ -1,5 +1,7 @@
 
 
+scheduler.skin = scheduler.skin || 'contrast_black';
+
 
 // add a switch to select an appropriate config for a current screen size
 scheduler.resetConfig = () => {
