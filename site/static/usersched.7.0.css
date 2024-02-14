@@ -71,10 +71,8 @@ div.dhx_custom_button_shide {
 	width: 4rem;
 }
 
+
 /* override some dhtmlx css to correct some deficiencies */
-/*.dhx_cal_event_clear:before {
-	display: none;
-}*/
 .dhx_repeat_text {
 	width: 38px;
 }

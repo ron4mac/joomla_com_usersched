@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.2.0
+* @since		1.2.1
 */
 defined('_JEXEC') or die;
 
@@ -160,6 +160,20 @@ class UserschedViewUsersched extends UserschedView
 	}
 
 	protected function categoriesCSS ()
+	{
+		$css = '';
+		if ($this->categories)
+		foreach ($this->categories as $cat) {
+			$css .= '.dhx_cal_data div.evt-ctg-'.$cat['id']
+			.' {background-image:none;';
+			if ($cat['bgcolor']) $css .= 'background-color:'.$cat['bgcolor'].';';
+			if ($cat['txcolor']) $css .= 'color:'.$cat['txcolor'].';';
+			$css .= "}\n";
+		}
+		return $css;
+	}
+
+	protected function oldcategoriesCSS ()
 	{
 		$css = '';
 		if ($this->categories)

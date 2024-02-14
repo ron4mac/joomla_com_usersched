@@ -1,57 +1,34 @@
-/*
-.dhx_cal_tab, .dhx_cal_tab.active {
-	font-size: 11px;
-	height: 19px;
-	line-height: 20px;
+/* accomodate our event category styling (mostly happens via scheduler.templates.event_class function) */
+.dhx_cal_data div.evt-ctg-0 {
+	background-image:none;
+	background-color:revert;
+	color:revert;
+	border:1px solid #CCC;
 }
-.dhx_cal_tab.first.flt, .dhx_cal_tab.last.flt {
-	border-radius: 0;
+.dhx_cal_data .usched-evt-hday {
+	background: initial;
+    color: #AAA;
+    border: 1px solid #CCC;
 }
-.dhx_section_time.dhx_lightbox_minical select.dhx_lightbox_time_select {
-	width: 82px;
+.dhx_cal_event_line, .dhx_cal_event_clear {
+	padding-left: 6px;
 }
-.dhx_cal_light_rec.dhx_cal_light_wide {
-	width: 514px;
+.dhx_cal_event_clear:before {
+	display:none;
 }
-.dhx_month_body_border, .dhx_month_head_border, .dhx_scale_bar_border, .dhx_scale_hour_border {
-	border-left: 1px solid #e0e0e0;
+.dhx_cal_event_clear_date {
+	display:none;
 }
-*/
+.usched-alert {
+	border-left:2px dotted red;
+}
 
-.dhx_cal_light_wide .dhx_wrap_section {
-	margin-bottom: 10px;
-}
-.dhx_cal_navline div, .dhx_cal_navline .dhx_cal_prev_button, .dhx_cal_navline .dhx_cal_next_button {
-	top: 22px;
-}
-.dhx_custom_button_shide {
-	display: none;
-}
-.dhx_form_alerts {
-	margin: 30px 0 0 117px;
-	overflow: hidden;
-}
-.sched_alertsf {
-	display: flex;
-	flex-wrap: wrap;
-}
-/*#alert_form {
-	padding-top: 8px;
-}*/
-.sched_alrtatru, .sched_alrtatrm {
-	margin-right: 2rem;
-}
-.sched_alrtatru select, .sched_alrtatrm select {
-	display: block;
-}
-#alertlead_val {
-	width: 3rem;
-}
-#alertmethod, #alertlead_mul {
-	padding-right:30px;
-	background-position-y: 0;
-}
-select.us-cat-sel {
-	padding-right:30px;
-	margin-bottom:0;
-}
+
+@media screen and (max-width: 600px) {
+	.dhx_cal_navline {
+		margin-top: 0;
+	}
+	.scheduler_popup_controls {
+		display: inline-grid;
+	}
+}/** 600px **/

@@ -1,8 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.2.1
 */
 defined('_JEXEC') or die;
 
@@ -159,6 +160,7 @@ $fact = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->
 </div>
 
 <input class="btn btn-primary" type="submit" name="saves" value="<?=Text::_('COM_USERSCHED_CFG_SAVE')?>" onclick="this.form.task.value='setcfg'" />
+<input class="btn btn-secondary" type="submit" name="cancl" value="<?=Text::_('JCANCEL')?>" onclick="this.form.task.value='canclcfg'" />
 <input type="hidden" name="cal_type" value="<?=$this->cal_type?>" />
 <input type="hidden" name="task" value="setcfg" />
 <input type="hidden" name="<?php echo JSession::getFormToken() ?>" value="1">

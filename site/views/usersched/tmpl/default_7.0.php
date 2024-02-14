@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.2.0
+* @since		1.2.1
 */
 defined('_JEXEC') or die;
 
@@ -45,7 +45,7 @@ if ($skin) {
 $this->document->addStylesheet('https://cdn.dhtmlx.com/scheduler/7.0/dhtmlxscheduler.css');
 $this->document->addStylesheet('components/com_usersched/static/usersched.7.0.css', $skinopts);
 if (JFile::exists($skinpath.'skin.css')) {
-//	$this->document->addStylesheet($skinpath.'skin.css', $skinopts);
+	$this->document->addStylesheet($skinpath.'skin.css', $skinopts);
 }
 
 // get the calendar ID

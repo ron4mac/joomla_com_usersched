@@ -106,9 +106,11 @@ var USched = {
 		scheduler.keys.edit_save = -1;	//keep enter/return key from saving event
 
 
-			scheduler.templates.event_class = function(start, end, event){
-				return "";
-				return event.classname || "red";
+			scheduler.templates.event_class = function(start, end, event) {
+				//console.log(start, end, event.classname, event.category);
+				if (event.xevt == 'isHoliday') return 'usched-evt-hday';
+				let cats = event.alert_user ? 'usched-alert ' : '';
+				return cats + (event.category ? ('evt-ctg-'+event.category) : 'evt-no-ctg');
 			};
 
 
@@ -122,7 +124,7 @@ var USched = {
 
 		const compactView = {
 			xy: {
-				nav_height: 100
+				nav_height: 80
 			},
 			config: {
 				header: {
@@ -131,6 +133,7 @@ var USched = {
 						{ cols: ["day","week","month","spacer","today"] }
 					]
 				}
+			//	header: ["day","week","month","date","prev","today","next"]
 			},
 			templates: {
 				month_scale_date: scheduler.date.date_to_str("%D"),
@@ -152,10 +155,30 @@ var USched = {
 			}
 		};
 
-		let dsets = USched.mobile ? compactView : fullView;
-		scheduler.utils.mixin(scheduler.config, dsets.config, true);
-		scheduler.utils.mixin(scheduler.templates, dsets.templates, true);
-		scheduler.utils.mixin(scheduler.xy, dsets.xy, true);
+		function resetConfig(){
+			var settings;
+			let _CW = document.getElementById('usched_container').offsetWidth;
+			//if(window.innerWidth < 1024){
+			if (_CW < 80){
+				settings = compactView;
+			} else {
+				settings = fullView;
+			}
+			scheduler.utils.mixin(scheduler.config, settings.config, true);
+			scheduler.utils.mixin(scheduler.templates, settings.templates, true);
+			scheduler.utils.mixin(scheduler.xy, settings.xy, true);
+			return true;
+		}
+
+		scheduler.config.responsive_lightbox = true;
+		//resetConfig();
+		scheduler.attachEvent("onBeforeViewChange", resetConfig);
+		scheduler.attachEvent("onSchedulerResize", resetConfig);
+
+	//	let dsets = USched.mobile ? compactView : fullView;
+	//	scheduler.utils.mixin(scheduler.config, dsets.config, true);
+	//	scheduler.utils.mixin(scheduler.templates, dsets.templates, true);
+	//	scheduler.utils.mixin(scheduler.xy, dsets.xy, true);
 
 /*
 		// do some things to accomodate a mobile device

@@ -5,12 +5,11 @@
 #configform input[type="submit"] {
 	float: right;
 	margin-top: 1rem;
+	margin-left: 1rem;
 }
 #configform .clr {
 	clear:both;
 }
-
-
 
 
 

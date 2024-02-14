@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.2.0
+* @since		1.2.1
 */
 defined('_JEXEC') or die;
 
@@ -212,7 +212,7 @@ if (!$rows) {
 			$emsg = $e->getMessage();
 			UschedHelper::loggit($emsg,true);
 			header("HTTP/1.1 500 Failure");
-		header('Content-Type: application/json');
+			header('Content-Type: application/json');
 			//http_response_code(500);
 			$result = [
 				'action' => 'error',
