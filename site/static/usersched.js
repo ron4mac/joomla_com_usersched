@@ -1,3 +1,9 @@
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.2.2
+*/
 //'use strict';
 /*global scheduler*/
 
@@ -62,11 +68,13 @@ var USched = {
 		return obj1;
 	},
 
-	printView: () => {
+	printView: (evt,elm) => {
+		evt.preventDefault();
 		if (!scheduler.expanded) {
 			if (!confirm('Printing is best done from the expanded view. Print anyway?')) return;
 		}
 		scheduler.exportToPDF({format:'full',orientation:'landscape',header:'<style>.dhx_expand_icon{display:none}</style>'});
+		document.querySelector('#usched_container .uschd-ham-menu').click();
 	},
 
 	init: () => {
@@ -123,9 +131,6 @@ var USched = {
 		}
 
 		const compactView = {
-			xy: {
-				nav_height: 80
-			},
 			config: {
 				header: {
 					rows: [
@@ -142,9 +147,6 @@ var USched = {
 			}
 		};
 		const fullView = {
-			xy: {
-				nav_height: 80
-			},
 			config: {
 				header: ["day","week","month","date","prev","today","next"]
 			},
@@ -159,19 +161,18 @@ var USched = {
 			var settings;
 			let _CW = document.getElementById('usched_container').offsetWidth;
 			//if(window.innerWidth < 1024){
-			if (_CW < 80){
+			if (_CW < 1000){
 				settings = compactView;
 			} else {
 				settings = fullView;
 			}
 			scheduler.utils.mixin(scheduler.config, settings.config, true);
 			scheduler.utils.mixin(scheduler.templates, settings.templates, true);
-			scheduler.utils.mixin(scheduler.xy, settings.xy, true);
 			return true;
 		}
 
 		scheduler.config.responsive_lightbox = true;
-		//resetConfig();
+		resetConfig();
 		scheduler.attachEvent("onBeforeViewChange", resetConfig);
 		scheduler.attachEvent("onSchedulerResize", resetConfig);
 
@@ -242,6 +243,10 @@ scheduler.attachEvent('onError', function(errorMessage){
 
 
 		scheduler.init('scheduler_here', new Date(), USched.mode);
+
+
+    scheduler.attachEvent('onBeforeExpand', () => document.getElementById('scheduler_here').style.zIndex = 15);
+    scheduler.attachEvent('onBeforeCollapse', () => document.getElementById('scheduler_here').style.zIndex = 'inherit');
 
 
 		// need to mess with sections AFTER init

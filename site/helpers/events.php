@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.2.0
+* @since		1.2.2
 */
 defined('_JEXEC') or die;
 
@@ -64,7 +64,8 @@ function recursNow (&$evt, $rBeg, $rEnd, $lasto=true) {	$lasto=false;
 			$cdt = new R_DateTime(date('Y-m-d H:i',$rBeg));
 			$dim = ($cdt->getFullYear() - $dt->getFullYear()) * 12;
 			$dim += $dim ? ($cdt->getMonth() - $dt->getMonth()) : ($dt->getMonth() - $cdt->getMonth());
-			var_dump($cdt->getFullYear(),$dt->getFullYear(),$cdt->getMonth(),$dt->getMonth(),$dim,$count);if ($dim<0) { jexit();}
+			//var_dump($cdt->getFullYear(),$dt->getFullYear(),$cdt->getMonth(),$dt->getMonth(),$dim,$count);
+			if ($dim<0) { jexit();}
 			$nop = (int) ($dim / $count);
 			$dt->add(new DateInterval('P'.($nop*$count).'M'));
 			break;

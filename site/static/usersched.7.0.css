@@ -1,17 +1,96 @@
+/**
+* @package		com_usersched
+* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.2.2
+*/
+
 /* a container for the usersched instance */
 #usched_container {
 	position: relative;
+	overflow: auto;
 }
 /* raise above everything else for expand purposes */
 div.dhx_cal_container {
-	z-index: 14;
+/*	z-index: 14;*/
 }
 
 /* provide a bit more space at the top for tool icons */
 .dhx_cal_navline {
-	height:75px;
-	padding-top:25px;
+/*	height:75px;
+	padding-top:25px;*/
 }
+
+/* our hamburger menu */
+.uschd-ham-menu {
+	display: flex;
+	height: 25px;
+	width: 20px;
+	margin-left: auto;
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	z-index: 15;
+	cursor: pointer;
+}
+.uschd-ham-menu span {
+	height: 2px;
+	width: 100%;
+	background-color: #666;
+	border-radius: 32px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	transition: .3s ease;
+}
+.uschd-ham-menu span:nth-child(1) {
+	top: 25%;
+}
+.uschd-ham-menu span:nth-child(3) {
+	top: 75%;
+}
+.uschd-ham-menu.active span {
+	background-color: #666;
+}
+.uschd-ham-menu.active span:nth-child(1) {
+	top: 50%;
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+.uschd-ham-menu.active span:nth-child(2) {
+	opacity: 0;
+}
+.uschd-ham-menu.active span:nth-child(3) {
+	top: 50%;
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* and the off-screen menu for the hamburger */
+.uschd-off-menu {
+	background-color:  #EEE;
+	height: fit-content;
+	width: fit-content;
+	position: absolute;
+	top: 0;
+	left: -450px;
+	display: flex;
+	flex-direction: column;
+	font-size: 1.1rem;
+	transition: .3s ease;
+	z-index: 15;
+}
+.uschd-off-menu.active {
+	left: 0;
+}
+.uschd-off-menu ul {
+	list-style: none;
+	padding: .5rem 1rem 1rem 2rem;
+	margin: 0;
+}
+.uschd-off-menu ul a {
+	text-decoration: none;
+}
+
 
 /* for our additions to the calendar */
 /* a space at the top of the calendar for tool buttons */
@@ -76,3 +155,23 @@ div.dhx_custom_button_shide {
 .dhx_repeat_text {
 	width: 38px;
 }
+.dhx_cal_navline {
+	padding: 0 32px 8px 32px;
+}
+.dhx_expand_icon {
+	top: 4px;
+	right: 8px;
+}
+
+/* give more side space to the calendar */
+@media (width <= 800px) {
+	body.wrapper-fluid .site-grid {
+		grid-gap: 0 12px;
+	}
+}
+/*@media (width <= 400px) {
+	body.wrapper-fluid .site-grid {
+		grid-gap: 0 0;
+	}
+}*/
+
