@@ -213,11 +213,11 @@ var USched = {
 			plugs.quick_info = true;
 			scheduler.config.quick_info_detached = false;
 		} else {
-			plugs.tooltip = true;
+//			plugs.tooltip = true;
 		}
 		plugs.container_autoresize = true;
 		plugs.pdf = true;
-		scheduler.plugins(plugs);
+		scheduler.plugins(plugs);	console.log(plugs);
 
 
 		// experiment here
@@ -240,9 +240,20 @@ scheduler.attachEvent('onError', function(errorMessage){
 });
 
 
-
-
 		scheduler.init('scheduler_here', new Date(), USched.mode);
+
+
+
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	//	scheduler.config.readonly_form = true;
+		//block all modifications
+	//	scheduler.attachEvent("onBeforeDrag",function(){return false;});
+	//	scheduler.attachEvent("onClick",function(){return false;});
+	//	scheduler.config.details_on_dblclick = true;
+	//	scheduler.config.dblclick_create = false;
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
 
 
     scheduler.attachEvent('onBeforeExpand', () => document.getElementById('scheduler_here').style.zIndex = 15);

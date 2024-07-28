@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.2.1
+* @since		1.2.3
 */
 defined('_JEXEC') or die;
 
@@ -28,7 +28,7 @@ class UserschedViewUsersched extends UserschedView
 	'start_on_monday' => false,
 	'first_hour' => 8,
 	'last_hour' => 22,
-	'readonly' => false,
+	'readonly' => true,
 	'drag_resize' => 1,
 	'drag_move' => 1,
 	'drag_create' => 1,
@@ -75,15 +75,18 @@ class UserschedViewUsersched extends UserschedView
 		switch ($cal_type) {
 			case 0:
 				$this->canCfg = true;
+				$this->config['readonly'] = false;
 				break;
 			case 1:
 				if (array_intersect($this->user->groups, $jID)) {
 					$this->canCfg = true;
+					$this->config['readonly'] = false;
 				}
 				break;
 			case 2:
 				if ($this->user->authorise('core.edit')) {
 					$this->canCfg = true;
+					$this->config['readonly'] = false;
 				}
 				break;
 		}

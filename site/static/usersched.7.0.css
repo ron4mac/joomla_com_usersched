@@ -163,6 +163,7 @@ div.dhx_custom_button_shide {
 	right: 8px;
 }
 
+
 /* give more side space to the calendar */
 @media (width <= 800px) {
 	body.wrapper-fluid .site-grid {

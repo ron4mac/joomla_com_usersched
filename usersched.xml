@@ -7,7 +7,7 @@
 	<license>GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)</license>
 	<authorEmail>ron@rjconline.net</authorEmail>
 	<authorUrl>rjconline.net</authorUrl>
-	<version>1.2.2</version>
+	<version>1.2.3</version>
 	<updater jver="4\.[0-4]" pver="7.0" />
 	<description>COM_USERSCHED_XML_DESCRIPTION</description>
 	<scriptfile>script.php</scriptfile>
@@ -49,6 +49,6 @@
 		</files>
 	</administration>
 	<updateservers>
-		<server type="extension" priority="1" name="UserSched Updates">http://rjcrans.net/jupdates/com_usersched/updates.php</server>
+		<server type="extension" priority="1" name="UserSched Updates">https://rjcrans.net/jupdates/com_usersched/updates.php</server>
 	</updateservers>
 </extension>
