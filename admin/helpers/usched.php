@@ -3,12 +3,13 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.2.0
+* @since		1.3.0
 */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Log\Log;
+use RJCreations\Library\RJUserCom;
 
 abstract class UschedHelper
 {
@@ -26,7 +27,7 @@ abstract class UschedHelper
 	public static function getInstanceObject ($mid=null)	// SO
 	{
 		if (!empty(self::$instanceObj)) return self::$instanceObj;
-		self::$instanceObj = RJUserCom::getInstObject('cal_type', $mid);
+		self::$instanceObj = RJUserCom::getInstObject($mid);
 		return self::$instanceObj;
 	}
 
