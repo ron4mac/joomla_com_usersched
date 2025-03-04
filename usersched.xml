@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="3.3" client="site" method="upgrade">
+<!DOCTYPE extension>
+<extension type="component" method="upgrade">
 	<name>com_usersched</name>
 	<author>Ron Crans</author>
-	<creationDate>July 2024</creationDate>
-	<copyright>(C) 2015-2024 Ron Crans.</copyright>
+	<creationDate>August 2024</creationDate>
+	<copyright>(C) 2015-2024 RJCreations. All rights reserved</copyright>
 	<license>GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)</license>
 	<authorEmail>ron@rjconline.net</authorEmail>
 	<authorUrl>rjconline.net</authorUrl>
@@ -15,6 +16,7 @@
 	<files folder="site">
 		<filename>alertcheck.php</filename>
 		<filename>js.php</filename>
+		<folder>classes</folder>
 		<folder>forms</folder>
 		<folder>helpers</folder>
 		<folder>language</folder>

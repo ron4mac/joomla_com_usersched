@@ -265,6 +265,8 @@ scheduler.attachEvent('onError', function(errorMessage){
 		scheduler.locale.labels.section_category = 'Category';
 		// set the height of the description
 //		scheduler.config.lightbox.sections[0].height = 60;
+		scheduler.config.lightbox.sections[2].year_range = [1940,2026];
+
 		// get the repeat section
 		let rs = scheduler.config.lightbox.sections[1];
 		// add category selection after description, removing repeat

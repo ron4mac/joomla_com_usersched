@@ -5,21 +5,24 @@
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
 * @since		1.3.0
 */
+namespace RJCreations\Component\Usersched\Site\Helper;
+
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\Database\DatabaseDriver;
 
+use RJCreations\Component\Usersched\Site\RRule;
+
 require_once JPATH_COMPONENT.'/classes/rdatetime.php';
 
-define('HOURSECS', 3600);
-define('DAYSECS', 86400);
-define('WEEKSECS', 604800);
+class AlertCheck {
 
-class USchedAcheck {
-
-	const DNM = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+//	const DNM = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+	const TENMINSECS = 600;
+	const DAYSECS = 86400;
+//	const WEEKSECS = 604800;
 
 	protected $db;
 	protected $bug;
@@ -32,7 +35,7 @@ class USchedAcheck {
 		$this->config = $cfg;
 		$this->bugout('@@@@@@@ DBASE '.basename(dirname($dbp,2)).'/'.basename(dirname($dbp)));
 		$opt = ['driver'=>'sqlite','host'=>'','user'=>'','password'=>'','database'=>$dbp,'prefix'=>''];
-		$db = JDatabaseDriver::getInstance($opt);
+		$db = DatabaseDriver::getInstance($opt);
 		$db->connect();
 		$db->getConnection()->sqliteCreateFunction('strtotime', 'strtotime', 1);
 		$this->db = $db;
@@ -49,16 +52,17 @@ class USchedAcheck {
 		}
 
 		// remove expired alerted sentinals (> 1 day)
-		$this->db->setQuery('DELETE FROM alerted WHERE ('.$time.' - atime + 5)> lead'/*.DAYSECS*/)->execute();
+//		$this->db->setQuery('DELETE FROM alerted WHERE ('.$time.' - atime + 5)> lead'/*.self::DAYSECS*/)->execute();
+		$this->db->setQuery('DELETE FROM alerted WHERE ('.$time.' - atime)>'.self::DAYSECS)->execute();
 
-		$alerted = $this->getTable('alerted','*','','eid','eid');
+		$alerted = $this->getTable('alerted','*','','eid');
 
 		$atime = $time;
 
 		// get event range
 		$fields = '*, strtotime(start_date) AS t_start, strtotime(end_date) as t_end';
 		//$where = 'alert_user != \'\' AND ((substr(end_date,1,5) == \'9999-\')OR(t_end > '.$atime.')) AND ((t_start - alert_lead) <= ('.$atime.' + 5))';
-		$where = 'alert_user != \'\' AND ((substr(end_date,1,5) == \'9999-\')OR(t_end > '.$atime.')) AND ((t_start - alert_lead) <= '.$atime.')';
+		$where = 'alert_user != \'\' AND ((substr(end_date,1,5) == \'9999-\') OR (t_end > '.$atime.')) AND ((t_start - alert_lead) <= '.$atime.')';
 		$evts = $this->getTable('events', $fields, $where);
 //		var_dump($atime,$evts);
 												/// @@@@@@ MIGHT WANT TO GET RECURRING EVENTS SEPARATELY
@@ -66,20 +70,38 @@ class USchedAcheck {
 			$this->bugout('<br>Event: '.$evt['text']);
 			// skip if was already alerted within timeframe
 			if ($this->wasAlerted($evt['event_id'], $alerted)) continue;
+			// skip recurring old type events
+			if (!empty($evt['rec_type']) && empty($evt['rrule'])) continue;
 			// skip if recurring and and no hit
-			if ($evt['rec_type'] && !$this->recursNow($evt, $atime)) continue;
+			if (!empty($evt['rrule']) && !$this->recursNow($evt, $atime-self::TENMINSECS, $atime+self::TENMINSECS)) continue;
 			// skip if XXXXX or event start was more than a day ago
 //			if (/*($atime + $evt['alert_lead']-$evt['t_start'])<0 ||*/ ($atime-$evt['t_start'])>86399) continue;
 
 			$this->bugout('ALERT '.$evt['start_date']);
 			$this->sendAlerts($evt, $atime);
 		//	$this->markAlerted($evt['event_id'], $evt['t_start']-$evt['alert_lead'], $evt['alert_lead']+$evt['t_end']-$evt['t_start'] /*$atime*/);
-			$this->markAlerted($evt['event_id'], $evt['t_start']-$evt['alert_lead'], max($evt['alert_lead'],DAYSECS));
+//			$this->markAlerted($evt['event_id'], $evt['t_start']/* -$evt['alert_lead'] */, max($evt['alert_lead'],self::DAYSECS));
+			$this->markAlerted($evt['event_id'], $atime, max($evt['alert_lead'],self::DAYSECS));
 		}
 		$this->bugout('<br><br>');
 	}
 
-	private function recursNow (&$evt, $atime)
+	private function recursNow (&$evt, $rBeg, $rEnd)
+	{
+		$this->bugout('Recursing: ',[$rBeg, date(DATE_RFC822,$rBeg), $rEnd, date(DATE_RFC822,$rEnd)/*, $evt*/]);
+		$rr = new RRule\RRule($evt['rrule'], $evt['start_date']);
+		$occ = $rr->getOccurrencesBetween($rBeg - $evt['alert_lead'], $rEnd, 1);
+		if ($occ) {
+			//echo'<xmp>';var_dump($occ);echo'</xmp>';
+			$evt['t_start'] = $occ[0]->getTimestamp();
+			$evt['start_date'] = $occ[0]->format('Y-m-d H:i');
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private function old_recursNow (&$evt, $rBeg, $rEnd)
 	{
 		if (trim($evt['rec_type']) == 'none') return false;
 		list($rec_pattern, $xtra) = explode('#', $evt['rec_type']);
@@ -92,46 +114,45 @@ class USchedAcheck {
 		$divsr = 1;
 		switch ($type) {
 			case 'day':
-				$divsr = $count * DAYSECS;
-				$pdelta = (int)floor(($atime + $evt['alert_lead'] - $evt['t_start']) / $divsr);
-				$dt->add(new DateInterval('P'.($pdelta*$count).'D'));
+				$divsr = $count * self::DAYSECS;
+				$pdelta = (int)floor(($rBeg + $evt['alert_lead'] - $evt['t_start']) / $divsr);
+				$dt->add(new \DateInterval('P'.($pdelta*$count).'D'));
 				$this->bugout('DAYCAN '.$dt->format('Y-m-d H:i D'));
 				break;
 			case 'week':
-				$divsr = $count * WEEKSECS;
-				$edays = explode(',',$daysl);
-				$fday = $edays[0];
-				$frstt = $evt['t_start'];
-				$iters = (int)(($atime - $frstt) / $divsr);							$this->bugout('TSTART',[$divsr,$iters,date(DATE_RFC822,$frstt)]);
-				$frstt += $iters * $divsr;							$this->bugout('FITTER '.date(DATE_RFC822,$frstt));
-				$tgt = 0;
-				while (!$tgt) {
-					$ltim = 0;
-					foreach ($edays as $eday) {
-						$etim = $frstt + ($eday-$fday) * DAYSECS;				$this->bugout('TITTER '.date(DATE_RFC822,$etim));
-						if ($etim > $atime) {
-							$tgt = $ltim ?: $etim;
-							break 2;
-						}
-						$ltim = $etim;
-					}
-					$frstt += $divsr;
-					if (($frstt-$evt['alert_lead'])>$atime) return false;
+				$divsr = $count * self::WEEKSECS;
+				$pdelta = (int)(($rBeg - $evt['t_start']) / $divsr);
+				// add prior occurences to arrive at next occurence date
+				if ($pdelta<0) {
+					$dt->sub(new \DateInterval('P'.(abs($pdelta+1)*$count).'W'));
+				} else {
+					$dt->add(new \DateInterval('P'.($pdelta*$count).'W'));
 				}
-				$dt = new R_DateTime('', null, $tgt);
+				$this->bugout('TSTART',[$divsr,$dt->format('Y-m-d H:i D')]);
+				do {
+					foreach (explode(',',$daysl) as $dow) {
+						$dt->nextDow($dow, $count);
+						$this->bugout('NEXTDOW '.$dt->format('Y-m-d H:i D'));
+						$ts = $dt->getTimestamp();
+						if ($ts >= $evt['t_start'] && $ts >= $rBeg) break 3;
+					}
+					$dt->modify("+$count ".self::DNM[0]);
+					$this->bugout('NEXTWOO '.$dt->format('Y-m-d H:i D'));
+				} while ($dt->getTimestamp() < $rEnd);
+
 				break;
 			case 'month':
-				$cdt = new R_DateTime(date('Y-m-d H:i',$atime /*+ $evt['alert_lead']*/));
+				$cdt = new R_DateTime(date('Y-m-d H:i',$rBeg /*+ $evt['alert_lead']*/));
 				$dim = ($cdt->getFullYear() - $dt->getFullYear()) * 12;
 				$dim += $cdt->getMonth() - $dt->getMonth();
 				$nop = (int) ($dim / $count);
-				$dt->add(new DateInterval('P'.($nop*$count).'M'));
+				$dt->add(new \DateInterval('P'.($nop*$count).'M'));
 				break;
 			case 'year':
-				$cdt = new R_DateTime(date('Y-m-d H:i',$atime /*+ $evt['alert_lead']*/));
+				$cdt = new R_DateTime(date('Y-m-d H:i',$rBeg /*+ $evt['alert_lead']*/));
 				$diy = $cdt->getFullYear() - $dt->getFullYear();
 				$nop = (int) ($diy / $count);
-				$dt->add(new DateInterval('P'.($nop*$count).'Y'));
+				$dt->add(new \DateInterval('P'.($nop*$count).'Y'));
 				if ($day) {
 					$dt->modify("+$count2 ".self::DNM[$day]);
 				}
@@ -156,11 +177,14 @@ class USchedAcheck {
 			$dt->setDay2($nday <= $wk ? ($nday + 7) : $nday);
 		}
 */
+
+		$this->bugout('CANDD '.$dt->format('Y-m-d H:i D'));
+
 		$closetime = $dt->getTimestamp();
-		$diffr = $atime - $closetime + $evt['alert_lead'];
-		$this->bugout('CLODIF',[$atime,$closetime,$evt['alert_lead'],$diffr]);
+		$diffr = $rBeg - $closetime + $evt['alert_lead'];
+		$this->bugout('CLODIF',[$rBeg,$closetime,$evt['alert_lead'],$diffr]);
 	//	$this->bugout('CLODIF',[$evt,date(DATE_RFC822,$closetime),$diffr]);
-		if (($diffr<0) || ($diffr>DAYSECS)) {
+		if (($diffr<0) || ($diffr>self::DAYSECS)) {
 			return false;
 		}
 
@@ -175,7 +199,7 @@ class USchedAcheck {
 		try {
 			$mailer = Factory::getMailer();
 			foreach ($this->alertees as $a) {
-				if (in_array($a['id'], $ausrs) && $a[$addr]) $mailer->addRecipient($a[$addr]);
+				if (in_array($a['id'], $ausrs) && $a[$addr]) $mailer->addRecipient($a[$addr], $a['name']);
 			}
 			$mailer->setSubject($subj);
 			$mailer->setBody($body);
@@ -187,10 +211,10 @@ class USchedAcheck {
 
 	protected function sendAlerts ($evt, $atime)
 	{
-		if ($this->bug) return;
+	//	if ($this->bug) return;
 		$ausrs = explode(',',$evt['alert_user']);
 
-		$toTime = $evt['rec_type'] ? ($evt['t_start'] + $evt['event_length']) : $evt['t_end'];
+		$toTime = $evt['rrule'] ? ($evt['t_start'] + $evt['duration']) : $evt['t_end'];
 		$evtTime = $this->formattedDateTime($evt['t_start'], $toTime);
 		$lb = "\n"; $lbb = "\n\n";
 		if ($evt['alert_meth'] & 1) {	//email
@@ -217,16 +241,17 @@ class USchedAcheck {
 	// mark (for a day) that an alert was triggered
 	protected function markAlerted ($id, $atime, $lead)
 	{
-		if (true || $this->bug) return;
-		if ($lead < DAYSECS) $lead = DAYSECS;
-		$this->db->setQuery('INSERT INTO alerted (eid,atime,lead) VALUES ('.$id.','.$atime.','.$lead.')');
+		if ($this->bug) return;
+		if ($lead < self::DAYSECS) $lead = self::DAYSECS;
+		$toa = date(DATE_RFC822,$atime);
+		$this->db->setQuery('INSERT INTO alerted (eid,atime,lead,toa) VALUES ('.$id.','.$atime.','.$lead.',"'.$toa.'")');
 		$this->db->execute();
 	}
 	
 	// see if the event's alert has already been triggered
 	protected function wasAlerted ($id, $stray)
-	{
-		return !empty($stray[$id]);
+	{	//file_put_contents('LOG.txt', 'WA '.print_r([$id, $stray],true)."\n", FILE_APPEND);
+		return $this->bug ? false : !empty($stray[$id]);
 //		foreach ($stray as $st) {
 //			if ($st['eid'] == $id) return true;
 //		}
@@ -235,12 +260,12 @@ class USchedAcheck {
 
 	private function formattedDateTime ($from, $to=0)
 	{
-		if ($to-$from == DAYSECS) {
+		if ($to-$from == self::DAYSECS) {
 			return date('D j F Y', $from);
 		}
 		$fdt = date('D j F Y g:ia', $from);
 		if ($to) {
-			if ($to-$from > DAYSECS) {
+			if ($to-$from > self::DAYSECS) {
 				if ((date('Hi',$from).date('Hi',$to)) == '00000000') {
 					return date('D j F Y', $from).' - '.date('D j F Y', $from);
 				} else {

@@ -13,9 +13,11 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Http\HttpFactory;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Component\ComponentHelper;
+use RJCreations\Library\RJUserCom;
+use RJCreations\Component\Usersched\Site\Helper\AlertCheck;
 
 \JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched.php');
-\JLoader::register('USchedAcheck', JPATH_COMPONENT.'/alertcheck.php');
+//\JLoader::register('USchedAcheck', JPATH_COMPONENT.'/alertcheck.php');
 
 define('RJC_DEV', (JDEBUG) && file_exists(JPATH_ROOT.'/rjcdev.php'));
 
@@ -121,6 +123,7 @@ if (!$rows) {
 		$key = ComponentHelper::getParams('com_usersched')->get('googapi_key','');
 		$url = 'https://www.googleapis.com/calendar/v3/calendars/'.$rg.'@holiday.calendar.google.com/events?key='.$key;
 		$url .= '&timeMin='.$yr.'-01-01T00%3A00%3A00%2B00%3A00&timeMax='.($yr+1).'-01-01T00%3A00%3A00%2B00%3A00&singelEvents=true';
+		file_put_contents('GOOG.txt', $url);
 		$connector = HttpFactory::getHttp();
 		$data = $connector->get($url);
 		return $data->body;
@@ -131,20 +134,20 @@ if (!$rows) {
 	{
 		$dbug = strpos($this->input->server->get('HTTP_USER_AGENT'), 'Wget') === false;
 
-		$dbs = RJUserCom::getDbPaths(null, 'sched', true);
+		$dbs = RJUserCom::getDbPaths(null, 'usersched', true);
 
 		// get the storage location path
 		$results = Factory::getApplication()->triggerEvent('onRjuserDatapath');
 		$dsp = isset($results[0]) ? trim($results[0]) : false;
 		$stor = ($dsp ?: 'userstor');
 
-		$config = new JConfig();
+		$config = new \JConfig();
 		$xtime = time();
 
 		if ($dbug) echo'<pre>';
 		foreach ($dbs as $dbp=>$inst) {
 			foreach ($inst as $info) {
-				$acheck = new USchedAcheck($info['path'], $config, $dbug);
+				$acheck = new AlertCheck($info['path'], $config, $dbug);
 				$acheck->processAlerts($xtime);
 				unset($acheck);
 			}
@@ -183,6 +186,7 @@ if (!$rows) {
 				case 'GET':
 					if (RJC_DEV) file_put_contents('LOG.txt', 'G '.print_r($_GET,true)."\n", FILE_APPEND);
 					$result = $m->read($_GET);
+				//	if (RJC_DEV) file_put_contents('LOG.txt', 'EV '.print_r($result,true)."\n", FILE_APPEND);
 					break;
 				case 'POST':
 					// with Joomla: ->input->json->getraw()
@@ -203,6 +207,65 @@ if (!$rows) {
 						// delete a single occurrence from recurring series
 						if (!empty($body['rec_type']) && $body['rec_type'] === 'none') {
 							$result['action'] = 'deleted';//!
+						}
+					} elseif ($action == 'updated') {
+						$m->update($body, $id);
+					} elseif ($action == 'deleted') {
+						$m->delete($id);
+					}
+					break;
+				default: throw new Exception('Unexpected Method'); break;
+			}
+		} catch (Exception $e) {
+			$emsg = $e->getMessage();
+			UschedHelper::loggit($emsg,true);
+			header("HTTP/1.1 500 Failure");
+			header('Content-Type: application/json');
+			//http_response_code(500);
+			$result = [
+				'action' => 'error',
+				'message' => $emsg
+			];
+			echo json_encode($result);
+			exit();
+		}
+
+		header('Access-Control-Allow-Origin: *');
+		header('Access-Control-Allow-Methods: *');
+		header('Content-Type: application/json');
+		echo json_encode($result);
+	}
+
+	// my own backend for scheduler 7.1+ (with rrule recurring)
+	public function calJ7r ()
+	{
+		try {
+			$m = $this->getModel('backendr');
+			switch ($_SERVER['REQUEST_METHOD']) {
+				case 'GET':
+				//	if (RJC_DEV) file_put_contents('LOG.txt', 'G '.print_r($_GET,true)."\n", FILE_APPEND);
+					$result = $m->read($_GET);
+				//	if (RJC_DEV) file_put_contents('LOG.txt', 'EV '.print_r($result,true)."\n", FILE_APPEND);
+					break;
+				case 'POST':
+					$json = $this->input->json->getraw();
+					if (RJC_DEV) file_put_contents('LOG.txt', 'I '.print_r($json,true)."\n", FILE_APPEND);
+					$requestPayload = json_decode($json);
+					$id = $requestPayload->id;
+					$action = $requestPayload->action;
+					$body = (array) $requestPayload->data;
+
+					$result = [
+						'action' => $action
+					];
+
+					if ($action == 'inserted') {
+						$databaseId = $m->create($body);
+						$result['tid'] = $databaseId;
+						// If a deleted instance was inserted - the server response must have the "deleted" status.
+						// A deleted instance can be identified by the non-empty value of the deleted property.
+						if (isset($body['deleted'])) {
+							$result['action'] = 'deleted';
 						}
 					} elseif ($action == 'updated') {
 						$m->update($body, $id);

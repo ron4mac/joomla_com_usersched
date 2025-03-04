@@ -3,13 +3,14 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.2.1
+* @since		1.3.0
 */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
+use RJCreations\Component\Usersched\Site\Helper\HtmlUsersched;
 
 $fact = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->mnuItm, false);
 ?>
@@ -136,8 +137,8 @@ $fact = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->
 	<?php foreach ($this->categories as $cat) :?>
 		<input type="hidden" name="category_id[]" value="<?=$cat['id']?>" />
 		<span><input type="text" name="category_name[]" value="<?=$cat['name']?>" class="ecname" /></span>
-		<span class="gcent"><?=HTMLHelper::_('usersched.colorPicker',$cat['id'],'tx',$cat['txcolor'])?></span>
-		<span class="gcent"><?=HTMLHelper::_('usersched.colorPicker',$cat['id'],'bg',$cat['bgcolor'])?></span>
+		<span class="gcent"><?=HtmlUsersched::colorPicker($cat['id'],'tx',$cat['txcolor'])?></span>
+		<span class="gcent"><?=HtmlUsersched::colorPicker($cat['id'],'bg',$cat['bgcolor'])?></span>
 		<span class="gcent"><input type="checkbox" name="category_dele[]" value="<?=$cat['id']?>" class="ecdele" /></span>
 		<span class="catsamp" style="color:<?=$cat['txcolor']?>;background-color:<?=$cat['bgcolor']?>"><?=$cat['name']?></span>
 	<?php endforeach;?>

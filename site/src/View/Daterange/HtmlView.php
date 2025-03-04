@@ -10,9 +10,15 @@ namespace RJCreations\Component\Usersched\Site\View\Daterange;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use RJCreations\Component\Usersched\Site\Helper\Events;
+use RJCreations\Component\Usersched\Site\Helper\HtmlUsersched;
 
-require_once JPATH_COMPONENT.'/helpers/events.php';
+//require_once JPATH_COMPONENT.'/helpers/'.(Factory::getApplication()->input->get('dev',0,'integer')?'dev_':'').'events.php';
 require_once JPATH_COMPONENT.'/src/View/UschedView.php';
+
+//echo'<xmp>';var_dump('HTML',debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 8));echo'</xmp>';
+
+define('RJC_DEVR', (JDEBUG) && Factory::getApplication()->input->get('dev',0,'integer'));
 
 class HtmlView extends \UschedView
 {
@@ -64,12 +70,12 @@ class HtmlView extends \UschedView
 		$where = '(t_start>'.$this->rBeg.' OR end_date LIKE \'9999%\' OR t_end>'.$this->rBeg.') AND t_start<'.$this->rEnd.' ORDER BY t_start';
 //			$where = '(t_start>'.$this->rBeg.' OR t_end>'.$this->rBeg.') AND t_start<'.$this->rEnd.' ORDER BY t_start';
 		$evts = $m->getUdTable('events', $where, true, $fields);
-	//	bugout('[-]'.$where,$evts);
+	//	Events::bugout('[-]'.$where,$evts);
 		foreach ($evts as $k=>$evt) {
-			bugout('ts:te', [$evt['start_date'],$evt['t_start'],$evt['end_date'],$evt['t_end']]);
-			if ($evt['rec_type']) {
+		//	Events::bugout('ts:te', [$evt['start_date'],$evt['t_start'],$evt['end_date'],$evt['t_end']]);
+			if (!empty($evt['rrule'])) {
 				// check for deleted individual instances of repeated events
-				if ($evt['rec_type'] == 'none') {
+				if ($evt['deleted']) {
 					// remove this from the event list
 					unset($evts[$k]);
 					// find and remove the associated event instance
@@ -80,9 +86,9 @@ class HtmlView extends \UschedView
 					}
 					continue;
 				}
-				if (recursNow($evt, $this->rBeg, $this->rEnd, false)) {
+				if (Events::recursNow($evt, $this->rBeg, $this->rEnd, false)) {
 					// adjust end to reflect event length
-					$evt['t_end'] = $evt['t_start'] + $evt['event_length'];
+					$evt['t_end'] = $evt['t_start'] + $evt['duration'];
 					//replace with adjusted event
 					$evts[$k]=$evt;
 				}
@@ -92,7 +98,7 @@ class HtmlView extends \UschedView
 
 		// turn urls into links
 		foreach ($evts as $k=>$evt) {
-			\JHtmlUsersched::makeLinks($evts[$k]['text']);
+			HtmlUsersched::makeLinks($evts[$k]['text']);
 		}
 
 		usort($evts, function ($a,$b) { if ($a['t_start']==$b['t_start']) return 0; return ($a['t_start'] < $b['t_start']) ? -1 : 1; });

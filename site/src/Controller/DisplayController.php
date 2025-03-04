@@ -52,9 +52,13 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 			$iview = $this->getView('config','html','site');	//,null,['layout'=>$viewLayout]);
 			$iview->instObj = $this->instanceObj;
 		}
+//		$iview = $this->getView($inv,$this->input->get('dev',0,'integer')?'dev':'html','site');	//,'',['layout'=>$viewLayout]);
 		$iview = $this->getView($inv,'html','site');	//,'',['layout'=>$viewLayout]);
 		$iview->instObj = $this->instanceObj;
 
+		if ($this->input->get('dev',0,'integer')) {
+		//	Factory::getApplication()->getDocument()->setType('Dev');
+		}
 		parent::display($cachable, $urlparams);
 
 		return $this;
