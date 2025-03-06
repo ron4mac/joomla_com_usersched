@@ -8,7 +8,7 @@
 	<fields name="params">
 
 		<!-- Basic options. -->
-		<fieldset name="basic" label="COM_MENUS_BASIC_FIELDSET_LABEL" addfieldpath="administrator/components/com_usersched/models/fields">
+		<fieldset name="basic" label="COM_MENUS_BASIC_FIELDSET_LABEL" addfieldpath="administrator/components/com_usersched/fields">
 
 			<field name="message" type="textarea"
 				cols="30"

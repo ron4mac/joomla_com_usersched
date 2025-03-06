@@ -20,7 +20,7 @@ require_once JPATH_COMPONENT.'/classes/rdatetime.php';
 class AlertCheck {
 
 //	const DNM = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-	const TENMINSECS = 600;
+	const RANGESECS = 1200;
 	const DAYSECS = 86400;
 //	const WEEKSECS = 604800;
 
@@ -73,15 +73,16 @@ class AlertCheck {
 			// skip recurring old type events
 			if (!empty($evt['rec_type']) && empty($evt['rrule'])) continue;
 			// skip if recurring and and no hit
-			if (!empty($evt['rrule']) && !$this->recursNow($evt, $atime-self::TENMINSECS, $atime+self::TENMINSECS)) continue;
+			if (!empty($evt['rrule']) && !$this->recursNow($evt, $atime-self::RANGESECS, $atime+$evt['alert_lead']+self::RANGESECS)) continue;
 			// skip if XXXXX or event start was more than a day ago
 //			if (/*($atime + $evt['alert_lead']-$evt['t_start'])<0 ||*/ ($atime-$evt['t_start'])>86399) continue;
 
 			$this->bugout('ALERT '.$evt['start_date']);
-			$this->sendAlerts($evt, $atime);
+//			$this->sendAlerts($evt, $atime);
 		//	$this->markAlerted($evt['event_id'], $evt['t_start']-$evt['alert_lead'], $evt['alert_lead']+$evt['t_end']-$evt['t_start'] /*$atime*/);
 //			$this->markAlerted($evt['event_id'], $evt['t_start']/* -$evt['alert_lead'] */, max($evt['alert_lead'],self::DAYSECS));
 			$this->markAlerted($evt['event_id'], $atime, max($evt['alert_lead'],self::DAYSECS));
+			$this->sendAlerts($evt, $atime);
 		}
 		$this->bugout('<br><br>');
 	}
@@ -90,7 +91,7 @@ class AlertCheck {
 	{
 		$this->bugout('Recursing: ',[$rBeg, date(DATE_RFC822,$rBeg), $rEnd, date(DATE_RFC822,$rEnd)/*, $evt*/]);
 		$rr = new RRule\RRule($evt['rrule'], $evt['start_date']);
-		$occ = $rr->getOccurrencesBetween($rBeg - $evt['alert_lead'], $rEnd, 1);
+		$occ = $rr->getOccurrencesBetween($rBeg, $rEnd, 1);
 		if ($occ) {
 			//echo'<xmp>';var_dump($occ);echo'</xmp>';
 			$evt['t_start'] = $occ[0]->getTimestamp();
@@ -204,8 +205,9 @@ class AlertCheck {
 			$mailer->setSubject($subj);
 			$mailer->setBody($body);
 			if (!$mailer->Send()) echo 'Mailing failed: '.$mailer->ErrorInfo."\n";
-		} catch (Exception $e) {
-			echo $e->getMessage();
+		} catch (\Exception $exception) {
+			echo $exception->getMessage();
+			var_dump($mailer->getAllRecipientAddresses());
 		}
 	}
 

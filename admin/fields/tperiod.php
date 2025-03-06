@@ -1,14 +1,15 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.3.0
 */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 
-Factory::getDocument()->addScript('components/com_usersched/models/fields/tperiod.js');
+Factory::getDocument()->addScript('components/com_usersched/fields/tperiod.js');
 
 class JFormFieldTPeriod extends Joomla\CMS\Form\FormField
 {

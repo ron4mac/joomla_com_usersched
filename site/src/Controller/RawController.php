@@ -214,9 +214,9 @@ if (!$rows) {
 						$m->delete($id);
 					}
 					break;
-				default: throw new Exception('Unexpected Method'); break;
+				default: throw new \Exception('Unexpected Method'); break;
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			$emsg = $e->getMessage();
 			UschedHelper::loggit($emsg,true);
 			header("HTTP/1.1 500 Failure");
@@ -273,9 +273,9 @@ if (!$rows) {
 						$m->delete($id);
 					}
 					break;
-				default: throw new Exception('Unexpected Method'); break;
+				default: throw new \Exception('Unexpected Method'); break;
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			$emsg = $e->getMessage();
 			UschedHelper::loggit($emsg,true);
 			header("HTTP/1.1 500 Failure");
