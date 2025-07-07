@@ -11,4 +11,4 @@ Calendars can be configured to have email/SMS alerts attached to events. For thi
 be set on the server to run periodically (every 5 minutes is probably best).
 
 Sample CRON job setting:
-/usr/bin/wget -q -O - "<JOOMLA_URL>/index.php?option=com_usersched&task=ajax.cron&format=raw" >> <SOME_PATH>/cronmsg.txt
+/usr/bin/wget -q -O - "<JOOMLA_URL>/index.php?option=com_usersched&task=Raw.cron&format=raw" >> <SOME_PATH>/cronmsg.txt
