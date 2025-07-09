@@ -10,7 +10,7 @@ scheduler.attachEvent("onViewChange", function (new_mode, new_date) {
 	const getHolidays = (yr) => {
 		if (scheduler.gHolyYrs.indexOf(yr)==-1) {
 			scheduler.gHolyYrs.push(yr);
-			let url = "/index.php?option=com_usersched&format=raw&task=ajax.holidays&yr="+yr+"&rg=usa__en";
+			let url = "/index.php?option=com_usersched&format=raw&task=Raw.holidays&yr="+yr+"&rg=usa__en";
 			let currentURL = window.location;
 			let live_site = currentURL.protocol+'//'+currentURL.host+USched.base;
 			fetch(live_site + url)

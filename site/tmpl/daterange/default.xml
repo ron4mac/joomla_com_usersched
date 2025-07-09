@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_USERSCHED_DATERANGE_TITLE" option="COM_USERSCHED_DATERANGE_OPTION">
+		<help key = "JHELP_MENUS_MENU_ITEM_SEARCH_RESULTS" />
+		<message><![CDATA[COM_USERSCHED_DATERANGE_DESC]]></message>
+	</layout>
+
+	<fields name="params">
+
+		<!-- Basic options. -->
+		<fieldset name="basic" label="COM_MENUS_BASIC_FIELDSET_LABEL" addfieldpath="administrator/components/com_usersched/fields">
+
+			<field name="message" type="textarea"
+				cols="30"
+				label="COM_USERSCHED_RANGE_MSG_LABEL"
+				description="COM_USERSCHED_RANGE_MSG_DESC"
+				rows="3"
+				hint="COM_USERSCHED_RANGE_MESSAGE"
+			/>
+
+			<field name="cal_menu" type="menuitem"
+				label="COM_USERSCHED_RANGE_MENU_REF_LABEL"
+				description="COM_USERSCHED_RANGE_MENU_REF_DESC"
+				required="required"
+			/>
+<!--
+			<field name="relative" type="radio" default="abs"
+				label="Relative/Absolute Date Range"
+				description="Should date range be relative to today or absolute dates. You can also specify dates using the php function strtotime"
+			>
+				<option value="abs">Absolute</option>
+				<option value="rel">Relative</option>
+				<option value="strtotime">strtotime</option>
+			</field>
+-->
+			<field name="relstart" type="tperiod"
+				default="-259200"
+				label="COM_USERSCHED_RANGE_START_REL_LABEL"
+				description="COM_USERSCHED_RANGE_START_REL_DESC"
+			/>
+
+			<field name="relend" type="tperiod"
+				default="6048000"
+				label="COM_USERSCHED_RANGE_END_REL_LABEL"
+				description="COM_USERSCHED_RANGE_END_REL_DESC"
+			/>
+
+		</fieldset>
+	</fields>
+</metadata>

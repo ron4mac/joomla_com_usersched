@@ -9,7 +9,7 @@ scheduler.attachEvent("onViewChange", function (new_mode, new_date) {
 		let live_site = currentURL.protocol+'//'+currentURL.host+USched.base;
 		if (scheduler.bdayYrs.indexOf(yr)==-1) {
 			scheduler.bdayYrs.push(yr);
-			let url = "/index.php?option=com_usersched&format=raw&task=ajax.birthdays&y="+yr;
+			let url = "/index.php?option=com_usersched&format=raw&task=Raw.birthdays&y="+yr;
 			fetch(live_site + url)
 			.then((resp) => { if (!resp.ok) { throw new Error('Network response was not OK'); } return resp.json(); })
 			.then((data) => {

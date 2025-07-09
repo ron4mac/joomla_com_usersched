@@ -82,8 +82,10 @@
 			label="COM_USERSCHED_CONFIG_DHTMLX_VERSION_LABEL"
 			description="COM_USERSCHED_CONFIG_DHTMLX_VERSION_DESC"
 		>
-			<option value="6.0">6.x</option>
-			<option value="7.0">7.x</option>
+			<option value="6.0">6.0.x</option>
+			<option value="7.0">7.0.x</option>
+			<option value="7.1">7.1.x</option>
+			<option value="7.2">7.2.x</option>
 		</field>
 		<field name="standard_skin"
 			type="folderlist"

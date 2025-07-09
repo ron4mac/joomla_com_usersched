@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_USERSCHED_DEFAULT_CAL_TITLE" option="COM_USERSCHED_DEFAULT_CAL_OPTION">
+		<help
+			key = "JHELP_MENUS_MENU_ITEM_SEARCH_RESULTS"
+		/>
+		<message>
+			<![CDATA[COM_USERSCHED_DEFAULT_CAL_DESC]]>
+		</message>
+	</layout>
+
+	<fields name="params">
+
+		<!-- Basic options. -->
+		<fieldset name="basic" label="COM_MENUS_BASIC_FIELDSET_LABEL">
+
+			<field name="instance_type" type="radio"
+				default="0"
+				description="COM_USERSCHED_CALTYPE_DESC"
+				label="COM_USERSCHED_CALTYPE_LABEL"
+			>
+				<option value="0">COM_USERSCHED_USER_CAL</option>
+				<option value="1">COM_USERSCHED_GROUP_CAL</option>
+				<option value="2">COM_USERSCHED_SITE_CAL</option>
+			</field>
+
+			<field name="group_owner" type="usergrouplist"
+				label="Owning group:"
+				description="Select the group who owns/edits the calendar"
+				showon="instance_type:1"
+			/>
+
+			<field name="group_admin" type="usergrouplist"
+				multiple="true"
+				label="Editable by:"
+				description="Select the group(s) who may edit the calendar"
+				showon="instance_type:1"
+			/>
+
+			<field name="site_admin" type="usergrouplist"
+				multiple="true"
+				label="Editable by:"
+				description="Select the group(s) who may edit the calendar"
+				showon="instance_type:2"
+			/>
+
+			<field name="can_alert" type="radio"
+				default="0"
+				description="Select whether this calendar can create alerts"
+				label="Can use alerts:"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+
+			<field name="can_skin" type="radio"
+				default="0"
+				description="Select whether this calendar can be 'skinned'"
+				label="Can 'skin' calendar:"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+
+		</fieldset>
+
+	</fields>
+</metadata>

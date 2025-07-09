@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="3.3" client="site" method="upgrade">
+<!DOCTYPE extension>
+<extension type="component" method="upgrade">
 	<name>com_usersched</name>
 	<author>Ron Crans</author>
-	<creationDate>February 2024</creationDate>
-	<copyright>(C) 2015-2024 Ron Crans.</copyright>
+	<creationDate>August 2024</creationDate>
+	<copyright>(C) 2015-2024 RJCreations. All rights reserved</copyright>
 	<license>GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)</license>
 	<authorEmail>ron@rjconline.net</authorEmail>
 	<authorUrl>rjconline.net</authorUrl>
-	<version>1.2.3</version>
+	<version>1.3.0</version>
 	<updater jver="4\.[0-4]" pver="7.0" />
 	<description>COM_USERSCHED_XML_DESCRIPTION</description>
+	<namespace path="src">RJCreations\Component\Usersched</namespace>
 	<scriptfile>script.php</scriptfile>
 	<files folder="site">
-		<filename>controller.php</filename>
-		<filename>index.html</filename>
-		<filename>usersched.php</filename>
-		<filename>js.php</filename>
 		<filename>alertcheck.php</filename>
-		<folder>controllers</folder>
-		<folder>models</folder>
-		<folder>views</folder>
+		<filename>js.php</filename>
+		<folder>classes</folder>
+		<folder>forms</folder>
 		<folder>helpers</folder>
-		<folder>skins</folder>
-		<folder>static</folder>
-		<folder>prevskin</folder>
 		<folder>language</folder>
+		<folder>prevskin</folder>
+		<folder>skins</folder>
+		<folder>src</folder>
+		<folder>static</folder>
+		<folder>tmpl</folder>
 	</files>
 	<administration>
 		<menu img="components/com_usersched/static/usersched16.png">COM_USERSCHED_MENU</menu>
@@ -36,16 +36,15 @@
 		<files folder="admin">
 			<filename>access.xml</filename>
 			<filename>config.xml</filename>
-			<filename>controller.php</filename>
-			<filename>index.html</filename>
-			<filename>usersched.php</filename>
-			<folder>helpers</folder>
-			<folder>controllers</folder>
-			<folder>models</folder>
-			<folder>views</folder>
-			<folder>language</folder>
-			<folder>static</folder>
+			<folder>fields</folder>
 			<folder>help</folder>
+			<folder>helpers</folder>
+			<folder>language</folder>
+			<folder>services</folder>
+			<folder>sql</folder>
+			<folder>src</folder>
+			<folder>static</folder>
+			<folder>tmpl</folder>
 		</files>
 	</administration>
 	<updateservers>
