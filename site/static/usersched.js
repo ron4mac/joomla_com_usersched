@@ -1,8 +1,8 @@
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.2.2
+* @since		1.3.0
 */
 //'use strict';
 /*global scheduler*/
@@ -78,6 +78,20 @@ var USched = {
 	},
 
 	init: () => {
+
+		let plugs = USched.plugs;		//{recurring: true, readonly: true, expand: true, year_view: true};
+//		if (USched.mobile) {
+//			plugs.quick_info = true;
+//			scheduler.config.quick_info_detached = false;
+//		} else {
+			plugs.tooltip = true;
+			plugs.readonly = false;
+//		}
+		plugs.container_autoresize = true;
+		plugs.pdf = true;
+		scheduler.plugins(plugs);	console.log(plugs);
+
+
 		// merge configuration
 		if (scheduler.cfg_cfg) {
 			USched.mergeObjs(scheduler.config, scheduler.cfg_cfg);
@@ -208,17 +222,19 @@ var USched = {
 		}
 */
 
+
+/*
 		let plugs = USched.plugs;		//{recurring: true, readonly: true, expand: true, year_view: true};
-		if (USched.mobile) {
-			plugs.quick_info = true;
-			scheduler.config.quick_info_detached = false;
-		} else {
-//			plugs.tooltip = true;
-		}
+//		if (USched.mobile) {
+//			plugs.quick_info = true;
+//			scheduler.config.quick_info_detached = false;
+//		} else {
+			plugs.tooltip = true;
+//		}
 		plugs.container_autoresize = true;
 		plugs.pdf = true;
 		scheduler.plugins(plugs);	console.log(plugs);
-
+*/
 
 		// experiment here
 	//	scheduler.config.fix_tab_position = false;

@@ -33,11 +33,17 @@ class BackendrModel extends UserschedModel
 
 		foreach ($events as $ix=>$ev) {
 			// mask out these fields for conversion purposes
-			unset($events[$ix]['rec_type']);
-			unset($events[$ix]['event_pid']);
-			unset($events[$ix]['event_length']);
+		//	unset($events[$ix]['rec_type']);
+		//	unset($events[$ix]['event_pid']);
+		//	unset($events[$ix]['event_length']);
 			// transform some text
-			$events[$ix]['text'] = htmlentities($ev['text']);
+		//	$events[$ix]['text'] = htmlentities($ev['text']);
+			if (strpos($ev['text'], '$Y') !== false) {
+				$d2 = new \DateTime('now');
+				$d1 = new \DateTime($ev['start_date']);
+				$iv = $d1->diff($d2);
+				$events[$ix]['text'] = str_replace('$Y', $iv->format('%y'), $ev['text']);
+			}
 		}
 
 		return $events;

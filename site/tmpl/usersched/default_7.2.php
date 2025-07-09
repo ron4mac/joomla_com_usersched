@@ -37,7 +37,7 @@ if ($this->canCfg) {
 // get the calendar ID
 $calID = base64_encode(UserSchedHelper::uState('calid'));
 
-// gather and inline needed javascript variables
+// gather any inline needed javascript variables
 $script = '';
 if ($skin) $script .= 'scheduler.skin = "'.$skin.'";';
 
