@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.3.1
 */
 namespace RJCreations\Component\Usersched\Site\View\Daterange;
 
@@ -13,17 +13,13 @@ use Joomla\CMS\Factory;
 use RJCreations\Component\Usersched\Site\Helper\Events;
 use RJCreations\Component\Usersched\Site\Helper\HtmlUsersched;
 
-//require_once JPATH_COMPONENT.'/helpers/'.(Factory::getApplication()->input->get('dev',0,'integer')?'dev_':'').'events.php';
-require_once JPATH_COMPONENT.'/src/View/UschedView.php';
-
-//echo'<xmp>';var_dump('HTML',debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 8));echo'</xmp>';
-
 define('RJC_DEVR', (JDEBUG) && Factory::getApplication()->input->get('dev',0,'integer'));
 
-class HtmlView extends \UschedView
+class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 {
 	protected $rBeg;
 	protected $rEnd;
+	protected $canSearch = false;
 	protected $isSearch = false;
 
 	function display ($tpl = null)
@@ -36,9 +32,30 @@ class HtmlView extends \UschedView
 		$this->document->addStyleSheet('components/com_usersched/static/upcoming.css');
 		$this->categories = $m->getUdTable('categories');
 
-		if ($this->getLayout()=='search') {
+		$caliObj = \UschedHelper::getInstanceObject($this->params->get('cal_menu'));
+//echo'<xmp>';var_dump($caliObj);echo'</xmp>';
+//echo'<xmp>';var_dump(\UschedHelper::getInstanceID(true));echo'</xmp>';
+		list($cal_type, $jID) = \UschedHelper::getInstanceID(true);
+		$jID = is_array($jID) ? $jID : explode(',',$jID);
+		switch (/*$cal_type*/$caliObj->type) {
+			case 0:
+				$this->canSearch = true;
+				break;
+			case 1:
+				if (array_intersect($this->user->groups, $jID)) {
+					$this->canSearch = true;
+				}
+				break;
+			case 2:
+				if ($this->user->authorise('core.edit')) {
+					$this->canSearch = true;
+				}
+				break;
+		}
+
+		if ($this->canSearch && $this->app->input->post->get('cevsterm', null, 'string')) {
 			$this->isSearch = true;
-			$this->sterm = Factory::getApplication()->input->get('sterm', '__', 'string');
+			$this->sterm = Factory::getApplication()->input->get('cevsterm', '__', 'string');
 			$evts = $m->evtSearch($this->sterm);
 			$this->data = $evts;
 			parent::display($tpl);

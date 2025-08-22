@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.3.1
 */
 namespace RJCreations\Component\Usersched\Site\View\Config;
 
@@ -14,10 +14,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Filesystem\Folder;
 
-//require_once JPATH_COMPONENT.'/helpers/usersched.php';
-require_once JPATH_COMPONENT.'/src/View/UschedView.php';
-
-class HtmlView extends \UschedView
+class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 {
 	protected $config = [
 	'default_date' => '%j %M %Y',

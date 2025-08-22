@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.3.1
 */
 namespace RJCreations\Component\Usersched\Site\Controller;
 
@@ -123,7 +123,7 @@ if (!$rows) {
 		$key = ComponentHelper::getParams('com_usersched')->get('googapi_key','');
 		$url = 'https://www.googleapis.com/calendar/v3/calendars/'.$rg.'@holiday.calendar.google.com/events?key='.$key;
 		$url .= '&timeMin='.$yr.'-01-01T00%3A00%3A00%2B00%3A00&timeMax='.($yr+1).'-01-01T00%3A00%3A00%2B00%3A00&singelEvents=true';
-		file_put_contents('GOOG.txt', $url);
+	//	file_put_contents('GOOG.txt', $url);
 		$connector = HttpFactory::getHttp();
 		$data = $connector->get($url);
 		return $data->body;

@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.3.1
 */
 namespace RJCreations\Component\Usersched\Site\Model;
 
@@ -37,9 +37,9 @@ class DaterangeModel extends UserschedModel
 		$db->setQuery('SELECT strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, * FROM events WHERE text LIKE '.$db->quote("%{$for}%").' ORDER BY t_start');
 		$evts = $db->loadAssocList();
 		foreach ($evts as $k=>$evt) {
-			//var_dump($evt);
+			//var_dump($evt);jexit();
 			if (strpos($evt['end_date'],'9999-')===0) {
-				$evts[$k]['t_end'] = $evt['t_start'] + $evt['event_length'];
+				$evts[$k]['t_end'] = $evt['t_start'] + $evt['duration'];
 			}
 		}
 		return $evts;
