@@ -2,7 +2,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.3.2
 */
 //'use strict';
 /*global scheduler*/
@@ -75,6 +75,12 @@ var USched = {
 		}
 		scheduler.exportToPDF({format:'full',orientation:'landscape',header:'<style>.dhx_expand_icon{display:none}</style>'});
 		document.querySelector('#usched_container .uschd-ham-menu').click();
+	},
+
+	edtEvt: (evtid,isrec) => {
+		scheduler.detachEvent(scheduler.uschedCalEdtEvt);
+		if (isrec) scheduler.showLightbox_rec(evtid);
+		else scheduler.showLightbox(evtid);
 	},
 
 	init: () => {
@@ -255,8 +261,15 @@ scheduler.attachEvent('onError', function(errorMessage){
     return true;
 });
 
-
-		scheduler.init('scheduler_here', new Date(), USched.mode);
+		let cald = new Date();
+		const eid = localStorage.getItem('uschedCalEdtEvt');
+		if (eid) {
+			const eidp = eid.split('|');
+			localStorage.clear('uschedCalEdtEvt');
+			cald = new Date(eidp[2]);
+			scheduler.uschedCalEdtEvt = scheduler.attachEvent('onLoadEnd', function() {USched.edtEvt(eidp[0],eidp[1])});
+		}
+		scheduler.init('scheduler_here', cald, USched.mode);
 
 
 

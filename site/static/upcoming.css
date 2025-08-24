@@ -18,7 +18,11 @@ li.ev_td_li {
 }
 li.ev_td_li .usch-alert {
 	color: red;
-	margin-left: 0.5rem;
+	margin-left: 0.4rem;
+}
+li.ev_td_li .usch-rept {
+	color: blue;
+	margin-left: 0.4rem;
 }
 div.userschedver {
 	color: #999;

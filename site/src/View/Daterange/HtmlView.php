@@ -3,13 +3,14 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.1
+* @since		1.3.2
 */
 namespace RJCreations\Component\Usersched\Site\View\Daterange;
 
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
 use RJCreations\Component\Usersched\Site\Helper\Events;
 use RJCreations\Component\Usersched\Site\Helper\HtmlUsersched;
 
@@ -21,6 +22,7 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 	protected $rEnd;
 	protected $canSearch = false;
 	protected $isSearch = false;
+	protected $oCalUrl = '';
 
 	function display ($tpl = null)
 	{
@@ -29,29 +31,12 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 		$m = $this->getModel();
 		if (!$m->hasData()) { parent::display('nope'); return; }
 
-		$this->document->addStyleSheet('components/com_usersched/static/upcoming.css');
+		$this->document->addStyleSheet('components/com_usersched/static/upcoming.css', ['version' => 'auto']);
 		$this->categories = $m->getUdTable('categories');
 
 		$caliObj = \UschedHelper::getInstanceObject($this->params->get('cal_menu'));
-//echo'<xmp>';var_dump($caliObj);echo'</xmp>';
-//echo'<xmp>';var_dump(\UschedHelper::getInstanceID(true));echo'</xmp>';
-		list($cal_type, $jID) = \UschedHelper::getInstanceID(true);
-		$jID = is_array($jID) ? $jID : explode(',',$jID);
-		switch (/*$cal_type*/$caliObj->type) {
-			case 0:
-				$this->canSearch = true;
-				break;
-			case 1:
-				if (array_intersect($this->user->groups, $jID)) {
-					$this->canSearch = true;
-				}
-				break;
-			case 2:
-				if ($this->user->authorise('core.edit')) {
-					$this->canSearch = true;
-				}
-				break;
-		}
+		$this->oCalUrl = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$caliObj->menuid, false);
+		$this->canSearch = $caliObj->canEdit();
 
 		if ($this->canSearch && $this->app->input->post->get('cevsterm', null, 'string')) {
 			$this->isSearch = true;
