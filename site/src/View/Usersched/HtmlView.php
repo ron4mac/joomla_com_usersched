@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.1
+* @since		1.3.2
 */
 namespace RJCreations\Component\Usersched\Site\View\Usersched;
 
@@ -58,8 +58,8 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 
 	'icons_edit' => ['icon_save', 'icon_cancel'],
 	'icons_select' => ['icon_details', 'icon_edit', 'icon_delete'],
-	'buttons_left' => ['dhx_save_btn', 'dhx_cancel_btn'],
-	'buttons_right' => ['dhx_delete_btn'],
+//@	'buttons_left' => ['dhx_save_btn', 'dhx_cancel_btn'],
+//@	'buttons_right' => ['dhx_delete_btn'],
 	'highlight_displayed_event' => true,
 	'displayed_event_color' => '#ffc5ab',
 	'displayed_event_text_color' => '#7e2727',
@@ -101,7 +101,7 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 		$this->categories = $m->getUdTable('categories'); $this->categories = $this->categories ?: [];	//if (!$this->categories) $this->categories = [];
 		$cfg = $m->getUdTable('options', 'name = "config"', false);
 		if ($cfg) {
-			$dhxver = $this->params->get('dhtmlx_version', '7.0');
+			$dhxver = $this->params->get('dhtmlx_version', '7.1');
 			if ((int)$dhxver > 6) $this->plugs['export_api'] = true;
 			$this->settings = unserialize($cfg['value']);
 			$this->applyCfg($this->settings);

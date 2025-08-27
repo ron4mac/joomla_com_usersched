@@ -4,7 +4,7 @@
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
 * @since		1.3.2
 */
-//'use strict';
+'use strict';
 /*global scheduler*/
 
 var USched = {
@@ -79,7 +79,7 @@ var USched = {
 
 	edtEvt: (evtid,isrec) => {
 		scheduler.detachEvent(scheduler.uschedCalEdtEvt);
-		if (isrec) scheduler.showLightbox_rec(evtid);
+		if (isrec && (scheduler.version>'7.1')) scheduler.showLightbox_rec(evtid);
 		else scheduler.showLightbox(evtid);
 	},
 
@@ -95,8 +95,7 @@ var USched = {
 //		}
 		plugs.container_autoresize = true;
 		plugs.pdf = true;
-		scheduler.plugins(plugs);	console.log(plugs);
-
+		scheduler.plugins(plugs);
 
 		// merge configuration
 		if (scheduler.cfg_cfg) {
@@ -341,13 +340,13 @@ scheduler.attachEvent('onError', function(errorMessage){
 		// inhibit time display in event bar - takes up too much room
 		scheduler.templates.event_bar_date = () => {return ''};
 
-		if (typeof scheduler.dhtmlXTooltip != 'undefined') {
-			// force the event tooltip to hide when the mouse leaves the calendar area
-			let dhxcaldatahere = document.getElementById('scheduler_here');
-			let dhxcaldatas = dhxcaldatahere.getElementsByClassName('dhx_cal_data');
-			let dhxcaldata = dhxcaldatas[0];
-			dhxcaldata.onmouseout = () => {scheduler.dhtmlXTooltip.hide()};
-		}
+	//	if (typeof scheduler.dhtmlXTooltip != 'undefined') {
+	//		// force the event tooltip to hide when the mouse leaves the calendar area
+	//		let dhxcaldatahere = document.getElementById('scheduler_here');
+	//		let dhxcaldatas = dhxcaldatahere.getElementsByClassName('dhx_cal_data');
+	//		let dhxcaldata = dhxcaldatas[0];
+	//		dhxcaldata.onmouseout = () => {scheduler.dhtmlXTooltip.hide()};
+	//	}
 	}
 };
 

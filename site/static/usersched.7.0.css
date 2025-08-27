@@ -163,6 +163,23 @@ div.dhx_custom_button_shide {
 	right: 8px;
 }
 
+.dhtmlXTooltip.tooltip {
+	width: fit-content;
+	/*display: inline-block;
+	background-color: cyan;
+	-moz-box-shadow:2px 2px 6px #888888;
+	-webkit-box-shadow:2px 2px 6px #888888;
+	-o-box-shadow:2px 2px 6px #888888;
+	box-shadow:2px 2px 6px #888888;
+	text-align: left;
+	max-width: 300px;
+	border-left: 1px solid #CCCCCC;
+	border-top: 1px solid #CCCCCC;
+	color: #005493;
+	opacity: 1;
+	z-index: 100;*/
+}
+
 
 /* give more side space to the calendar */
 @media (width <= 800px) {
