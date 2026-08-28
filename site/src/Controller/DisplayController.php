@@ -15,7 +15,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Session\Session;
 
-\JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched.php');
+\JLoader::register('UschedHelper', JPATH_ADMINISTRATOR.'/components/com_usersched/helpers/usched.php');
 
 define('RJC_DEV', (JDEBUG) && file_exists(JPATH_ROOT.'/rjcdev.php'));
 

@@ -1,23 +1,24 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.3.3
 */
-namespace RJCreations\Component\Usersched\Administrator\View;
+namespace RJCreations\Component\Usersched\Administrator\View\Calendars;
 
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use RJCreations\Component\Usersched\Administrator\View\UschedView;
 
-require_once JPATH_COMPONENT_ADMINISTRATOR.'/src/View/UserschedView.php';
 
 /**
  * View class for a list of group schedulers.
  */
-class CalendarsView extends UserschedView
+class HtmlView extends UschedView
 {
 	protected $items;
 	protected $pagination;
@@ -31,11 +32,11 @@ class CalendarsView extends UserschedView
 		$this->pagination = $this->get('Pagination');
 		$this->state = $this->get('State');	//var_dump($this->state);
 
-		// Check for errors.
-		if (count($errors = $this->get('Errors'))) {
-			JError::raiseError(500, implode("\n", $errors));
-			return false;
-		}
+	//	// Check for errors.
+	//	if (count($errors = $this->get('Errors'))) {
+	//		JError::raiseError(500, implode("\n", $errors));
+	//		return false;
+	//	}
 
 		$this->addToolbar();
 		parent::display($tpl);
@@ -44,23 +45,23 @@ class CalendarsView extends UserschedView
 	// Add the page title and toolbar.
 	protected function addToolbar ()
 	{
-		$canDo	= UserSchedHelper::getActions();
+		$canDo	= \UserSchedHelper::getActions();
 
-		JToolBarHelper::title(Text::_('COM_USERSCHED_MENU').' : '.Text::_('COM_USERSCHED_MANAGER_GSCHEDS'), 'calendar usersched');
+		ToolBarHelper::title(Text::_('COM_USERSCHED_MENU').' : '.Text::_('COM_USERSCHED_MANAGER_GSCHEDS'), 'calendar usersched');
 
-		JToolBarHelper::deleteList(Text::_('COM_USERSCHED_MANAGER_DELETEOK'));
-		//JToolBarHelper::trash('usersched.trash');
+		ToolBarHelper::deleteList(Text::_('COM_USERSCHED_MANAGER_DELETEOK'));
+		//ToolBarHelper::trash('usersched.trash');
 
 	//	if ($canDo->get('core.edit.state')) {
-	//		JToolBarHelper::custom('scheds.reset', 'refresh.png', 'refresh_f2.png', 'JUSERSCHED_RESET', false);
+	//		ToolBarHelper::custom('scheds.reset', 'refresh.png', 'refresh_f2.png', 'JUSERSCHED_RESET', false);
 	//	}
 
-		JToolBarHelper::divider();
-		if ($canDo->get('core.admin')) {
-			JToolBarHelper::preferences('com_usersched');
+		ToolBarHelper::divider();
+		if ($canDo->{'core.admin'}) {
+			ToolBarHelper::preferences('com_usersched');
 		}
-		JToolBarHelper::divider();
-		JToolBarHelper::help('group_schedulers', true);
+		ToolBarHelper::divider();
+		ToolBarHelper::help('group_schedulers', true);
 	}
 
 	protected function state ($vari, $set=false, $val='', $glb=false)

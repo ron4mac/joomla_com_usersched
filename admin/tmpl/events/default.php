@@ -3,6 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
 
@@ -10,7 +11,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 
 // Include the component HTML helpers.
-HTMLHelper::addIncludePath(JPATH_COMPONENT.'/helpers/html');
+HTMLHelper::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_usersched/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 

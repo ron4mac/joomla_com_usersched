@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
 
@@ -11,7 +11,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\Database\DatabaseDriver;
 
-require_once JPATH_COMPONENT.'/classes/rdatetime.php';
+require_once JPATH_SITE.'/components/com_usersched/classes/rdatetime.php';
 
 define('HOURSECS', 3600);
 define('DAYSECS', 86400);

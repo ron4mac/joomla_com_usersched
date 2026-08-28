@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.4.0
 */
 
 /*	codess
@@ -47,19 +47,19 @@ if (strpos($codes,'M') !== false) {
 //$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_expand.js';
 //$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_pdf.js';
 if (strpos($codes,'J') !== false) {
-	$jsfiles[] = 'static/rjc_ext.js';
-	$jsfiles[] = 'static/locale_alerts_'.$lcl.'.js';
+	$jsfiles[] = 'rjc_ext.js';
+	$jsfiles[] = 'locale_alerts_'.$lcl.'.js';
 }
-$jsfiles[] = 'static/usersched.js';
-$jsfiles[] = 'static/locale_lang_'.$lcl.'.js';
+$jsfiles[] = 'usersched.js';
+$jsfiles[] = 'locale_lang_'.$lcl.'.js';
 if (strpos($codes,'H') !== false) {
 	$needRO = true;
-	$jsfiles[] = 'static/holiday_ext.js';
+	$jsfiles[] = 'holiday_ext.js';
 }
 if (strpos($codes,'B') !== false) {
 	$needRO = true;
 	//$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_readonly.js';
-	$jsfiles[] = 'static/usrbday_ext.js';
+	$jsfiles[] = 'usrbday_ext.js';
 }
 if ($needRO) {
 //	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_readonly.js';
@@ -72,6 +72,7 @@ foreach ($jsfiles as $jsf) {
 		$totsize += strlen($jsf['s']) + 1;
 		$jss[] = $jsf['s'];
 	} else {
+		$jsf = '../../../media/com_usersched/js/'.$jsf;
 		$lastmod = max($lastmod, @filemtime($jsf));
 		$fsz = @filesize($jsf);
 		$totsize += ($fsz ?: 12) + strlen($jsf) + 6;
@@ -97,6 +98,7 @@ if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && stripslashes($_SERVER['HTTP_IF_NONE
 		if (is_array($jsf)) {
 			echo $jsf['s'];
 		} else {
+			$jsf = '../../../media/com_usersched/js/'.$jsf;
 			echo"/*{$jsf}*/\n";
 			if (!@readfile($jsf)) echo"/*MISSING*/\n";
 		}

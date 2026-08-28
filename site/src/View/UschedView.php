@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.1
+* @since		1.4.0
 */
 namespace RJCreations\Component\Usersched\Site\View;
 
@@ -12,13 +12,16 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\Application\Web\WebClient;
 use Joomla\CMS\Component\ComponentHelper;
+use RJCreations\Component\Usersched\Site\Helper\UserschedHelper;
 
-\JLoader::register('UserSchedHelper', JPATH_COMPONENT . '/helpers/usersched.php');
-\JLoader::register('JHtmlUsersched', JPATH_COMPONENT . '/helpers/html/usersched.php');
+//\JLoader::register('UserSchedHelper', JPATH_SITE . '/components/com_usersched/helpers/usersched.php');
+//\JLoader::register('JHtmlUsersched', JPATH_SITE . '/components/com_usersched/helpers/html/usersched.php');
 
 class UschedView extends \Joomla\CMS\MVC\View\HtmlView
 {
 	protected $app;							// provide app instance to views
+	public $document;						//  - and document
+	protected $wa;							//  - and webAssetManager
 	protected $cOpts;						// component options
 	protected $show_versions, $version;		// settings for version display
 	protected $user, $cal_type, $auth;		// user and calendar/authid info
@@ -33,9 +36,10 @@ class UschedView extends \Joomla\CMS\MVC\View\HtmlView
 		$wc = new WebClient();
 		$this->mobile = $wc->mobile;
 
-		if (!$this->document) $this->document = Factory::getDocument();
-		// get the menu id
 		$this->app = Factory::getApplication();
+		if (!$this->document) $this->document = Factory::getDocument();
+		$this->wa = $this->document->getWebAssetManager();
+		// get the menu id
 		$this->mnuItm = $this->app->input->getInt('Itemid');
 		// get the component options
 		$this->cOpts = ComponentHelper::getParams('com_usersched');
@@ -44,7 +48,7 @@ class UschedView extends \Joomla\CMS\MVC\View\HtmlView
 		$this->version = $this->cOpts->get('version', 'n.n.n');
 		// and get other generally needed info
 		$this->user = Factory::getUser();
-		$calid = \UserSchedHelper::uState('calid');	//var_dump($calid);
+		$calid = UserschedHelper::uState('calid');	//var_dump($calid);
 		list($this->cal_type, $this->auth) = explode(':',$calid?$calid:'-1:');
 		// get the calendar instance params
 		$this->params = $this->app->getParams();

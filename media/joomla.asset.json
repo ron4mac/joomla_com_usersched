@@ -1,0 +1,52 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "com_usersched",
+  "version": "1.4.0",
+  "description": "User Notes",
+  "license": "GPL-3.0+",
+  "assets": [
+    {
+      "name": "com_usersched.css.usersched7.1",
+      "type": "style",
+      "uri": "https://cdn.dhtmlx.com/scheduler/7.1/dhtmlxscheduler.css"
+    },
+    {
+      "name": "com_usersched.css.usersched.7.1",
+      "type": "style",
+      "uri": "com_usersched/usersched.7.1.css",
+      "dependencies": [
+        "com_usersched.css.usersched7.1"
+      ]
+    },
+    {
+      "name": "com_usersched.css.config",
+      "type": "style",
+      "uri": "com_usersched/config.css"
+    },
+    {
+      "name": "com_usersched.css.upcoming",
+      "type": "style",
+      "uri": "com_usersched/upcoming.css"
+    },
+
+
+    {
+      "name": "com_usersched.scheduler7.1",
+      "type": "script",
+      "uri": "https://cdn.dhtmlx.com/scheduler/7.1/dhtmlxscheduler.js"
+    },
+    {
+      "name": "com_usersched.usernotes",
+      "type": "script",
+      "uri": "com_usersched/usernotes.js",
+      "dependencies": [
+        "com_usersched.scheduler7.1"
+      ]
+    },
+    {
+      "name": "com_usersched.config",
+      "type": "script",
+      "uri": "com_usersched/config.js"
+    }
+  ]
+}

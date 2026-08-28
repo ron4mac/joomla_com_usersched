@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.2
+* @since		1.4.0
 */
 namespace RJCreations\Component\Usersched\Site\View\Daterange;
 
@@ -31,7 +31,8 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 		$m = $this->getModel();
 		if (!$m->hasData()) { parent::display('nope'); return; }
 
-		$this->document->addStyleSheet('components/com_usersched/static/upcoming.css', ['version' => 'auto']);
+		$this->wa->useStyle('com_usersched.css.upcoming');
+
 		$this->categories = $m->getUdTable('categories');
 
 		$caliObj = \UschedHelper::getInstanceObject($this->params->get('cal_menu'));

@@ -1,15 +1,16 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Session\Session;
 use RJCreations\Component\Usersched\Site\Helper\HtmlUsersched;
 
 $fact = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->mnuItm, false);
@@ -136,7 +137,7 @@ $fact = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->
 	<span><?=Text::_('COM_USERSCHED_CFG_CATNAME')?></span><span><?=Text::_('COM_USERSCHED_CFG_TXTCOLOR')?></span><span><?=Text::_('COM_USERSCHED_CFG_BGCOLOR')?></span><span><?=Text::_('COM_USERSCHED_CFG_DELETE')?></span><span></span>
 	<?php foreach ($this->categories as $cat) :?>
 		<input type="hidden" name="category_id[]" value="<?=$cat['id']?>" />
-		<span><input type="text" name="category_name[]" value="<?=$cat['name']?>" class="ecname" /></span>
+		<span><input type="text" name="category_name[]" value="<?=$cat['name']?>" class="ecname" oninput="USched.show_cat(this)" onchange="USched.show_cat(this)" /></span>
 		<span class="gcent"><?=HtmlUsersched::colorPicker($cat['id'],'tx',$cat['txcolor'])?></span>
 		<span class="gcent"><?=HtmlUsersched::colorPicker($cat['id'],'bg',$cat['bgcolor'])?></span>
 		<span class="gcent"><input type="checkbox" name="category_dele[]" value="<?=$cat['id']?>" class="ecdele" /></span>
@@ -164,7 +165,7 @@ $fact = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->
 <input class="btn btn-secondary" type="submit" name="cancl" value="<?=Text::_('JCANCEL')?>" onclick="this.form.task.value='canclcfg'" />
 <input type="hidden" name="cal_type" value="<?=$this->cal_type?>" />
 <input type="hidden" name="task" value="setcfg" />
-<input type="hidden" name="<?php echo JSession::getFormToken() ?>" value="1">
+<input type="hidden" name="<?php echo Session::getFormToken() ?>" value="1">
 </form>
 
 </cfg-tabs>

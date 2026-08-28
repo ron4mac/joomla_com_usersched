@@ -11,8 +11,6 @@
 	clear:both;
 }
 
-
-
 cfg-tabs {
 	display: block;
 	clear: both;
@@ -91,7 +89,7 @@ cfg-tabs .numer {
 	margin-top: .75rem;
 	width: 16px;
 	height: 16px;
-	background:#eee url(../static/plusbut.png) no-repeat;
+	background:#eee url(../img/plusbut.png) no-repeat;
 	cursor: pointer;
 }
 #alertee div {

@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
 
@@ -16,8 +16,18 @@ class com_userschedInstallerScript extends InstallerScript
 {
 	protected $minimumJoomla = '4.0';
 	protected $com_name = 'com_usersched';
-	protected $deleteFolders = ['components/com_usersched/pdf','components/com_usersched/scheduler'];
-	protected $deleteFiles = ['components/com_usersched/cron.php','components/com_usersched/cront.php','components/com_usersched/alertchk.php'];
+	protected $deleteFolders = [
+		'components/com_usersched/pdf',
+		'components/com_usersched/scheduler',
+		'components/com_usersched/static',
+		'components/com_usersched/helpers',
+		'components/com_usersched/skins'
+	];
+	protected $deleteFiles = [
+		'components/com_usersched/cron.php',
+		'components/com_usersched/cront.php',
+		'components/com_usersched/alertchk.php'
+	];
 
 	public function install ($parent) 
 	{
@@ -70,6 +80,9 @@ class com_userschedInstallerScript extends InstallerScript
 			$params['grp_recurrevt'] = false;
 			$params['show_versions'] = true;
 			$this->mySetParams($params);
+		}
+		if ($type === 'update') {
+			$this->removeFiles();
 		}
 	}
 

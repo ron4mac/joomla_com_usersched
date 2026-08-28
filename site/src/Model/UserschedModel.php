@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.4.0
 */
 namespace RJCreations\Component\Usersched\Site\Model;
 
@@ -12,8 +12,9 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 //use Joomla\Database\DatabaseDriver;
 use RJCreations\Library\RJUserCom;
+use RJCreations\Component\Usersched\Site\Helper\UserschedHelper;
 
-require_once JPATH_COMPONENT.'/helpers/usersched.php';
+//require_once JPATH_SITE.'/components/com_usersched/helpers/usersched.php';
 
 class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 {
@@ -250,7 +251,7 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 
 	public function importical ()
 	{
-		$calid = UserSchedHelper::uState('calid');
+		$calid = UserschedHelper::uState('calid');
 		$db = $this->getUserDatabase($calid);
 		if (!$db->dataExists()) return false;
 		$db->getDbase()->db_connect();	// cause it to open read/write
@@ -265,9 +266,9 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 
 	public function export2ical ()
 	{
-		require_once JPATH_COMPONENT . '/helpers/ical.php';
+		require_once JPATH_SITE . '/components/com_usersched/helpers/ical.php';
 		$exporter = new ICalExporter();
-		$calid = UserSchedHelper::uState('calid');
+		$calid = UserschedHelper::uState('calid');
 		$db = $this->getUserDatabase($calid);
 		if ($db->dataExists()) {
 			$evts = $db->getTable('events','',true);
@@ -354,7 +355,7 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 
 	private function xxbuildDB ($db, $cfg=false)
 	{
-		$sql = explode(';',file_get_contents(JPATH_COMPONENT_ADMINISTRATOR.'/models/sched.sql'));
+		$sql = explode(';',file_get_contents(JPATH_ADMINISTRATOR.'/components/com_usersched/models/sched.sql'));
 		$db = $this->getDatabase();
 		foreach ($sql as $x) {
 			$db->setQuery($x)->execute();
@@ -367,7 +368,7 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 
 	private function importIcalendar ($data, $db)
 	{
-		require_once JPATH_COMPONENT . '/helpers/ical.php';
+		require_once JPATH_SITE . '/components/com_usersched/helpers/ical.php';
 		if (!db || !data) return;
 		$exporter = new ICalExporter();
 		$events = $exporter->toHash($data);

@@ -1,24 +1,24 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.4.0
 */
-namespace RJCreations\Component\Usersched\Administrator\View;
+namespace RJCreations\Component\Usersched\Administrator\View\Skins;
 
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
-
-require_once JPATH_COMPONENT_ADMINISTRATOR.'/src/View/UserschedView.php';
+use RJCreations\Component\Usersched\Administrator\View\UschedView;
 
 /**
  * View class for a list of calendar skins.
  */
-class SkinsView extends UserschedView
+class HtmlView extends UschedView
 {
 	protected $items;
 	protected $pagination;
@@ -39,7 +39,7 @@ class SkinsView extends UserschedView
 		//			JError::raiseError(500, implode("\n", $errors));
 		//			return false;
 		//		}
-		if (isset($this->state->task)) {
+		if (false && isset($this->state->task)) {
 			$tpl = $this->state->task;
 			parent::display($tpl);
 			Factory::getApplication()->input->setVar('hidemainmenu', true);
@@ -56,13 +56,13 @@ class SkinsView extends UserschedView
 	 */
 	protected function addToolbar()
 	{
-		$canDo	= UserSchedHelper::getActions();
+		$canDo	= \UserSchedHelper::getActions();
 
 		ToolBarHelper::title(Text::_('COM_USERSCHED_MENU').' : '.Text::_('COM_USERSCHED_MANAGER_SKINS'), 'calendar usersched');
 
 		ToolBarHelper::deleteList(Text::_('COM_USERSCHED_SKINS_DELETEOK'),'skins.delete');
 	//	ToolBarHelper::custom('skins.delete','delete','delete', 'COM_USERSCHED_SKINS_DELETEOK',true,'modal-box');
-		$bar = JToolBar::getInstance('toolbar');
+		$bar = ToolBar::getInstance('toolbar');
 	//	$bar->appendButton('Confirm', Text::_('COM_USERSCHED_SKINS_DELETEOK'), 'delete', 'delete', 'skins.delete', true, 'modal-box');
 
 		ToolBarHelper::spacer();
@@ -89,7 +89,7 @@ class SkinsView extends UserschedView
 	//	}
 
 		ToolBarHelper::divider();
-		if ($canDo->get('core.admin')) {
+		if ($canDo->{'core.admin'}) {
 			ToolBarHelper::preferences('com_usersched');
 		}
 		ToolBarHelper::divider();

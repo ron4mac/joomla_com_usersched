@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
 
@@ -19,6 +19,7 @@ use Joomla\CMS\HTML\Registry;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
+use RJCreations\Component\Usersched\Administrator\Extension\UserschedComponent;
 
 return new class implements ServiceProviderInterface
 {
@@ -27,13 +28,14 @@ return new class implements ServiceProviderInterface
 		$container->registerServiceProvider(new MVCFactory('\\RJCreations\\Component\\Usersched'));
 		$container->registerServiceProvider(new ComponentDispatcherFactory('\\RJCreations\\Component\\Usersched'));
 		$container->set(
-			ComponentInterface::class,
-			function (Container $container)
-			{
-				$component = new MVCComponent($container->get(ComponentDispatcherFactoryInterface::class));
-				$component->setMVCFactory($container->get(MVCFactoryInterface::class));
-				return $component;
-			}
+				ComponentInterface::class,
+				function (Container $container)
+				{
+					$component = new UserschedComponent($container->get(ComponentDispatcherFactoryInterface::class));
+					$component->setMVCFactory($container->get(MVCFactoryInterface::class));
+					$component->setRegistry($container->get(Registry::class));
+					return $component;
+		}
 		);
 	}
 };

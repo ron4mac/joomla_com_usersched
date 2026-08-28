@@ -1,18 +1,20 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 
 // Include the component HTML helpers.
-HTMLHelper::addIncludePath(JPATH_COMPONENT.'/helpers/html');
+HTMLHelper::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_usersched/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
 //HTMLHelper::_('bootstrap.formvalidation');
 
@@ -33,7 +35,7 @@ $canDo = UserSchedHelper::getActions();
 $imgPath = Uri::base().'components/com_usersched/static/';
 $selIcon = 'selected.png';
 $unselIcon = 'unselected.png';
-$upform = '<form action="'.JRoute::_('index.php?option=com_usersched&view=skins').'" onsubmit="return document.formvalidator.isValid(this)" enctype="multipart/form-data" method="post" name="upldForm" id="upldForm">
+$upform = '<form action="'.Route::_('index.php?option=com_usersched&view=skins').'" onsubmit="return document.formvalidator.isValid(this)" enctype="multipart/form-data" method="post" name="upldForm" id="upldForm">
 		<div>
 			<p>'.Text::_('COM_USERSCHED_UPLOAD_MSG').'</p>
 			<label>'.Text::_('COM_USERSCHED_UPLOAD_LABEL').'</label><input type="text" name="skin_name" class="required validate-string" required />
@@ -49,7 +51,7 @@ $upform = '<form action="'.JRoute::_('index.php?option=com_usersched&view=skins'
 <style>
 	#modal-box .modal-body {padding:1.5em};
 </style>
-<?php echo HTMLHelper::_(
+<?php  echo HTMLHelper::_(
 	'bootstrap.renderModal',
 	'modal-box', // selector
 	array( // options
@@ -60,8 +62,8 @@ $upform = '<form action="'.JRoute::_('index.php?option=com_usersched&view=skins'
 	),
 		$upform
 ); ?>
-<form action="<?php echo JRoute::_('index.php?option=com_usersched&view=skins'); ?>" method="post" name="adminForm" id="adminForm">
-	<?php echo HTMLHelper::_('usched.sideBar', $this->sidebar); ?>
+<form action="<?php echo Route::_('index.php?option=com_usersched&view=skins'); ?>" method="post" name="adminForm" id="adminForm">
+	<?php //echo HTMLHelper::_('usched.sideBar', $this->sidebar); ?>
 	<div id="j-main-container" class="span10">
 
 		<table class="table table-striped adminlist">

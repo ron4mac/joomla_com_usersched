@@ -1,13 +1,15 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.2
+* @since		1.4.0
 */
 namespace RJCreations\Component\Usersched\Site\View\Usersched;
 
 defined('_JEXEC') or die;
+
+use RJCreations\Component\Usersched\Site\Helper\UserschedHelper;
 
 class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 {
@@ -94,7 +96,7 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 		// store the caltype and user in the session
 		if (!is_array($jID)) $jID = [$jID];
 		//$this->state('calid', true, $this->cal_type.':'.implode(',', $jID));
-		\UserSchedHelper::uState('calid', true, $this->params->get('cal_type').':'.implode(',', $jID));
+		UserschedHelper::uState('calid', true, $this->params->get('cal_type').':'.implode(',', $jID));
 
 		$m = $this->getModel();
 		$this->alertees = $m->getUdTable('alertees'); $this->alertees = $this->alertees ?: [];	//if (!$this->alertees) $this->alertees = [];

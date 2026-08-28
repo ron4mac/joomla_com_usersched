@@ -1,15 +1,14 @@
 <?php 
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.2
+* @since		1.4.0
 */
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-
 
 global $isDevel;
 $isDevel = true;
@@ -61,7 +60,7 @@ if ($this->params->get('show_page_heading', 1)) {
 	<tr>
 		<td class="ev_td_<?php echo $row['category'] ?>" data-calevt="<?=$row['event_id'].'|'.(bool)$row['rrule'].'|'.$row['start_date']?>">
 			<ul>
-				<li class="ev_td_li">
+				<li class="ev_td_li limity">
 					<?php
 						echo $this->formattedDateTime($row['t_start'], $row['t_end']);
 						echo $row['rrule'] ? '<i class="usch-rept fa fa-ellipsis-vertical"></i>' : '';
@@ -78,3 +77,10 @@ if ($this->params->get('show_page_heading', 1)) {
 <?php if ($this->show_versions) :?>
 <div id="versionbar" class="userschedver">UserSched <span id="userschedver"><?php echo $this->version ?></span></div>
 <?php endif; ?>
+<script>
+document.querySelectorAll('li.ev_td_li').forEach(item => {
+	item.addEventListener('pointerdown', (evt) => {
+		evt.currentTarget.classList.toggle('limity');
+	});
+});
+</script>

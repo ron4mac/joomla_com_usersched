@@ -6,7 +6,7 @@ var USched = function() {
 	const sampElm = (elm) => {
 		let selm = elm.parentElement;
 		let samp;
-		for (let i=0; i<3; i++) {
+		for (let i=0; i<4; i++) {
 			selm = selm.nextElementSibling;
 			if (selm.classList.contains('catsamp')) {
 				samp = selm;
@@ -26,9 +26,9 @@ var USched = function() {
 		},
 		addCategory: (elm) => {
 			let htm = '<input type="hidden" name="category_id[]" value="'+nxid+'" />\
-			<span><input type="text" name="category_name[]" value="New Category" class="ecname" /></span>\
-			<span class="gcent"><input type="color" name="category_txcolor[]" value="#000000" oninput="show_tx(this)" onchange="show_tx(this)" /></span>\
-			<span class="gcent"><input type="color" name="category_bgcolor[]" value="#FFFFFF" oninput="show_bg(this)" onchange="show_bg(this)" /></span>\
+			<span><input type="text" name="category_name[]" value="New Category" class="ecname" oninput="USched.show_cat(this)" onchange="USched.show_cat(this)" /></span>\
+			<span class="gcent"><input type="color" name="category_txcolor[]" value="#000000" oninput="USched.show_tx(this)" onchange="USched.show_tx(this)" /></span>\
+			<span class="gcent"><input type="color" name="category_bgcolor[]" value="#FFFFFF" oninput="USched.show_bg(this)" onchange="USched.show_bg(this)" /></span>\
 			<span></span>\
 			<span class="catsamp">New Category</span>';
 			elm.previousElementSibling.innerHTML += htm;
@@ -36,6 +36,7 @@ var USched = function() {
 		},
 		show_tx: (elm) => { sampElm(elm).style.color = elm.value; },
 		show_bg: (elm) => { sampElm(elm).style.backgroundColor = elm.value; },
+		show_cat: (elm) => { console.log(elm.value); sampElm(elm).innerText = elm.value; },
 		openTab: (evt,tabId) => {
 			let i, tabcontent, tablinks;
 			tabcontent = document.getElementsByClassName("tabcontent");

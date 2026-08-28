@@ -1,25 +1,26 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Router\Route;
+use RJCreations\Component\Usersched\Site\Helper\UserschedHelper;
 
-// determine needed CSS files and add them to head
+// determine needed CSS files and add them
 $is_terrace = true;
 $skin = $this->params->get('default_skin');
 if ($this->settings['settings_skin']) $skin = $this->settings['settings_skin'];
 $skinpath = 'components/com_usersched/' . ($skin ? "skins/{$skin}/" : 'static/');
 $skinopts = ['version' => 'auto'];
 
-$this->document->addStylesheet('https://cdn.dhtmlx.com/scheduler/7.1/dhtmlxscheduler.css');
-$this->document->addStylesheet('components/com_usersched/static/usersched.7.1.css', $skinopts);
+$this->wa->useStyle('com_usersched.css.usersched.7.1');
+
 if (is_file($skinpath.'skin.css')) {
 	$this->document->addStylesheet($skinpath.'skin.css', $skinopts);
 }
@@ -27,15 +28,18 @@ if (is_file($skinpath.'custom.css')) {
 	$this->document->addStylesheet($skinpath.'custom.css', $skinopts);
 }
 
+$catcss = $this->categoriesCSS();
+if ($catcss) $this->wa->addInlineStyle($catcss);
+
 // setup hamburger menuid
-$ham_menu_items = '<li><a href="#" onclick="USched.printView(event,this)"><img src="components/com_usersched/static/printer.png" title="Print Calendar"> Print2PDF</a></li>';
+$ham_menu_items = '<li><a href="#" onclick="USched.printView(event,this)"><img src="media/com_usersched/img/printer.png" title="Print Calendar"> Print2PDF</a></li>';
 if ($this->canCfg) {
 	$cfgurl = Route::_('index.php?option=com_usersched&task=doConfig&Itemid='.$this->mnuItm, false);
-	$ham_menu_items .= '<li><a href="'.$cfgurl.'"><img src="components/com_usersched/static/cfg16-3.png" title="Configure Calendar"> Config</a></li>';
+	$ham_menu_items .= '<li><a href="'.$cfgurl.'"><img src="media/com_usersched/img/cfg16-3.png" title="Configure Calendar"> Config</a></li>';
 }
 
 // get the calendar ID
-$calID = base64_encode(UserSchedHelper::uState('calid'));
+$calID = base64_encode(UserschedHelper::uState('calid'));
 
 // gather and inline needed javascript variables
 $script = '';
@@ -74,18 +78,28 @@ if ($this->settings['settings_bday']) $jscodes .= 'B';
 if ($this->canCfg) $jscodes .= 'A';
 
 if ($this->mobile) $jscodes .= 'M';
-$this->document->addScript('https://cdn.dhtmlx.com/scheduler/7.1/dhtmlxscheduler.js');
-$this->document->addScript('components/com_usersched/js.php?'.$jscodes, $skinopts);
 
-$this->document->addScriptDeclaration($script);
-$this->document->addStyleDeclaration($this->categoriesCSS());
+$this->wa->registerAndUseScript('com_usersched.combo', 'components/com_usersched/js.php?'.$jscodes, $skinopts, [], ['com_usersched.scheduler7.1']);
 
-$icns_left = -17;
-$icns_leftx = 20;
-$tabs_right = -42;
-$tabs_rightx = 64;
-$tabs_left = -47;
-$tabs_leftx = 61;
+
+//$this->document->addScriptDeclaration($script);
+$this->wa->addInlineScript($script);
+
+$tabs = json_encode($this->tabs);
+$plugs = json_encode($this->plugs);
+$djs = <<<JS
+USched.tabs = $tabs;
+USched.plugs = $plugs;
+document.addEventListener('DOMContentLoaded', function() {USched.init();});
+// hamburger menu
+const uschdHamMenu = document.querySelector('.uschd-ham-menu');
+const uschdOffMenu = document.querySelector('.uschd-off-menu');
+uschdHamMenu.addEventListener('click', () => {
+	uschdHamMenu.classList.toggle('active');
+	uschdOffMenu.classList.toggle('active');
+});
+JS;
+$this->wa->addInlineScript($djs, [], ['type' => 'module']);	// module executes last
 
 if ($this->params->get('show_page_heading', 1)) {
 	echo '<div class="page-header"><h3>'.$this->escape($this->params->get('page_heading')).'</h3></div>';
@@ -109,16 +123,3 @@ if ($this->params->get('show_page_heading', 1)) {
 	<!-- UserSched <?php echo $this->version ?> -->
 	<?php endif; ?>
 </div>
-<script type="text/javascript">
-	// set this here so it is last in the chain
-	USched.tabs = <?=json_encode($this->tabs)?>;
-	USched.plugs = <?=json_encode($this->plugs)?>;
-	document.addEventListener('DOMContentLoaded', function() {USched.init();});
-	// hamburger menu
-	const uschdHamMenu = document.querySelector('.uschd-ham-menu');
-	const uschdOffMenu = document.querySelector('.uschd-off-menu');
-	uschdHamMenu.addEventListener('click', () => {
-		uschdHamMenu.classList.toggle('active');
-		uschdOffMenu.classList.toggle('active');
-	});
-</script>

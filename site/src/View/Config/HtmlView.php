@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.1
+* @since		1.4.0
 */
 namespace RJCreations\Component\Usersched\Site\View\Config;
 
@@ -11,8 +11,9 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\Filesystem\Folder;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Filesystem\Folder;
+use RJCreations\Component\Usersched\Site\Helper\UserschedHelper;
 
 class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 {
@@ -115,8 +116,8 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 				echo'<xmp>';var_dump($this);echo'</xmp>';jexit();
 		}
 
-		$this->document->addStyleSheet('components/com_usersched/static/config.css');
-		$this->document->addScript('components/com_usersched/static/config.js');
+		$this->wa->useStyle('com_usersched.css.config')
+			->useScript('com_usersched.config');
 
 		//$langTag = Factory::getLanguage()->getTag();
 		$this->config['lang_tag'] = Factory::getLanguage()->getTag();
@@ -138,7 +139,7 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 			$this->alertees = [];
 			$this->categories = [];
 			$this->skinOptions = $this->getSkinOptions();
-			$this->config = \UserSchedHelper::$dfltConfig;
+			$this->config = UserschedHelper::$dfltConfig;
 			parent::display($start);
 		}
 	}
@@ -164,7 +165,7 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 	{
 		// Initialize variables.
 		$options = [];
-		$path = JPATH_COMPONENT_SITE . '/skins';
+		$path = JPATH_SITE.'/media/com_usersched/skins';
 
 		// Prepend some default options
 		$options[] = HTMLHelper::_('select.option', '', Text::_('JOPTION_USE_DEFAULT'));

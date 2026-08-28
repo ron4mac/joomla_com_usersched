@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.1
+* @since		1.4.0
 */
 namespace RJCreations\Component\Usersched\Site\Controller;
 
@@ -16,7 +16,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use RJCreations\Library\RJUserCom;
 use RJCreations\Component\Usersched\Site\Helper\AlertCheck;
 
-\JLoader::register('UschedHelper', JPATH_COMPONENT_ADMINISTRATOR.'/helpers/usched.php');
+\JLoader::register('UschedHelper', JPATH_ADMINISTRATOR.'/components/com_usersched/helpers/usched.php');
 //\JLoader::register('USchedAcheck', JPATH_COMPONENT.'/alertcheck.php');
 
 define('RJC_DEV', (JDEBUG) && file_exists(JPATH_ROOT.'/rjcdev.php'));

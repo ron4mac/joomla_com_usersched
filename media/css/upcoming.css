@@ -15,6 +15,7 @@ table.ev_table td {
 li.ev_td_li {
 	margin-right: 2rem;
 	line-height: 1.3rem;
+	touch-action: manipulation;
 }
 li.ev_td_li .usch-alert {
 	color: red;
@@ -23,6 +24,12 @@ li.ev_td_li .usch-alert {
 li.ev_td_li .usch-rept {
 	color: blue;
 	margin-left: 0.4rem;
+}
+li.limity {
+	max-height: 6rem;
+	overflow-y: hidden;
+	/* Applies a vertical fade-out mask at the bottom 20% */
+	mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
 }
 div.userschedver {
 	color: #999;

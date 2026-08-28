@@ -1,21 +1,26 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.4.0
 */
+namespace RJCreations\Component\Usersched\Administrator\Model;
+
 defined('_JEXEC') or die;
 
-jimport('joomla.filesystem.folder');
-jimport('joomla.application.component.modellist');
+use Joomla\CMS\Access\Access;
+use RJCreations\Library\RJUserCom;
 
-class UserschedModelCalendars extends JModelList
+\JLoader::register('UserSchedHelper', JPATH_ADMINISTRATOR.'/components/com_usersched/helpers/usersched.php');
+
+class CalendarsModel extends \Joomla\CMS\MVC\Model\ListModel
 {
 
 	protected $_total = -1;
 
 	public function getItems ()
-	{	//return array();
+	{
 		// Get a storage key.
 		$store = $this->getStoreId('list');
 
@@ -24,16 +29,14 @@ class UserschedModelCalendars extends JModelList
 			return $this->cache[$store];
 		}
 
-//		jimport('rjuserdata.userdata');
-		$scheds = array();
-//		$folds =  UschedHelper::getDbPaths('g','sched');	//RJUserDbs::getDbPaths('g','sched');
-		$folds =  RJUserCom::getDbPaths('g','sched');	//RJUserDbs::getDbPaths('g','sched');
-		foreach ($folds as $fold=>$info) {
+		$scheds = [];
+		$folds =  RJUserCom::getDbPaths('g','usersched');	//RJUserDbs::getDbPaths('g','sched');
+		foreach ($folds as $fold=>$mgis) foreach ($mgis as $mgi) {
 			$gid = (int)substr($fold,1);
-			$group = UserSchedHelper::getGroupTitle($gid);
+			$group = \UserSchedHelper::getGroupTitle($gid);
 			if (!$group) $group = "&lt; group {$gid} &gt;";
-			$members = JAccess::getUsersByGroup($gid);
-			$scheds[] = array('name'=>$group,'members'=>count($members),'gid'=>$gid);
+			$members = Access::getUsersByGroup($gid);
+			$scheds[] = ['name'=>$group,'members'=>count($members),'guid'=>'_'.$gid,'mnun'=>$mgi['mnun']];
 		}
 		$this->_total = count($scheds);
 

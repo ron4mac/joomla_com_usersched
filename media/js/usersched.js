@@ -2,7 +2,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.2
+* @since		1.3.3
 */
 'use strict';
 /*global scheduler*/
@@ -293,7 +293,7 @@ scheduler.attachEvent('onError', function(errorMessage){
 		scheduler.locale.labels.section_category = 'Category';
 		// set the height of the description
 //		scheduler.config.lightbox.sections[0].height = 60;
-		scheduler.config.lightbox.sections[2].year_range = [1940,2026];
+		scheduler.config.lightbox.sections[2].year_range = [1940,2040];
 
 		// get the repeat section
 		let rs = scheduler.config.lightbox.sections[1];

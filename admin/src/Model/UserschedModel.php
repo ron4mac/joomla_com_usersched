@@ -1,18 +1,19 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.4.0
 */
 namespace RJCreations\Component\Usersched\Administrator\Model;
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\User\User;
 use RJCreations\Library\RJUserCom;
 
-\jimport('joomla.filesystem.folder');
-\jimport('joomla.application.component.modellist');
+//\jimport('joomla.filesystem.folder');
+//\jimport('joomla.application.component.modellist');
 
 class UserschedModel extends \Joomla\CMS\MVC\Model\ListModel
 {
@@ -26,7 +27,7 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\ListModel
 	}
 
 	public function getItems ()
-	{	//return [];
+	{
 		// Get a storage key.
 		$store = $this->getStoreId('list');
 
@@ -35,14 +36,12 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\ListModel
 			return $this->cache[$store];
 		}
 
-//		jimport('rjuserdata.userdata');
 		$scheds = [];
-//		$folds = UschedHelper::getDbPaths('u','sched');
-		$folds =  RJUserCom::getDbPaths('u','sched');
-		foreach ($folds as $fold=>$info) {
+		$folds =  RJUserCom::getDbPaths('u','usersched');
+		foreach ($folds as $fold=>$mgis) foreach ($mgis as $mgi)  {
 			$userid = (int)substr($fold,1);
-			$user = JUser::getInstance($userid);
-			$scheds[] = ['name'=>$user->name,'uname'=>$user->username,'uid'=>$userid];
+			$user = User::getInstance($userid);
+			$scheds[] = ['name'=>$user->name,'uname'=>$user->username,'guid'=>'@'.$userid,'mnun'=>$mgi['mnun']];
 		}
 		$this->_total = count($scheds);
 
@@ -55,7 +54,7 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\ListModel
 		foreach ($scheds as $key => $row) {
 			$name[$key]  = $row['name'];
 			$uname[$key] = $row['uname'];
-			$uid[$key] = $row['uid'];
+			$uid[$key] = $row['guid'];
 		}
 		
 		if ($this->_total)

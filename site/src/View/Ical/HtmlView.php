@@ -1,15 +1,15 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.1
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 
-require_once JPATH_COMPONENT.'/helpers/ical.php';
+require_once JPATH_SITE.'/components/com_usersched/helpers/ical.php';
 
 class UserschedViewIcal extends \RJCreations\Component\Usersched\Site\View\UschedView
 {

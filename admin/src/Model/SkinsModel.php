@@ -1,15 +1,21 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.4.0
 */
+namespace RJCreations\Component\Usersched\Administrator\Model;
+
 defined('_JEXEC') or die;
 
-jimport('joomla.filesystem.folder');
-jimport('joomla.application.component.modellist');
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\Component\ComponentHelper;
 
-class UserschedModelSkins extends JModelList
+//jimport('joomla.filesystem.folder');
+//jimport('joomla.application.component.modellist');
+
+class SkinsModel extends \Joomla\CMS\MVC\Model\ListModel
 {
 
 	protected $_total = -1;
@@ -23,9 +29,9 @@ class UserschedModelSkins extends JModelList
 
 	public function deleteSkins ($skins)
 	{
-		$spath = JPATH_COMPONENT_SITE . '/skins/';
+		$spath = JPATH_SITE . '/media/com_usersched/skins/';
 		foreach ($skins as $skin) {
-			JFolder::delete($spath.$skin);
+			Folder::delete($spath.$skin);
 		}
 	}
 
@@ -33,7 +39,7 @@ class UserschedModelSkins extends JModelList
 	{
 		$zip = new ZipArchive();
 		if ($zip->open($fref) !== true) return 1;
-		$spath = JPATH_COMPONENT_SITE . '/skins/'.$skinName.'/';
+		$spath = JPATH_SITE . '/media/com_usersched/skins/'.$skinName.'/';
 		for($i = 0; $i < $zip->numFiles; $i++) {
 			$entry = $zip->getNameIndex($i);
 			if ($zip->extractTo($spath, $entry) !== true) return 2;
@@ -52,15 +58,15 @@ class UserschedModelSkins extends JModelList
 			return $this->cache[$store];
 		}
 
-		$params = JComponentHelper::getParams('com_usersched');
+		$params = ComponentHelper::getParams('com_usersched');
 		$udsk = $params->get('default_skin');
 		$gdsk = $params->get('group_default_skin');
 		$sdsk = $params->get('site_default_skin');
 
 		$skins = array(array('name'=>'','isUdef'=>!$udsk,'isGdef'=>!$gdsk,'isSdef'=>!$sdsk));
-		$spath = JPATH_COMPONENT_SITE . '/skins/';
+		$spath = JPATH_SITE . '/media/com_usersched/skins/';
 		if (!file_exists($spath)) return $skins;
-		$folds = JFolder::folders($spath);
+		$folds = Folder::folders($spath);
 		foreach ($folds as $fold) {
 			$skins[] = array(
 					'name'=>$fold,
