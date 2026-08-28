@@ -8,8 +8,10 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Log\Log;
+use Joomla\Database\DatabaseDriver;
+use Joomla\CMS\Installer\InstallerScript;
+
 use RJCreations\Library\RJUserCom;
 
 class com_userschedInstallerScript extends InstallerScript
@@ -48,7 +50,7 @@ class com_userschedInstallerScript extends InstallerScript
 		if (parent::preflight($type, $parent) === false) return false;
 
 		// ensure that SQLite is active in joomla
-		$dbs = JDatabaseDriver::getConnectors();
+		$dbs = DatabaseDriver::getConnectors();
 		if (!in_array('sqlite', $dbs) && !in_array('Sqlite', $dbs)) {
 			Log::add('Joomla support for SQLite(3) is required for this component.', Log::WARNING, 'jerror');
 			return false;
