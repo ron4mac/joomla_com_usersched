@@ -1,4 +1,4 @@
-PRAGMA user_version=1
+PRAGMA user_version=1;
 BEGIN TRANSACTION;
 CREATE TABLE `events` (
 	`event_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Http\HttpFactory;
-use Joomla\CMS\Filesystem\Folder;
+use Joomla\Filesystem\Folder;
 use Joomla\CMS\Component\ComponentHelper;
 use RJCreations\Library\RJUserCom;
 use RJCreations\Component\Usersched\Site\Helper\AlertCheck;

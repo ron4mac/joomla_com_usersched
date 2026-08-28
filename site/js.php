@@ -64,6 +64,8 @@ if (strpos($codes,'B') !== false) {
 if ($needRO) {
 //	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_readonly.js';
 }
+chdir(basename(getcwd())=='com_usersched' ? '../../' : '../../../');
+//file_put_contents('HEREIAM.txt',getcwd().print_r([$_SERVER,$_ENV],true));
 $lastmod = 0;
 $totsize = 0;
 $jss = [];
@@ -72,7 +74,7 @@ foreach ($jsfiles as $jsf) {
 		$totsize += strlen($jsf['s']) + 1;
 		$jss[] = $jsf['s'];
 	} else {
-		$jsf = '../../../media/com_usersched/js/'.$jsf;
+		$jsf = 'media/com_usersched/js/'.$jsf;
 		$lastmod = max($lastmod, @filemtime($jsf));
 		$fsz = @filesize($jsf);
 		$totsize += ($fsz ?: 12) + strlen($jsf) + 6;
@@ -98,9 +100,9 @@ if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && stripslashes($_SERVER['HTTP_IF_NONE
 		if (is_array($jsf)) {
 			echo $jsf['s'];
 		} else {
-			$jsf = '../../../media/com_usersched/js/'.$jsf;
+			$jsf = 'media/com_usersched/js/'.$jsf;
 			echo"/*{$jsf}*/\n";
-			if (!@readfile($jsf)) echo"/*MISSING*/\n";
+			if (!@readfile($jsf)) echo "/*MISSING*/\n";
 		}
 		echo"\n";
 	}
