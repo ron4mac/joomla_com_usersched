@@ -11,12 +11,13 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 //use Joomla\Database\DatabaseDriver;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use RJCreations\Library\RJUserCom;
 use RJCreations\Component\Usersched\Site\Helper\UserschedHelper;
 
 //require_once JPATH_SITE.'/components/com_usersched/helpers/usersched.php';
 
-class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
+class UserschedModel extends BaseDatabaseModel
 {
 	protected $dbinit = false;
 
@@ -89,7 +90,7 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 			$this->dbinit = true;
 			@mkdir($udbPath, 0777, true);
 		}
-		
+
 //		if (class_exists('DatabaseDriver')) {
 //			$db = DatabaseDriver::getInstance(['driver'=>'sqlite','database'=>$udbPath.$dbFile]);
 //		} else {
@@ -115,10 +116,8 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 		$db->setQuery('SELECT '.$values.' FROM ' . $table . ($where ? (' WHERE '.$where) : ''));
 		if ($all) {
 			return $db->loadAssocList();
-		} else {
-			return $db->loadAssoc();
 		}
-		return null;
+		return $db->loadAssoc();
 	}
 
 	public function getDefaultConfig ()
@@ -131,7 +130,7 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 		return $this->default_cfg;
 	}
 
-	public function saveConfig ($data)
+	public function saveConfig ($data): void
 	{	//echo'<xmp>';var_dump($data);echo'</xmp>';jexit();
 		$blank = [
 			'settings_width' => '',
@@ -264,7 +263,7 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 		return true;
 	}
 
-	public function export2ical ()
+	public function export2ical (): void
 	{
 		require_once JPATH_SITE . '/components/com_usersched/helpers/ical.php';
 		$exporter = new ICalExporter();
@@ -279,7 +278,7 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 		}
 	}
 
-	private function manageAlertees ($data, $db)
+	private function manageAlertees ($data, $db): void
 	{
 		// delete/update/add alertees
 		$aids = $data->get('alertee_id',null,'array');
@@ -316,7 +315,7 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 		}
 	}
 
-	private function manageCategories ($data, $db)
+	private function manageCategories ($data, $db): void
 	{
 		// delete/update/add categories
 		$cids = $data->get('category_id',null,'array');
@@ -353,23 +352,10 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 		}
 	}
 
-	private function xxbuildDB ($db, $cfg=false)
-	{
-		$sql = explode(';',file_get_contents(JPATH_ADMINISTRATOR.'/components/com_usersched/models/sched.sql'));
-		$db = $this->getDatabase();
-		foreach ($sql as $x) {
-			$db->setQuery($x)->execute();
-		}
-		if ($cfg) {
-			$cfg = $db->quote($cfg);
-			$db->setQuery('INSERT INTO options (`name`,`value`) VALUES ("config",'.$cfg.')')->execute();
-		}
-	}
-
-	private function importIcalendar ($data, $db)
+	private function importIcalendar (string|bool $data, $db): void
 	{
 		require_once JPATH_SITE . '/components/com_usersched/helpers/ical.php';
-		if (!db || !data) return;
+		if (!$db || !$data) return;
 		$exporter = new ICalExporter();
 		$events = $exporter->toHash($data);
 		//echo'<pre>';var_dump($events);echo'</pre>';jexit();
@@ -379,7 +365,7 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 		}
 	}
 
-	private function addEvent ($evt, $db)
+	private function addEvent (array $evt, $db): void
 	{
 		//echo'<pre>';var_dump($evt);echo'</pre>';return;
 		foreach ($evt as $k=>$v) {
@@ -393,7 +379,7 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 					break;
 			}
 		}
-		if (!isset($evt['user'])) $evt['user'] = Factory::getUser()->id;
+		$evt['user'] ??= Factory::getUser()->id;
 		$q = $db->_insert('events', array_keys($evt), array_values($evt));
 		//echo'<pre>';var_dump($q);echo'</pre>';
 		$db->execute($q);

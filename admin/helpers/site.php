@@ -1,10 +1,13 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Object\CMSObject;
 
 /**
  * Mock JSite class used to fool the frontend search plugins because they route the results.
@@ -12,22 +15,21 @@ defined('_JEXEC') or die;
  * @package		Joomla.Administrator
  * @subpackage	com_usersched
  */
-class JSite extends JObject
+class JSite extends CMSObject
 {
 	/**
 	 * False method to fool the frontend search plugins
 	 */
-	function getMenu()
+	public function getMenu ()
 	{
-		$result = new JSite;
-		return $result;
+		return new JSite();
 	}
 
 	/**
 	 * False method to fool the frontend search plugins
 	 */
-	function getItems()
+	public function getItems ()
 	{
-		return array();
+		return [];
 	}
 }

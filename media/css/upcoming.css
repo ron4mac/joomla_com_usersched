@@ -26,10 +26,10 @@ li.ev_td_li .usch-rept {
 	margin-left: 0.4rem;
 }
 li.limity {
-	max-height: 6rem;
+	max-height: 5.5rem;
 	overflow-y: hidden;
 	/* Applies a vertical fade-out mask at the bottom 20% */
-	mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+	mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
 }
 div.userschedver {
 	color: #999;

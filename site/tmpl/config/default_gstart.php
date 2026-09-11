@@ -5,9 +5,11 @@
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
 * @since		1.4.0
 */
+/** @var HtmlView $this */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Language\Text;
+use RJCreations\Component\Usersched\Site\View\Config\HtmlView;
 use RJCreations\Component\Usersched\Site\Helper\UserschedHelper;
 
 $gtitle = UserschedHelper::groupTitle($this->grpId);

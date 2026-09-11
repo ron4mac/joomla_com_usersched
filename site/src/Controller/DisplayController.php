@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.4.0
 */
 namespace RJCreations\Component\Usersched\Site\Controller;
 
@@ -14,12 +14,13 @@ use Joomla\CMS\Log\Log;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Session\Session;
+use Joomla\CMS\MVC\Controller\BaseController;
 
 \JLoader::register('UschedHelper', JPATH_ADMINISTRATOR.'/components/com_usersched/helpers/usched.php');
 
 define('RJC_DEV', (JDEBUG) && file_exists(JPATH_ROOT.'/rjcdev.php'));
 
-class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
+class DisplayController extends BaseController
 {
 	protected $default_view = 'usersched';
 	protected $instanceObj;
@@ -27,7 +28,7 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 	protected $userid = 0;
 	protected $mnuItm = 0;
 
-	function __construct ($default=[], $factory = null, $app = null, $input = null)
+	public function __construct ($default=[], $factory = null, $app = null, $input = null)
 	{
 		parent::__construct($default, $factory, $app, $input);
 		$this->mnuItm = $input->getInt('Itemid', 0);
@@ -44,16 +45,14 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 	public function display ($cachable = false, $urlparams = false)
 	{
 		// need any alternate layout because 'getView()' will lose it otherwise
-		$viewLayout = $this->input->get('layout', 'default', 'string');
 		$inv = $this->input->get('view','none');
 //		echo \UschedHelper::userDataPath();jexit();
 		if ($inv == 'usersched' && $this->userid && !file_exists(\UschedHelper::userDataPath().'/usersched.db3')) {
 			$this->input->set('view', 'config');
-			$iview = $this->getView('config','html','site');	//,null,['layout'=>$viewLayout]);
+			$iview = $this->getView('config','html','site');
 			$iview->instObj = $this->instanceObj;
 		}
-//		$iview = $this->getView($inv,$this->input->get('dev',0,'integer')?'dev':'html','site');	//,'',['layout'=>$viewLayout]);
-		$iview = $this->getView($inv,'html','site');	//,'',['layout'=>$viewLayout]);
+		$iview = $this->getView($inv,'html','site');
 		$iview->instObj = $this->instanceObj;
 
 		if ($this->input->get('dev',0,'integer')) {
@@ -64,7 +63,7 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 		return $this;
 	}
 
-	public function doConfig ()
+	public function doConfig (): void
 	{
 //		$calid = $this->input->getBase64('calid');
 		$m = $this->getModel('usersched');
@@ -75,7 +74,7 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 		$view->display();
 	}
 
-	public function setcfg ()
+	public function setcfg (): void
 	{
 		Session::checkToken();
 		$m = $this->getModel('usersched');
@@ -83,7 +82,7 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 		$this->setRedirect(Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->mnuItm, false), Text::_('COM_USERSCHED_CFG_SAVED'));
 	}
 
-	public function printView ()
+	public function printView (): void
 	{
 		$this->input->set('tmpl','component');
 		$view = $this->getView('print', 'html');
@@ -92,7 +91,7 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 		$view->display();
 	}
 
-	public function impical ()
+	public function impical (): void
 	{
 		Session::checkToken();
 		$m = &$this->getModel();
@@ -108,7 +107,7 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 		$this->setRedirect(Route::_('index.php?option=com_usersched&view=config&Itemid='.$this->mnuItm, false));
 	}
 
-	public function exp2ical ()
+	public function exp2ical (): void
 	{
 		Session::checkToken();
 		$m = $this->getModel();
@@ -118,7 +117,7 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 
 /*	ajax call from client scheduler js (setup in view default) */
 
-	public function calXML ()
+	public function calXML (): void
 	{
 		require_once 'scheduler/codebase/connector/scheduler_connector.php';
 		require_once 'scheduler/codebase/connector/db_sqlite3.php';
@@ -134,15 +133,15 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 
 		$this->scheduler = new schedulerConnector($res, 'SQLite3');
 		if (RJC_DEV) $this->scheduler->enable_log(JPATH_SITE.'/tmp/userschedconnlog.txt');
-		$this->scheduler->event->attach('beforeProcessing', [$this,'delete_related']);
-		$this->scheduler->event->attach('afterProcessing', [$this,'insert_related']);
-		$this->scheduler->event->attach('beforeProcessing', [$this,'set_event_user']);
-		$this->scheduler->event->attach('afterProcessing', [$this,'after_set_event_user']);
+		$this->scheduler->event->attach('beforeProcessing', $this->delete_related(...));
+		$this->scheduler->event->attach('afterProcessing', $this->insert_related(...));
+		$this->scheduler->event->attach('beforeProcessing', $this->set_event_user(...));
+		$this->scheduler->event->attach('afterProcessing', $this->after_set_event_user(...));
 		$this->scheduler->render_table('events','event_id','start_date,end_date,text,category,rec_type,event_pid,event_length,user,alert_lead,alert_user,alert_meth');
 	}
 
 /*	below are callbacks for the scheduler connector */
-	public function delete_related ($action)
+	public function delete_related ($action): void
 	{
 		$status = $action->get_status();
 		$type =$action->get_value('rec_type');
@@ -157,7 +156,7 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 		}
 	}
 
-	public function insert_related ($action)
+	public function insert_related ($action): void
 	{
 		$status = $action->get_status();
 		$type = $action->get_value('rec_type');
@@ -166,7 +165,7 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 			$action->set_status('deleted');
 	}
 
-	public function set_event_user ($action)
+	public function set_event_user ($action): void
 	{
 		//if ($this->settings['templates_username'] == 'true') $action->remove_field('1');
 		$status = $action->get_status();
@@ -188,7 +187,7 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 		}
 	}
 
-	public function after_set_event_user ($action)
+	public function after_set_event_user ($action): void
 	{
 		$action->set_response_attribute('user', $this->userid);
 	}

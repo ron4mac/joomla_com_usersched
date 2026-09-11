@@ -3,7 +3,7 @@
 <extension type="component" method="upgrade">
 	<name>com_usersched</name>
 	<author>Ron Crans</author>
-	<creationDate>August 2026</creationDate>
+	<creationDate>September 2026</creationDate>
 	<copyright>(C) 2015-2026 RJCreations. All rights reserved</copyright>
 	<license>GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)</license>
 	<authorEmail>ron@rjconline.net</authorEmail>
@@ -14,7 +14,6 @@
 	<namespace path="src">RJCreations\Component\Usersched</namespace>
 	<scriptfile>script.php</scriptfile>
 	<files folder="site">
-		<filename>alertcheck.php</filename>
 		<filename>js.php</filename>
 		<folder>classes</folder>
 		<folder>forms</folder>
@@ -25,6 +24,7 @@
 	</files>
 	<media destination="com_usersched" folder="media">
 		<filename>joomla.asset.json</filename>
+		<filename>sms.json</filename>
 		<folder>css</folder>
 		<folder>img</folder>
 		<folder>js</folder>

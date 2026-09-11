@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.3
+* @since		1.4.0
 */
 namespace RJCreations\Component\Usersched\Administrator\View\Calendars;
 
@@ -26,14 +26,16 @@ class HtmlView extends UschedView
 	protected $relm = 'calendars';
 
 	// Display the view
-	public function display ($tpl = null)
+	public function display ($tpl = null): void
 	{
-		$this->items = $this->get('Items');
-		$this->pagination = $this->get('Pagination');
-		$this->state = $this->get('State');	//var_dump($this->state);
+		$m = $this->getModel();
+
+		$this->items		= $m->getItems();
+		$this->pagination	= $m->getPagination();
+		$this->state		= $m->getState();	//var_dump($this->state);
 
 	//	// Check for errors.
-	//	if (count($errors = $this->get('Errors'))) {
+	//	if (count($errors = $m->getErrors()))) {
 	//		JError::raiseError(500, implode("\n", $errors));
 	//		return false;
 	//	}

@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.3
+* @since		1.4.0
 */
 namespace RJCreations\Component\Usersched\Administrator\View\Usersched;
 
@@ -12,12 +12,13 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use RJCreations\Component\Usersched\Administrator\View\UschedView;
 
 /**
  * View class for a list of user schedules.
  */
-class HtmlView extends UschedView
+class HtmlView extends BaseHtmlView
 {
 	protected $items;
 	protected $pagination;
@@ -27,14 +28,16 @@ class HtmlView extends UschedView
 	/**
 	 * Display the view
 	 */
-	public function display($tpl = null)
+	public function display ($tpl = null): void
 	{
-		$this->items		= $this->get('Items');
-		$this->pagination	= $this->get('Pagination');
-		$this->state		= $this->get('State');	//var_dump($this->state);
+		$m = $this->getModel();
+
+		$this->items		= $m->getItems();
+		$this->pagination	= $m->getPagination();
+		$this->state		= $m->getState();	//var_dump($this->state);
 
 		// Check for errors.
-		//		if (count($errors = $this->get('Errors'))) {
+		//		if (count($errors = $m->getErrors())) {
 		//			JError::raiseError(500, implode("\n", $errors));
 		//			return false;
 		//		}
@@ -48,7 +51,7 @@ class HtmlView extends UschedView
 	 *
 	 * @since	1.6
 	 */
-	protected function addToolbar()
+	protected function addToolbar ()
 	{
 		$canDo = \UserSchedHelper::getActions();
 

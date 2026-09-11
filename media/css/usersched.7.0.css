@@ -1,14 +1,15 @@
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.2.2
+* @since		1.4.0
 */
 
 /* a container for the usersched instance */
 #usched_container {
 	position: relative;
 	overflow: auto;
+	padding-top: 1px;
 }
 /* raise above everything else for expand purposes */
 div.dhx_cal_container {

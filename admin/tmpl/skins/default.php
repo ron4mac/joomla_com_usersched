@@ -5,6 +5,7 @@
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
 * @since		1.4.0
 */
+/** @var \RJCreations\Component\Usersched\Administrator\View\Skins\HtmlView $this */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
@@ -13,8 +14,6 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 
-// Include the component HTML helpers.
-HTMLHelper::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_usersched/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
 //HTMLHelper::_('bootstrap.formvalidation');
 
@@ -54,12 +53,12 @@ $upform = '<form action="'.Route::_('index.php?option=com_usersched&view=skins')
 <?php  echo HTMLHelper::_(
 	'bootstrap.renderModal',
 	'modal-box', // selector
-	array( // options
+	[ // options
 		'modal-dialog-scrollable' => true,
 		'title'  => 'Test Title',
 //		'footer' => '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 //					<button type="button" class="btn btn-primary" id="modal-save">Send</button>',
-	),
+	],
 		$upform
 ); ?>
 <form action="<?php echo Route::_('index.php?option=com_usersched&view=skins'); ?>" method="post" name="adminForm" id="adminForm">
@@ -105,7 +104,7 @@ $upform = '<form action="'.Route::_('index.php?option=com_usersched&view=skins')
 						<?php echo HTMLHelper::_('grid.id', $i, $item['name']); ?>
 					</td>
 					<td>
-						<a href="javascript:void(0);" onclick="return previewSkin('cb<?php echo $i; ?>')" title="<?php echo Text::_('COM_USERSCHED_PREVIEW_SKIN'); ?>"><?php echo $item['name']?$item['name']:'-standard-'; ?></a>
+						<a href="javascript:void(0);" onclick="return previewSkin('cb<?php echo $i; ?>')" title="<?php echo Text::_('COM_USERSCHED_PREVIEW_SKIN'); ?>"><?php echo $item['name'] ?: '-standard-'; ?></a>
 					</td>
 					<td class="center">
 						<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i; ?>','skins.makeDfltU')"><img src="<?php echo $imgPath.($item['isUdef']?$selIcon:$unselIcon)?>" /></a>

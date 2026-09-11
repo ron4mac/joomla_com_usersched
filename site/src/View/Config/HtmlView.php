@@ -13,10 +13,22 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\Filesystem\Folder;
 use Joomla\CMS\HTML\HTMLHelper;
+use RJCreations\Component\Usersched\Site\View\UschedView;
 use RJCreations\Component\Usersched\Site\Helper\UserschedHelper;
 
-class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
+class HtmlView extends UschedView
 {
+	public $canCfg;
+	public $canSkin;
+	public $canAlert;
+	public $instObj;
+	public $grpId;
+	public $alertees;
+	public $categories;
+	public $settings;
+	public $cfgcfg;
+	public $skinOptions;
+
 	protected $config = [
 	'default_date' => '%j %M %Y',
 	'month_date' => '%F %Y',
@@ -72,7 +84,7 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 	'lang_tag' => 'en-GB'
 	];
 
-	function display ($tpl=null)
+	public function display ($tpl=null): void
 	{
 		$authids = (strpos($this->auth,',')) ? explode(',', $this->auth) : $this->auth;
 		$this->canCfg = false;

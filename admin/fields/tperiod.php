@@ -1,46 +1,45 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormField;
 
 Factory::getDocument()->addScript('components/com_usersched/fields/tperiod.js');
 
-class JFormFieldTPeriod extends Joomla\CMS\Form\FormField
+class JFormFieldTPeriod extends FormField
 {
 	protected $type = 'TPeriod';
 
 	protected function getInput()
 	{
-		// Initialize variables.
-		$options = [];
 		$attr = '';
 
 		// Initialize some field attributes.
-		$attr .= $this->element['class'] ? ' class="' . (string) $this->element['class'] . '"' : '';
-		$attr .= ((string) $this->element['disabled'] == 'true') ? ' disabled="disabled"' : '';
+		$attr .= $this->element['class'] ? ' class="' . $this->element['class'] . '"' : '';
+		$attr .= ((string) $this->element['disabled'] === 'true') ? ' disabled="disabled"' : '';
 		$attr .= $this->element['size'] ? ' size="' . (int) $this->element['size'] . '"' : '';
 		$attr .= $this->multiple ? ' multiple="multiple"' : '';
 
 		// Initialize JavaScript field attributes.
-		$attr .= $this->element['onchange'] ? ' onchange="' . (string) $this->element['onchange'] . '"' : '';
+		$attr .= $this->element['onchange'] ? ' onchange="' . $this->element['onchange'] . '"' : '';
 
 		$sray = ['','','',''];
 		$nn = '';
 		if ($this->value) {
 			$tval = $this->value / 60;
-			if ($tval % 10080 == 0) { //weeks
+			if ($tval % 10080 === 0) { //weeks
 				$sray[3] = ' selected="selected"';
 				$nn = (int) $tval / 10080;
-			} else if($tval % 1440 == 0) { //days
+			} else if($tval % 1440 === 0) { //days
 				$sray[2] = ' selected="selected"';
 				$nn = (int) $tval / 1440;
-			} else if($tval % 60 == 0) { //hours
+			} else if($tval % 60 === 0) { //hours
 				$sray[1] = ' selected="selected"';
 				$nn = (int) $tval / 60;
 			} else { //minutes

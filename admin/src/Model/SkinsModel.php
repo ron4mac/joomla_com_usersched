@@ -10,12 +10,13 @@ namespace RJCreations\Component\Usersched\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Joomla\Filesystem\Folder;
+use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Component\ComponentHelper;
 
 //jimport('joomla.filesystem.folder');
 //jimport('joomla.application.component.modellist');
 
-class SkinsModel extends \Joomla\CMS\MVC\Model\ListModel
+class SkinsModel extends ListModel
 {
 
 	protected $_total = -1;
@@ -27,7 +28,7 @@ class SkinsModel extends \Joomla\CMS\MVC\Model\ListModel
 	}
 */
 
-	public function deleteSkins ($skins)
+	public function deleteSkins ($skins): void
 	{
 		$spath = JPATH_SITE . '/media/com_usersched/skins/';
 		foreach ($skins as $skin) {
@@ -63,17 +64,17 @@ class SkinsModel extends \Joomla\CMS\MVC\Model\ListModel
 		$gdsk = $params->get('group_default_skin');
 		$sdsk = $params->get('site_default_skin');
 
-		$skins = array(array('name'=>'','isUdef'=>!$udsk,'isGdef'=>!$gdsk,'isSdef'=>!$sdsk));
+		$skins = [['name'=>'','isUdef'=>!$udsk,'isGdef'=>!$gdsk,'isSdef'=>!$sdsk]];
 		$spath = JPATH_SITE . '/media/com_usersched/skins/';
 		if (!file_exists($spath)) return $skins;
 		$folds = Folder::folders($spath);
 		foreach ($folds as $fold) {
-			$skins[] = array(
-					'name'=>$fold,
-					'isUdef'=>($fold == $udsk),
-					'isGdef'=>($fold == $gdsk),
-					'isSdef'=>($fold == $sdsk)
-					);
+			$skins[] = [
+				'name'=>$fold,
+				'isUdef'=>($fold == $udsk),
+				'isGdef'=>($fold == $gdsk),
+				'isSdef'=>($fold == $sdsk)
+				];
 			$this->_total++;
 		}
 
@@ -88,7 +89,7 @@ class SkinsModel extends \Joomla\CMS\MVC\Model\ListModel
 			$uname[$key] = $row['uname'];
 			$uid[$key] = $row['uid'];
 		}
-		
+
 		// Sort the data with volume descending, edition ascending
 		// Add $data as the last parameter, to sort by the common key
 		switch ($listOrder) {
@@ -105,7 +106,7 @@ class SkinsModel extends \Joomla\CMS\MVC\Model\ListModel
 */
 
 		// Add the items to the internal cache.
-		$this->cache[$store] = array_slice($skins,$start,$limit?$limit:null);
+		$this->cache[$store] = array_slice($skins,$start,$limit ?: null);
 
 		return $this->cache[$store];
 	}

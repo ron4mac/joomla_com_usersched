@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.3
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
 
@@ -17,7 +17,7 @@ use Joomla\CMS\Application\ApplicationHelper;
 class UserSchedHelper
 {
 
-	public static function addSubmenu ($vName)
+	public static function addSubmenu ($vName): void
 	{
 		Sidebar::addEntry(
 			Text::_('COM_USERSCHED_SUBMENU_USERCALS'),
@@ -41,7 +41,7 @@ class UserSchedHelper
 		);
 	}
 
-	public static function getActions ()
+	public static function getActions (): \stdClass
 	{
 		$user = Factory::getUser();
 		$result = new stdClass();
@@ -69,7 +69,7 @@ class UserSchedHelper
 		return $title;
 	}
 
-	public static function getDbasePath ($uid, $isgrp)
+	public static function getDbasePath ($uid, $isgrp): string
 	{
 		$cmp = ApplicationHelper::getComponentName();
 

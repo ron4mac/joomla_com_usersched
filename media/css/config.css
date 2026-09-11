@@ -100,8 +100,26 @@ cfg-tabs .numer {
 .tabcontent .gcent {
 	text-align: center;
 }
-
-
+.actitm {
+	cursor: pointer;
+	color: var(--cassiopeia-color-link);
+}
+.actitm:hover {
+	font-variant-caps: small-caps;
+}
+.smslist {
+	display: grid;
+	grid-template-columns: auto auto auto 15%;
+	overflow-x: scroll;
+}
+.smslist span {
+	border-bottom: 1px solid #CCC;
+	padding-right: .5rem;
+}
+.smslist .sth {
+	border-bottom: 1px solid #444;
+	font-weight: bold;
+}
 
 
 #configform p.subtitl {

@@ -27,14 +27,16 @@ class EventsView extends UserschedView
 	/**
 	 * Display the view
 	 */
-	public function display($tpl = null)
+	public function display ($tpl = null): void
 	{
-		$this->items		= $this->get('Items');
-		$this->pagination	= $this->get('Pagination');
-		$this->state		= $this->get('State');	//var_dump($this->state);
+		$m = $this->getModel();
+
+		$this->items		= $m->getItems();
+		$this->pagination	= $m->getPagination();
+		$this->state		= $m->getState();	//var_dump($this->state);
 
 		// Check for errors.
-		//		if (count($errors = $this->get('Errors'))) {
+		//		if (count($errors = $m->getErrors()))) {
 		//			JError::raiseError(500, implode("\n", $errors));
 		//			return false;
 		//		}
@@ -48,7 +50,7 @@ class EventsView extends UserschedView
 	 *
 	 * @since	1.6
 	 */
-	protected function addToolbar()
+	protected function addToolbar ()
 	{
 		Factory::getApplication()->input->set('hidemainmenu', true);
 

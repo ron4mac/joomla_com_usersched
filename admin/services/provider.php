@@ -23,13 +23,13 @@ use RJCreations\Component\Usersched\Administrator\Extension\UserschedComponent;
 
 return new class implements ServiceProviderInterface
 {
-	public function register(Container $container)
+	public function register(Container $container): void
 	{
 		$container->registerServiceProvider(new MVCFactory('\\RJCreations\\Component\\Usersched'));
 		$container->registerServiceProvider(new ComponentDispatcherFactory('\\RJCreations\\Component\\Usersched'));
 		$container->set(
 				ComponentInterface::class,
-				function (Container $container)
+				function (Container $container): UserschedComponent
 				{
 					$component = new UserschedComponent($container->get(ComponentDispatcherFactoryInterface::class));
 					$component->setMVCFactory($container->get(MVCFactoryInterface::class));

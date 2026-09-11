@@ -5,7 +5,7 @@
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
 * @since		1.4.0
 */
-namespace RJCreations\Component\Usersched\Administrator\Helper\Html;
+namespace RJCreations\Component\Usersched\Administrator\Service\Html;
 
 defined('_JEXEC') or die;
 
@@ -14,13 +14,12 @@ use Joomla\CMS\Language\Text;
 class Usched
 {
 
-	public static function checkall ()
+	public static function checkall (): string
 	{
-		$html = '<input type="checkbox" name="checkall-toggle" value="" title="'.Text::_('JGLOBAL_CHECK_ALL').'" onclick="Joomla.checkAll(this)" />';
-		return $html;
+		return '<input type="checkbox" name="checkall-toggle" value="" title="'.Text::_('JGLOBAL_CHECK_ALL').'" onclick="Joomla.checkAll(this)" />';
 	}
 
-	public static function sideBar ($sidebar)
+	public static function sideBar ($sidebar): string
 	{
 		if ((int)JVERSION > 3) return '';
 		$html = '<div id="j-sidebar-container" class="span2">';

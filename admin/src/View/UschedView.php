@@ -9,11 +9,13 @@ namespace RJCreations\Component\Usersched\Administrator\View;
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+
 \JLoader::register('UserSchedHelper', JPATH_ADMINISTRATOR.'/components/com_usersched/helpers/usersched.php');
 
-class UschedView extends \Joomla\CMS\MVC\View\HtmlView
+class UschedView extends BaseHtmlView
 {
-	public function display ($tpl=null)
+	public function display ($tpl=null): void
 	{
 		\UserschedHelper::addSubmenu($this->relm);
 		$this->sidebar = ((int)JVERSION < 4) ? JHtmlSidebar::render() : '';

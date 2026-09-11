@@ -8,6 +8,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Language\Text;
 
 JLoader::register('UserSchedHelper', JPATH_ADMINISTRATOR.'/components/com_usersched/helpers/usersched.php');
@@ -15,23 +16,23 @@ JLoader::register('UserSchedHelper', JPATH_ADMINISTRATOR.'/components/com_usersc
 /**
  * Events list controller class.
  */
-class UserschedControllerEvents extends JControllerLegacy
+class UserschedControllerEvents extends BaseController
 {
 
-	public function __construct($config = array())
+	public function __construct ($config = [])
 	{
 		parent::__construct($config);
-		if (!isset($this->input)) $this->input = Factory::getApplication()->input;		//J2.x
+		$this->input ??= Factory::getApplication()->input;		//J2.x
 	}
 
-	public function delete ()
+	public function delete (): void
 	{
-		$dels = $this->input->get('cid',array(),'array');
+		$dels = $this->input->get('cid',[],'array');
 		$view = $this->input->get('view');
 		$uid = $this->input->getInt('uid',-1);
 		$isGrp = $this->input->getBool('isGrp',false);
 
-		$model = $this->getModel('events', '', array('uid'=>$uid,'isgrp'=>$isGrp));
+		$model = $this->getModel('events', '', ['uid'=>$uid,'isgrp'=>$isGrp]);
 		$model->deleteEvents($dels, $uid, $isGrp);
 
 		$this->setRedirect('index.php?option=com_usersched&view='.$view.'&uid='.$uid.($isGrp?('&isGrp='.$isGrp):''), Text::_('COM_USERSCHED_MSG_COMPLETE'));

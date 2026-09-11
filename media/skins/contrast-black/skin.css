@@ -1,3 +1,7 @@
+.uschd-ham-menu span {
+    background-color: #EEE;
+}
+
 /* accomodate our event category styling (mostly happens via scheduler.templates.event_class function) */
 .dhx_cal_data div.evt-ctg-0 {
 	background-image:none;

@@ -5,6 +5,7 @@
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
 * @since		1.4.0
 */
+/** @var \RJCreations\Component\Usersched\Site\View\Config\HtmlView $this */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Language\Text;
@@ -13,6 +14,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Session\Session;
 use RJCreations\Component\Usersched\Site\Helper\HtmlUsersched;
 
+$this->getDocument()->getWebAssetManager()->useScript('bootstrap.modal');
 $fact = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->mnuItm, false);
 ?>
 <cfg-tabs>
@@ -149,7 +151,7 @@ $fact = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->
 
 <div id="alertee" class="tabcontent">
 	<div>
-	<span><?=Text::_('COM_USERSCHED_CFG_ALRTNAME')?></span><span><?=Text::_('COM_USERSCHED_CFG_EMAIL')?></span><span><?=Text::_('COM_USERSCHED_CFG_SMS')?></span><span>&nbsp;<?=Text::_('COM_USERSCHED_CFG_DELETE')?></span>
+	<span><?=Text::_('COM_USERSCHED_CFG_ALRTNAME')?></span><span><?=Text::_('COM_USERSCHED_CFG_EMAIL')?></span><span><?=Text::sprintf('COM_USERSCHED_CFG_SMS','<span class="actitm" onclick="USched.showSMS()">assist</span>')?></span><span>&nbsp;<?=Text::_('COM_USERSCHED_CFG_DELETE')?></span>
 	<?php foreach ($this->alertees as $ae) :?>
 		<input type="hidden" name="alertee_id[]" value="<?=$ae['id']?>" />
 		<span><input type="text" name="alertee_name[]" value="<?=$ae['name']?>" class="aename" /></span>
@@ -169,6 +171,25 @@ $fact = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->
 </form>
 
 </cfg-tabs>
+
+<div class="modal fade" id="dynamicContentModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalTitle">Loading...</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modalBody">
+				<div class="spinner-border text-primary" role="status">
+					<span class="visually-hidden">Please wait...</span>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 <?php if ($this->show_versions) :?>

@@ -11,6 +11,7 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\Filesystem\Folder;
 use RJCreations\Library\RJUserCom;
 
@@ -18,16 +19,16 @@ use RJCreations\Library\RJUserCom;
 \JLoader::register('UserSchedHelper', JPATH_ADMINISTRATOR.'/components/com_usersched/helpers/usersched.php');
 //JLoader::registerPrefix('RJUser', JPATH_LIBRARIES . '/rjuser');
 
-class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
+class DisplayController extends BaseController
 {
 	protected $default_view = 'usersched';
 
-	public function remove ()
+	public function remove (): void
 	{
-		$dels = $this->input->get('cid',array(),'array');
+		$dels = $this->input->get('cid',[],'array');
 		$view = $this->input->get('view');
 		foreach ($dels as $del) {
-			list($guid,$mnu) = explode('|',$del);
+			[$guid,$mnu] = explode('|',$del);
 			RJUserCom::deleteStorageInstance($guid,$mnu);
 		}
 		$this->setRedirect('index.php?option=com_usersched&view='.$view, Text::_('COM_USERSCHED_MSG_COMPLETE'));
@@ -35,7 +36,7 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 
 	/****** OTHER OVERRIDES ******/
 
-	public function getModel($name = '', $prefix = '', $config = array())
+	public function getModel ($name = '', $prefix = '', $config = [])
 	{
 		if ($name == 'events'){
 			$config['uid'] = $this->input->getInt('uid', 0);

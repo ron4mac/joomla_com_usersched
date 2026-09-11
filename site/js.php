@@ -21,13 +21,13 @@ $codes = $_GET['c'];$lcl = $_GET['l'];
 
 //$jsfiles[] = 'scheduler/codebase/dhtmlxscheduler.js';
 //$jsfiles[] = 'scheduler/codebase/locale/locale_'.$lcl.'.js';
-//if (strpos($codes,'Y') !== false) $jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_year_view.js';
-//if (strpos($codes,'G') !== false) $jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_agenda_view.js';
-if (strpos($codes,'R') !== false) {
+//if (str_contains($codes,'Y')) $jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_year_view.js';
+//if (str_contains($codes,'G')) $jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_agenda_view.js';
+if (str_contains($codes,'R')) {
 //	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_recurring.js';
 //	$jsfiles[] = 'scheduler/codebase/locale/recurring/locale_recurring_'.$lcl.'.js';
 }
-if (strpos($codes,'A') === false) {
+if (!str_contains($codes,'A')) {
 	$needRO = true;
 	//$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_readonly.js';
 	$scpt = 'scheduler.config.readonly_form = true;';
@@ -39,24 +39,24 @@ if (strpos($codes,'A') === false) {
 	$jsfiles[] = ['s'=>$scpt];
 }
 //$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_minical.js';
-if (strpos($codes,'M') !== false) {
+if (str_contains($codes,'M')) {
 //	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_quick_info.js';
 } else {
 //	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_tooltip.js';
 }
 //$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_expand.js';
 //$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_pdf.js';
-if (strpos($codes,'J') !== false) {
+if (str_contains($codes,'J')) {
 	$jsfiles[] = 'rjc_ext.js';
 	$jsfiles[] = 'locale_alerts_'.$lcl.'.js';
 }
 $jsfiles[] = 'usersched.js';
 $jsfiles[] = 'locale_lang_'.$lcl.'.js';
-if (strpos($codes,'H') !== false) {
+if (str_contains($codes,'H')) {
 	$needRO = true;
 	$jsfiles[] = 'holiday_ext.js';
 }
-if (strpos($codes,'B') !== false) {
+if (str_contains($codes,'B')) {
 	$needRO = true;
 	//$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_readonly.js';
 	$jsfiles[] = 'usrbday_ext.js';
@@ -64,7 +64,7 @@ if (strpos($codes,'B') !== false) {
 if ($needRO) {
 //	$jsfiles[] = 'scheduler/codebase/ext/dhtmlxscheduler_readonly.js';
 }
-chdir(basename(getcwd())=='com_usersched' ? '../../' : '../../../');
+chdir(basename(getcwd()) === 'com_usersched' ? '../../' : '../../../');
 //file_put_contents('HEREIAM.txt',getcwd().print_r([$_SERVER,$_ENV],true));
 $lastmod = 0;
 $totsize = 0;
@@ -83,7 +83,7 @@ foreach ($jsfiles as $jsf) {
 }
 $hash = $lastmod . '-' . $totsize . '-' . md5(implode(':',$jss));
 
-if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) == $hash)
+if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) === $hash)
 {
 	// Return visit and no modifications, so do not send anything 
 	header ($_SERVER['SERVER_PROTOCOL'].' 304 Not Modified'); 

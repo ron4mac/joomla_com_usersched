@@ -10,19 +10,20 @@ namespace RJCreations\Component\Usersched\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\User\User;
+use Joomla\CMS\MVC\Model\ListModel;
 use RJCreations\Library\RJUserCom;
 
 //\jimport('joomla.filesystem.folder');
 //\jimport('joomla.application.component.modellist');
 
-class UserschedModel extends \Joomla\CMS\MVC\Model\ListModel
+class UserschedModel extends ListModel
 {
 
 	protected $_total = -1;
 
-	public function __construct($config = [], $factory = null)
+	public function __construct ($config = [], $factory = null)
 	{   
-		$config['filter_fields'] = ['fullname', 'username', 'userid'];
+		$config['filter_fields'] = ['fullname', 'a.fullname', 'username', 'a.username', 'userid', 'a.userid'];
 		parent::__construct($config, $factory);
 	}
 
@@ -49,32 +50,32 @@ class UserschedModel extends \Joomla\CMS\MVC\Model\ListModel
 		$limit = $this->getState('list.limit');
 		$listOrder = $this->getState('list.ordering');
 		$listDirn = $this->getState('list.direction');
-	//	echo $listOrder;echo $listDirn;
+		$sdir = $listDirn === 'asc' ? SORT_ASC : SORT_DESC;
 
 		foreach ($scheds as $key => $row) {
 			$name[$key]  = $row['name'];
 			$uname[$key] = $row['uname'];
 			$uid[$key] = $row['guid'];
 		}
-		
+
 		if ($this->_total)
 		// Sort the data with volume descending, edition ascending
 		// Add $data as the last parameter, to sort by the common key
 		switch ($listOrder) {
 			case 'username':
-				array_multisort($uname, SORT_ASC, $name, SORT_ASC, $uid, SORT_ASC, $scheds);
+				array_multisort($uname, $sdir, $name, $sdir, $uid, $sdir, $scheds);
 				break;
 			case 'fullname':
-				array_multisort($name, SORT_ASC, $uname, SORT_ASC, $uid, SORT_ASC, $scheds);
+				array_multisort($name, $sdir, $uname, $sdir, $uid, $sdir, $scheds);
 				break;
 			case 'userid':
-				array_multisort($uid, SORT_ASC, $uname, SORT_ASC, $name, SORT_ASC, $scheds);
+				array_multisort($uid, $sdir, $uname, $sdir, $name, $sdir, $scheds);
 				break;
 		}
 
 
 		// Add the items to the internal cache.
-		$this->cache[$store] = array_slice($scheds,$start,$limit?$limit:null);
+		$this->cache[$store] = array_slice($scheds,$start,$limit ?: null);
 
 		return $this->cache[$store];
 	}

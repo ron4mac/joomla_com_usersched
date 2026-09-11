@@ -28,14 +28,16 @@ class HtmlView extends UschedView
 	/**
 	 * Display the view
 	 */
-	public function display($tpl = null)
+	public function display ($tpl = null): void
 	{
-		$this->items		= $this->get('Items');
-		$this->pagination	= $this->get('Pagination');
-		$this->state		= $this->get('State');	//var_dump($this->state);
+		$m = $this->getModel();
+
+		$this->items		= $m->getItems();
+		$this->pagination	= $m->getPagination();
+		$this->state		= $m->getState();	//var_dump($this->state);
 
 		// Check for errors.
-		//		if (count($errors = $this->get('Errors'))) {
+		//		if (count($errors = $m->getErrors()))) {
 		//			JError::raiseError(500, implode("\n", $errors));
 		//			return false;
 		//		}
@@ -54,7 +56,7 @@ class HtmlView extends UschedView
 	 *
 	 * @since	1.6
 	 */
-	protected function addToolbar()
+	protected function addToolbar ()
 	{
 		$canDo	= \UserSchedHelper::getActions();
 
@@ -69,7 +71,7 @@ class HtmlView extends UschedView
 
 		// Add a modal upload button.
 		$icon = '<span class="icon-upload"> </span>';
-		$upbut = '<a class="modal btn btn-small" href="#upload_div" rel="{size: {x: 375, y: 225}}">'.$icon.' Upload</a>';
+	//	$upbut = '<a class="modal btn btn-small" href="#upload_div" rel="{size: {x: 375, y: 225}}">'.$icon.' Upload</a>';
 		$upbut = '<button
 	class="button-upload btn btn-primary" 
 	data-bs-toggle="modal" 

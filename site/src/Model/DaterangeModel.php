@@ -37,17 +37,16 @@ class DaterangeModel extends UserschedModel
 		switch ($this->smod) {
 			case '|':
 				foreach ($this->sstrs as $sstr) {
-					if (stripos($str, $sstr) !== false) return true;
+					if (stripos($str, (string) $sstr) !== false) return true;
 				}
 				break;
 			case '&':
 				foreach ($this->sstrs as $sstr) {
-					if (stripos($str, $sstr) === false) return false;
+					if (stripos($str, (string) $sstr) === false) return false;
 				}
 				return true;
-				break;
 			default:
-				if (stripos($str, $this->sstrs[0]) !== false) return true;
+				if (stripos($str, (string) $this->sstrs[0]) !== false) return true;
 		}
 		return false;
 	}
@@ -55,7 +54,7 @@ class DaterangeModel extends UserschedModel
 	public function evtSearch ($sterm)
 	{
 		$db = $this->getDbo();
-		$db->getConnection()->sqliteCreateFunction('sfunc', [$this,'sfunc'], 1);
+		$db->getConnection()->sqliteCreateFunction('sfunc', $this->sfunc(...), 1);
 
 		if (strpos($sterm, ' AND ') > 0) {
 			$this->smod = '&';
@@ -71,7 +70,7 @@ class DaterangeModel extends UserschedModel
 		$evts = $db->loadAssocList();
 		foreach ($evts as $k=>$evt) {
 			//var_dump($evt);jexit();
-			if (strpos($evt['end_date'],'9999-')===0) {
+			if (str_starts_with($evt['end_date'],'9999-')) {
 				$evts[$k]['t_end'] = $evt['t_start'] + $evt['duration'];
 			}
 		}

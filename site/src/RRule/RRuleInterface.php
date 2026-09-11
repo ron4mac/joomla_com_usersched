@@ -9,7 +9,6 @@
  * @link https://github.com/rlanvin/php-rrule
  */
 
-//namespace RRule;
 namespace RJCreations\Component\Usersched\Site\RRule;
 
 /**

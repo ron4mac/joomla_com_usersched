@@ -1,17 +1,22 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2025 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.1
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
 
-class UserschedViewPrint extends \RJCreations\Component\Usersched\Site\View\UschedView
+use RJCreations\Component\Usersched\Site\View\UschedView;
+
+class UserschedViewPrint extends UschedView
 {
+	public $post;
+	public $skin;
+	public $categories;
 	protected $html;
 
-	function display ($tpl=null)
+	public function display ($tpl=null): void
 	{
 		$data = json_decode($this->post->getRaw('data','{}'));
 		$this->html = $data->html;

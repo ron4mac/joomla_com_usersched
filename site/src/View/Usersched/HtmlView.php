@@ -9,10 +9,17 @@ namespace RJCreations\Component\Usersched\Site\View\Usersched;
 
 defined('_JEXEC') or die;
 
+use RJCreations\Component\Usersched\Site\View\UschedView;
 use RJCreations\Component\Usersched\Site\Helper\UserschedHelper;
 
-class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
+class HtmlView extends UschedView
 {
+	public $canCfg;
+	public $alertees;
+	public $categories;
+	public $settings;
+	public $cfgcfg;
+
 	protected $tabs = [];
 	protected $plugs = ['readonly' => true];
 	protected $config = [
@@ -69,10 +76,10 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 	'left_border' => true
 	];
 
-	function display ($tpl=null)
+	public function display ($tpl=null): void
 	{
 		$this->canCfg = false;
-		list($cal_type, $jID) = \UschedHelper::getInstanceID(true);
+		[$cal_type, $jID] = \UschedHelper::getInstanceID(true);
 		$jID = is_array($jID) ? $jID : explode(',',$jID);
 		switch ($cal_type) {
 			case 0:
@@ -103,7 +110,7 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 		$this->categories = $m->getUdTable('categories'); $this->categories = $this->categories ?: [];	//if (!$this->categories) $this->categories = [];
 		$cfg = $m->getUdTable('options', 'name = "config"', false);
 		if ($cfg) {
-			$dhxver = $this->params->get('dhtmlx_version', '7.1');
+			$dhxver = $this->params->get('dhtmlx_version', '7.2');
 			if ((int)$dhxver > 6) $this->plugs['export_api'] = true;
 			$this->settings = unserialize($cfg['value']);
 			$this->applyCfg($this->settings);

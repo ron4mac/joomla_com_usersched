@@ -1,39 +1,38 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\Database\DatabaseDriver;
 
-jimport('joomla.filesystem.folder');
-jimport('joomla.application.component.modellist');
-//jimport('rjuserdata.userdata');
-
-class UserSchedModelEvents extends JModelList
+class UserSchedModelEvents extends ListModel
 {
 	protected $_total = -1;
 
-	public function __construct($config = array())
+	public function __construct ($config = [])
 	{
 		$dbFile = '/sched.sql3';
 		$udbPath = JPATH_ROOT.'/'.UserSchedHelper::getDbasePath($config['uid'], $config['isgrp']).$dbFile;		//var_dump($udbPath);jexit();
-		$db = JDatabaseDriver::getInstance(array('driver'=>'sqlite','database'=>$udbPath));
+		$db = DatabaseDriver::getInstance(['driver'=>'sqlite','database'=>$udbPath]);
 		$db->connect();
 		$db->getConnection()->sqliteCreateFunction('strtotime', 'strtotime', 1);
 		$config['dbo'] = $db;
-		$config['filter_fields'] = array('startdate','category','rectype');
+		$config['filter_fields'] = ['startdate','category','rectype'];
 		parent::__construct($config);
 	}
 
-	public function deleteEvents ($eids, $uid, $isGrp)
+	public function deleteEvents ($eids, $uid, $isGrp): void
 	{
 //		$db = new $$RJUserData('sched', false, $uid, $isGrp);
 //		$db3 = $db->getDbase();
 //		$db3->db_connect(false);
-		$db3 = parent::getDBO();
+		$db3 = $this->getDatabase();
 		foreach ($eids as $id) {
 			$db3->setQuery("DELETE FROM events WHERE event_id = $id");
 			$db3->execute();
@@ -61,7 +60,7 @@ class UserSchedModelEvents extends JModelList
 							$events[] = $row;
 				}
 */
-		$db = parent::getDBO();
+		$db = $this->getDadabase();
 		$db->setQuery('SELECT e.*,c.name AS catname FROM events AS e LEFT OUTER JOIN categories AS c ON e.category = c.id');
 		$events = $db->loadAssocList();		//var_dump($events);jexit();
 
@@ -71,6 +70,7 @@ class UserSchedModelEvents extends JModelList
 		$limit = $this->getState('list.limit');
 		$listOrder = $this->getState('list.ordering');
 		$listDirn = $this->getState('list.direction');
+		$sdir = $listDirn === 'asc' ? SORT_ASC : SORT_DESC;
 
 		foreach ($events as $key => $row) {
 			$sdate[$key] = $row['start_date'];
@@ -83,18 +83,18 @@ class UserSchedModelEvents extends JModelList
 		// Add $data as the last parameter, to sort by the common key
 		switch ($listOrder) {
 			case 'startdate':
-				array_multisort($sdate, SORT_ASC, $evcat, SORT_ASC, $rtype, SORT_ASC, $events);
+				array_multisort($sdate, $sdir, $evcat, $sdir, $rtype, $sdir, $events);
 				break;
 			case 'category':
-				array_multisort($evcat, SORT_ASC, $sdate, SORT_ASC, $rtype, SORT_ASC, $events);
+				array_multisort($evcat, $sdir, $sdate, $sdir, $rtype, $sdir, $events);
 				break;
 			case 'rectype':
-				array_multisort($rtype, SORT_ASC, $sdate, SORT_ASC, $evcat, SORT_ASC, $events);
+				array_multisort($rtype, $sdir, $sdate, $sdir, $evcat, $sdir, $events);
 				break;
 		}
 
 		// Add the items to the internal cache.
-		$this->cache[$store] = array_slice($events,$start,$limit?$limit:null);
+		$this->cache[$store] = array_slice($events,$start,$limit ?: null);
 
 		return $this->cache[$store];
 	}

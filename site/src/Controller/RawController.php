@@ -11,8 +11,9 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Http\HttpFactory;
-use Joomla\Filesystem\Folder;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\Filesystem\Folder;
 use RJCreations\Library\RJUserCom;
 use RJCreations\Component\Usersched\Site\Helper\AlertCheck;
 
@@ -21,10 +22,10 @@ use RJCreations\Component\Usersched\Site\Helper\AlertCheck;
 
 define('RJC_DEV', (JDEBUG) && file_exists(JPATH_ROOT.'/rjcdev.php'));
 
-class RawController extends \Joomla\CMS\MVC\Controller\BaseController
+class RawController extends BaseController
 {
 	//	ajax call from client scheduler for user birthdays
-	public function birthdays ()
+	public function birthdays (): void
 	{
 		// clean up the dob as returned from the database
 		function unQuote ($val, $comma=false)
@@ -44,7 +45,7 @@ class RawController extends \Joomla\CMS\MVC\Controller\BaseController
 		$hasGroups = false;
 		if ($groups) {
 			foreach ($groups as $value) {
-				if ($value != '') {
+				if ($value != 0) {
 					if ($hasGroups == false) {
 						$userGroupWhereStatement .= 'ugm.group_id=' . $value;
 						$hasGroups = true;
@@ -65,10 +66,10 @@ class RawController extends \Joomla\CMS\MVC\Controller\BaseController
 		$db->setQuery( $query );
 		$rows = $db->loadObjectList();
 
-if (!$rows) {
-	echo json_encode(['NOPE']);
-	return;
-}
+		if (!$rows) {
+			echo json_encode(['NOPE']);
+			return;
+		}
 
 		// turn them into calendar events
 		$evts = [];
@@ -86,7 +87,7 @@ if (!$rows) {
 	}
 
 	//	ajax call from client scheduler for holidays (from Google)
-	public function holidays ()
+	public function holidays (): void
 	{
 		$yr = $this->input->get('yr', 2017);	// year
 		$rg = $this->input->get('rg', 'usa__en');	// region
@@ -130,22 +131,17 @@ if (!$rows) {
 	}
 
 	// cron job access here to send alerts
-	public function cron ()
+	public function cron (): void
 	{
-		$dbug = strpos($this->input->server->get('HTTP_USER_AGENT'), 'Wget') === false;
+		$dbug = !str_contains($this->input->server->get('HTTP_USER_AGENT'), 'Wget');
 
 		$dbs = RJUserCom::getDbPaths(null, 'usersched', true);
-
-		// get the storage location path
-		$results = Factory::getApplication()->triggerEvent('onRjuserDatapath');
-		$dsp = isset($results[0]) ? trim($results[0]) : false;
-		$stor = ($dsp ?: 'userstor');
 
 		$config = new \JConfig();
 		$xtime = time();
 
 		if ($dbug) echo'<pre>';
-		foreach ($dbs as $dbp=>$inst) {
+		foreach ($dbs as $inst) {
 			foreach ($inst as $info) {
 				$acheck = new AlertCheck($info['path'], $config, $dbug);
 				$acheck->processAlerts($xtime);
@@ -153,32 +149,10 @@ if (!$rows) {
 			}
 		}
 		if ($dbug) echo'</pre>';
-/*
-		return;
-
-		if ($dirh = opendir(JPATH_SITE . '/'.$stor)) {
-			while (false !== ($entry = readdir($dirh))) {
-				if ($entry != '.' && $entry != '..' && is_dir(JPATH_SITE.'/'.$stor.'/'.$entry)) {
-					if ($entry[0] == '@' || $entry[0] == '_') {
-						$grp = $entry[0] == '_';
-						foreach (glob(JPATH_SITE.'/'.$stor.'/'.$entry.'/com_usersched_[0-9]*') as $mid) {
-							$dbp = $mid.'/sched.sql3';
-							if (file_exists($dbp)) {
-								$acheck = new USchedAcheck($dbp, $config);
-								$acheck->processAlerts($xtime);
-								unset($acheck);
-							}
-						}
-					}
-				}
-			}
-			closedir($dirh);
-		}
-*/
 	}
 	
 	// my own backend for scheduler 6.x
-	public function calJ6 ()
+	public function calJ6 (): void
 	{
 		try {
 			$m = $this->getModel('backend');
@@ -214,7 +188,7 @@ if (!$rows) {
 						$m->delete($id);
 					}
 					break;
-				default: throw new \Exception('Unexpected Method'); break;
+				default: throw new \Exception('Unexpected Method');
 			}
 		} catch (\Exception $e) {
 			$emsg = $e->getMessage();
@@ -237,7 +211,7 @@ if (!$rows) {
 	}
 
 	// my own backend for scheduler 7.1+ (with rrule recurring)
-	public function calJ7r ()
+	public function calJ7r (): void
 	{
 		try {
 			$m = $this->getModel('backendr');
@@ -273,7 +247,7 @@ if (!$rows) {
 						$m->delete($id);
 					}
 					break;
-				default: throw new \Exception('Unexpected Method'); break;
+				default: throw new \Exception('Unexpected Method');
 			}
 		} catch (\Exception $e) {
 			$emsg = $e->getMessage();
@@ -293,6 +267,27 @@ if (!$rows) {
 		header('Access-Control-Allow-Methods: *');
 		header('Content-Type: application/json');
 		echo json_encode($result);
+	}
+
+	public function showsms (): void
+	{
+		$sms = json_decode(file_get_contents(JPATH_ROOT . '/media/com_usersched/sms.json'),false);
+
+		$cells = '<div class="smslist"><span class="sth">Carrier</span><span class="sth">SMS/MMS</span><span class="sth">Country/Region</span><span class="sth">Note</span>';
+		foreach ($sms as $s) {
+			$cells .= '<span>'.$s->carrier;
+			$cells .= '</span><span>'.$s->{'email-to-sms'}.($s->{'email-to-mms'} ? ('<br>'.$s->{'email-to-mms'}) : '');
+		//	$cells .= '</span><span>'.$s->{'email-to-mms'};
+			$cells .= '</span><span>'.$s->country.($s->region ? ('/'.$s->region) : '');
+		//	$cells .= '</span><span>'.$s->region;
+			$cells .= '</span><span>'.$s->notes.'</span>';
+		}
+		
+		echo json_encode([
+			'title'=>'SMS/MMS Email Links for Cell Networks',
+			'html'=>$cells.'</div>',
+			'error'=>'NOT YET FULLY IMPLEMENTED'
+		]);
 	}
 
 }

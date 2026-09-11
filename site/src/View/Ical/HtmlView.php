@@ -8,17 +8,20 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use RJCreations\Component\Usersched\Site\View\UschedView;
 
 require_once JPATH_SITE.'/components/com_usersched/helpers/ical.php';
 
-class UserschedViewIcal extends \RJCreations\Component\Usersched\Site\View\UschedView
+class UserschedViewIcal extends UschedView
 {
+	public $jID;
+	public $data;
 	protected $cal_type;
 
-	function display ($tpl = null)
+	public function display ($tpl = null): void
 	{
 		$calid = UserSchedHelper::uState('calid');
-		list($this->cal_type, $this->jID) = explode(':',$calid);
+		[$this->cal_type, $this->jID] = explode(':',$calid);
 
 		switch ($this->cal_type) {
 			case 20:		// user

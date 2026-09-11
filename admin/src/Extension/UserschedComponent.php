@@ -12,16 +12,16 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Extension\BootableExtensionInterface;
 use Joomla\CMS\Extension\MVCComponent;
 use Joomla\CMS\HTML\HTMLRegistryAwareTrait;
-use RJCreations\Component\Usersched\Administrator\Helper\Html\Usched;
+use RJCreations\Component\Usersched\Administrator\Service\Html\Usched;
 use Psr\Container\ContainerInterface;
 	
 class UserschedComponent extends MVCComponent implements BootableExtensionInterface
 {
 	use HTMLRegistryAwareTrait;
 
-	public function boot(ContainerInterface $container)
+	public function boot(ContainerInterface $container): void
 	{
-		$this->getRegistry()->register('ushed', new Usched());
+		$this->getRegistry()->register('usched', new Usched());
 	}
 
 }

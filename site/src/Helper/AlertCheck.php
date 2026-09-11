@@ -25,14 +25,10 @@ class AlertCheck {
 //	const WEEKSECS = 604800;
 
 	protected $db;
-	protected $bug;
-	protected $config;
 	protected $alertees;
 
-	public function __construct ($dbp, $cfg, $bug=false)
+	public function __construct ($dbp, protected $config, protected $bug=false)
 	{
-		$this->bug = $bug;
-		$this->config = $cfg;
 		$this->bugout('@@@@@@@ DBASE '.basename(dirname($dbp,2)).'/'.basename(dirname($dbp)));
 		$opt = ['driver'=>'sqlite','host'=>'','user'=>'','password'=>'','database'=>$dbp,'prefix'=>''];
 		$db = DatabaseDriver::getInstance($opt);
@@ -41,7 +37,7 @@ class AlertCheck {
 		$this->db = $db;
 	}
 
-	public function processAlerts ($time)
+	public function processAlerts ($time): void
 	{
 		$this->bugout("CURTIME $time ".date(DATE_RFC822,$time));
 
@@ -87,7 +83,7 @@ class AlertCheck {
 		$this->bugout('<br><br>');
 	}
 
-	private function recursNow (&$evt, $rBeg, $rEnd)
+	private function recursNow (array &$evt, int|float $rBeg, float|int $rEnd): bool
 	{
 		$this->bugout('Recursing: ',[$rBeg, date(DATE_RFC822,$rBeg), $rEnd, date(DATE_RFC822,$rEnd)/*, $evt*/]);
 		$rr = new RRule\RRule($evt['rrule'], $evt['start_date']);
@@ -97,105 +93,11 @@ class AlertCheck {
 			$evt['t_start'] = $occ[0]->getTimestamp();
 			$evt['start_date'] = $occ[0]->format('Y-m-d H:i');
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
-	private function old_recursNow (&$evt, $rBeg, $rEnd)
-	{
-		if (trim($evt['rec_type']) == 'none') return false;
-		list($rec_pattern, $xtra) = explode('#', $evt['rec_type']);
-		if ($rec_pattern == 'none') return false;
-		list($type,$count,$day,$count2,$daysl) = explode('_', $rec_pattern);
-	//	$this->bugout('PATTERN',[$type,$count,$day,$count2,$daysl]);
-		$this->bugout('RECTYPE '.$evt['rec_type']);
-		$this->bugout('START '.$evt['start_date']);
-		$dt = new R_DateTime($evt['start_date']);
-		$divsr = 1;
-		switch ($type) {
-			case 'day':
-				$divsr = $count * self::DAYSECS;
-				$pdelta = (int)floor(($rBeg + $evt['alert_lead'] - $evt['t_start']) / $divsr);
-				$dt->add(new \DateInterval('P'.($pdelta*$count).'D'));
-				$this->bugout('DAYCAN '.$dt->format('Y-m-d H:i D'));
-				break;
-			case 'week':
-				$divsr = $count * self::WEEKSECS;
-				$pdelta = (int)(($rBeg - $evt['t_start']) / $divsr);
-				// add prior occurences to arrive at next occurence date
-				if ($pdelta<0) {
-					$dt->sub(new \DateInterval('P'.(abs($pdelta+1)*$count).'W'));
-				} else {
-					$dt->add(new \DateInterval('P'.($pdelta*$count).'W'));
-				}
-				$this->bugout('TSTART',[$divsr,$dt->format('Y-m-d H:i D')]);
-				do {
-					foreach (explode(',',$daysl) as $dow) {
-						$dt->nextDow($dow, $count);
-						$this->bugout('NEXTDOW '.$dt->format('Y-m-d H:i D'));
-						$ts = $dt->getTimestamp();
-						if ($ts >= $evt['t_start'] && $ts >= $rBeg) break 3;
-					}
-					$dt->modify("+$count ".self::DNM[0]);
-					$this->bugout('NEXTWOO '.$dt->format('Y-m-d H:i D'));
-				} while ($dt->getTimestamp() < $rEnd);
-
-				break;
-			case 'month':
-				$cdt = new R_DateTime(date('Y-m-d H:i',$rBeg /*+ $evt['alert_lead']*/));
-				$dim = ($cdt->getFullYear() - $dt->getFullYear()) * 12;
-				$dim += $cdt->getMonth() - $dt->getMonth();
-				$nop = (int) ($dim / $count);
-				$dt->add(new \DateInterval('P'.($nop*$count).'M'));
-				break;
-			case 'year':
-				$cdt = new R_DateTime(date('Y-m-d H:i',$rBeg /*+ $evt['alert_lead']*/));
-				$diy = $cdt->getFullYear() - $dt->getFullYear();
-				$nop = (int) ($diy / $count);
-				$dt->add(new \DateInterval('P'.($nop*$count).'Y'));
-				if ($day) {
-					$dt->modify("+$count2 ".self::DNM[$day]);
-				}
-				$this->bugout('YEARCAN '.$dt->format('Y-m-d H:i D'));
-				break;
-		}
-/*
-		$days = [];
-		if ($daysl) {
-			$days = explode(',',$daysl);
-			//!! need to handle monday as begin of week
-		}
-
-		if ($count2) {
-			$wk = $count2;
-			$dt->setDay2(1);	// set to 1st of month
-			//echo '<br /> @1 '. $dt->format('Y-m-d H:i D');
-			$wk = ($wk - 1) * 7;	// offset to Nth
-			$cday = $dt->getDow();	// get dow for 1st of month
-			$nday = $day * 1 + $wk - $cday + 1;
-			//echo " > $wk $cday $nday";
-			$dt->setDay2($nday <= $wk ? ($nday + 7) : $nday);
-		}
-*/
-
-		$this->bugout('CANDD '.$dt->format('Y-m-d H:i D'));
-
-		$closetime = $dt->getTimestamp();
-		$diffr = $rBeg - $closetime + $evt['alert_lead'];
-		$this->bugout('CLODIF',[$rBeg,$closetime,$evt['alert_lead'],$diffr]);
-	//	$this->bugout('CLODIF',[$evt,date(DATE_RFC822,$closetime),$diffr]);
-		if (($diffr<0) || ($diffr>self::DAYSECS)) {
-			return false;
-		}
-
-		$evt['t_start'] = $closetime;
-		$evt['t_end'] = $evt['t_start'] + $evt['event_length'];
-		$evt['start_date'] = $dt->format('Y-m-d H:i');
-		return true;
-	}
-
-	private function sendAlert ($addr, $subj, $body, $ausrs)
+	private function sendAlert (string $addr, string $subj, string $body, array $ausrs): void
 	{
 		try {
 			$mailer = Factory::getMailer();
@@ -211,7 +113,7 @@ class AlertCheck {
 		}
 	}
 
-	protected function sendAlerts ($evt, $atime)
+	protected function sendAlerts (array $evt, $atime)
 	{
 	//	if ($this->bug) return;
 		$ausrs = explode(',',$evt['alert_user']);
@@ -229,12 +131,12 @@ class AlertCheck {
 		if ($evt['alert_meth'] & 2) {	//SMS
 			$splt = explode($lb,$evt['text'],2);
 			$body = $evtTime . $lbb;
-			$body .= isset($splt[1]) ? $splt[1] : '';
+			$body .= $splt[1] ?? '';
 			$this->sendAlert('sms', 'Calendar Alert -- '.$splt[0], $body, $ausrs);
 		}
 	}
 
-	private function getTable ($table, $values='*', $where='', $key=null, $col=null)
+	private function getTable (string $table, string $values='*', string $where='', $key=null, $col=null)
 	{	//var_dump('SELECT '.$values.' FROM ' . $table . ($where ? (' WHERE '.$where) : ''));
 		$this->db->setQuery('SELECT '.$values.' FROM ' . $table . ($where ? (' WHERE '.$where) : ''));
 		return $this->db->loadAssocList($key, $col);
@@ -251,7 +153,7 @@ class AlertCheck {
 	}
 	
 	// see if the event's alert has already been triggered
-	protected function wasAlerted ($id, $stray)
+	protected function wasAlerted ($id, array $stray): bool
 	{	//file_put_contents('LOG.txt', 'WA '.print_r([$id, $stray],true)."\n", FILE_APPEND);
 		return $this->bug ? false : !empty($stray[$id]);
 //		foreach ($stray as $st) {
@@ -260,7 +162,7 @@ class AlertCheck {
 //		return false;
 	}
 
-	private function formattedDateTime ($from, $to=0)
+	private function formattedDateTime ($from, $to=0): string
 	{
 		if ($to-$from == self::DAYSECS) {
 			return date('D j F Y', $from);
@@ -268,11 +170,10 @@ class AlertCheck {
 		$fdt = date('D j F Y g:ia', $from);
 		if ($to) {
 			if ($to-$from > self::DAYSECS) {
-				if ((date('Hi',$from).date('Hi',$to)) == '00000000') {
+				if ((date('Hi',$from).date('Hi',$to)) === '00000000') {
 					return date('D j F Y', $from).' - '.date('D j F Y', $from);
-				} else {
-					$fdt .= ' - '.date('D j F Y g:ia', $to);
 				}
+				$fdt .= ' - '.date('D j F Y g:ia', $to);
 			} else {
 				$fdt .= ' to '.date('g:ia', $to);
 			}
@@ -280,7 +181,7 @@ class AlertCheck {
 		return $fdt;
 	}
 
-	private function bugout ($msg, $vars='')
+	private function bugout (string $msg, $vars=''): void
 	{
 		if (!$this->bug) return;
 		echo $msg.' ';

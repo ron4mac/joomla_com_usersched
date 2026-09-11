@@ -6,4 +6,6 @@
 * @since		1.4.0
 */
 
+use RJCreations\Component\Usersched\Administrator\View\Calendars\HtmlView;
+
 require JPATH_ADMINISTRATOR.'/components/com_usersched/tmpl/uschedtmpl.php';

@@ -5,6 +5,7 @@
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
 * @since		1.4.0
 */
+/** @var \RJCreations\Component\Usersched\Site\View\Config\HtmlView $this */
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
@@ -50,7 +51,7 @@ if ($this->params->get('show_page_heading', 1)) {
 	<p style="font-size:1.2em"><span style="font-weight: bold;margin-right:.7rem">Searching:</span><span><?php echo $this->sterm ?></span></p>
 <table align="center" class="ev_table" ondblclick="USched.editEvt(event)">
 <?php else: ?>
-	<p style="font-size:1.2em"><?php echo Text::sprintf($this->message ? $this->message : 'COM_USERSCHED_RANGE_MESSAGE', $this->formattedDateTime($this->rBeg, $this->rEnd)) ?></p>
+	<p style="font-size:1.2em"><?php echo Text::sprintf($this->message ?: 'COM_USERSCHED_RANGE_MESSAGE', $this->formattedDateTime($this->rBeg, $this->rEnd)) ?></p>
 <table align="center" class="ev_table">
 <?php endif; ?>
 <?php

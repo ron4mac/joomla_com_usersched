@@ -6,6 +6,19 @@
   "license": "GPL-3.0+",
   "assets": [
     {
+      "name": "com_usersched.css.usersched7.2",
+      "type": "style",
+      "uri": "https://cdn.dhtmlx.com/scheduler/7.2/dhtmlxscheduler.css"
+    },
+    {
+      "name": "com_usersched.css.usersched.7.2",
+      "type": "style",
+      "uri": "com_usersched/usersched.7.2.css",
+      "dependencies": [
+        "com_usersched.css.usersched7.2"
+      ]
+    },
+    {
       "name": "com_usersched.css.usersched7.1",
       "type": "style",
       "uri": "https://cdn.dhtmlx.com/scheduler/7.1/dhtmlxscheduler.css"
@@ -16,6 +29,19 @@
       "uri": "com_usersched/usersched.7.1.css",
       "dependencies": [
         "com_usersched.css.usersched7.1"
+      ]
+    },
+    {
+      "name": "com_usersched.css.usersched7.0",
+      "type": "style",
+      "uri": "https://cdn.dhtmlx.com/scheduler/7.0/dhtmlxscheduler.css"
+    },
+    {
+      "name": "com_usersched.css.usersched.7.0",
+      "type": "style",
+      "uri": "com_usersched/usersched.7.0.css",
+      "dependencies": [
+        "com_usersched.css.usersched7.0"
       ]
     },
     {
@@ -31,6 +57,19 @@
 
 
     {
+      "name": "com_usersched.scheduler7.2",
+      "type": "script",
+      "uri": "https://cdn.dhtmlx.com/scheduler/7.2/dhtmlxscheduler.js"
+    },
+    {
+      "name": "com_usersched.usernotes",
+      "type": "script",
+      "uri": "com_usersched/usernotes.js",
+      "dependencies": [
+        "com_usersched.scheduler7.2"
+      ]
+    },
+    {
       "name": "com_usersched.scheduler7.1",
       "type": "script",
       "uri": "https://cdn.dhtmlx.com/scheduler/7.1/dhtmlxscheduler.js"
@@ -41,6 +80,19 @@
       "uri": "com_usersched/usernotes.js",
       "dependencies": [
         "com_usersched.scheduler7.1"
+      ]
+    },
+    {
+      "name": "com_usersched.scheduler7.0",
+      "type": "script",
+      "uri": "https://cdn.dhtmlx.com/scheduler/7.0/dhtmlxscheduler.js"
+    },
+    {
+      "name": "com_usersched.usernotes",
+      "type": "script",
+      "uri": "com_usersched/usernotes.js",
+      "dependencies": [
+        "com_usersched.scheduler7.0"
       ]
     },
     {

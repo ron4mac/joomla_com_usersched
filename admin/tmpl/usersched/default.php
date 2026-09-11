@@ -5,5 +5,8 @@
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
 * @since		1.4.0
 */
+/** @var HtmlView $this */
+
+use RJCreations\Component\Usersched\Administrator\View\Usersched\HtmlView;
 
 require JPATH_ADMINISTRATOR.'/components/com_usersched/tmpl/uschedtmpl.php';

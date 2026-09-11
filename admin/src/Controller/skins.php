@@ -1,26 +1,31 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2023 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
+* @since		1.4.0
 */
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Extension;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Table\Table;
 
-class UserschedControllerSkins extends JControllerLegacy
+class UserschedControllerSkins extends BaseController
 {
 
-	public function __construct($config = array())
+	public function __construct ($config = [])
 	{
 		parent::__construct($config);
-		if (!isset($this->input)) $this->input = Factory::getApplication()->input;		//J2.x
+		$this->input ??= Factory::getApplication()->input;		//J2.x
 	}
 
-	public function delete ()
+	public function delete (): void
 	{
-		$dels = $this->input->get('cid',array(),'array');
+		$dels = $this->input->get('cid',[],'array');
 		$view = $this->input->get('view');
 
 		$model = $this->getModel('skins');
@@ -29,7 +34,7 @@ class UserschedControllerSkins extends JControllerLegacy
 		$this->setRedirect('index.php?option=com_usersched&view='.$view, Text::_('COM_USERSCHED_MSG_COMPLETE').print_r($this->input->post,true));
 	}
 
-	public function addSkin ()
+	public function addSkin (): void
 	{
 		$errmsg = '';
 		$upfile = $_FILES['skinfile'];
@@ -46,50 +51,49 @@ class UserschedControllerSkins extends JControllerLegacy
 		}
 	}
 
-	public function makeDfltU ()
+	public function makeDfltU (): void
 	{
 		$this->setDefaultSkin('default_skin');
 	}
-	public function makeDfltG ()
+	public function makeDfltG (): void
 	{
 		$this->setDefaultSkin('group_default_skin');
 	}
-	public function makeDfltS ()
+	public function makeDfltS (): void
 	{
 		$this->setDefaultSkin('site_default_skin');
 	}
 
-	private function setDefaultSkin ($which)
+	private function setDefaultSkin (string $which): void
 	{
-		$rows = $this->input->get('cid',array(),'array');
+		$rows = $this->input->get('cid',[],'array');
 		$view = $this->input->get('view','skins');
 		$this->setCompParam($which, $rows[0]);
 		$this->setRedirect('index.php?option=com_usersched&view='.$view);
 	}
 
-	private function setCompParam ($param, $val)
+	private function setCompParam (string $param, $val): bool
 	{
 		// To access the extensions table we need the id of the component
-		$compomentId = JComponentHelper::getComponent('com_usersched')->id;
+		$compomentId = ComponentHelper::getComponent('com_usersched')->id;
 		assert($compomentId != 0); // make sure that no error will cause the creation of a new entry in the extenions table
-		
+
 		// set the new value using set()
-		$params = JComponentHelper::getParams('com_usersched');
+		$params = ComponentHelper::getParams('com_usersched');
 		$params->set($param, $params->get($param)==$val?'':$val);
-		
+
+		$db = Factory::getContainer()->get('DatabaseDriver');
 		// get an instance of the table class, load the component, overwrite the param-string with the new parameter values
-		$table = JTable::getInstance('extension');
+		$table = new Extension($db);
 		$table->load($compomentId);
-		$table->bind(array('params' => $params->toString()));
-		
+		$table->bind(['params' => $params->toString()]);
+
 		// check and store with some simple error handling
 		if (!$table->check()) {
-			$this->setError("set:{$param} check: ".$table->getError());
-			return false;
+			throw new \Exception("set:{$param} check: ".$table->getError());
 		}
 		if (!$table->store()) {
-			$this->setError("set:{$param} store: ".$table->getError());
-			return false;
+			throw new \Exception("set:{$param} store: ".$table->getError());
 		}
 		return true;
 	}

@@ -6,12 +6,12 @@
 * @since		1.4.0
 */
 defined('_JEXEC') or die;
+/** @var \RJCreations\Component\Usersched\Administrator\View\EventsView $this */
 
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\HTML\HTMLHelper;
 
-// Include the component HTML helpers.
-HTMLHelper::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_usersched/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 
@@ -22,7 +22,7 @@ $listOrder	= $this->state('list.ordering');
 $listDirn	= $this->state('list.direction');
 $canDo		= UserSchedHelper::getActions();
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_usersched&view=events'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo Route::_('index.php?option=com_usersched&view=events'); ?>" method="post" name="adminForm" id="adminForm">
 	<?php echo HTMLHelper::_('usched.sideBar', $this->sidebar); ?>
 	<div id="j-main-container" class="span10">
 
@@ -30,15 +30,15 @@ $canDo		= UserSchedHelper::getActions();
 			<thead>
 				<tr>
 					<th width="1%"></th>
-					<th width="1%"><?php echo JHtml::_('usched.checkall'); ?></th>
+					<th width="1%"><?php echo HTMLHelper::_('usched.checkall'); ?></th>
 					<th width="15%">
-						<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_EV_START', 'startdate', $listDirn, $listOrder); ?>
+						<?php echo HTMLHelper::_('grid.sort', 'COM_USERSCHED_EV_START', 'startdate', $listDirn, $listOrder); ?>
 					</th>
 					<th width="10%">
-						<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_EV_CAT', 'category', $listDirn, $listOrder); ?>
+						<?php echo HTMLHelper::_('grid.sort', 'COM_USERSCHED_EV_CAT', 'category', $listDirn, $listOrder); ?>
 					</th>
 					<th width="10%">
-						<?php echo JHtml::_('grid.sort', 'COM_USERSCHED_EV_RECTYPE', 'rectype', $listDirn, $listOrder); ?>
+						<?php echo HTMLHelper::_('grid.sort', 'COM_USERSCHED_EV_RECTYPE', 'rectype', $listDirn, $listOrder); ?>
 					</th>
 					<th width="50%">
 						<?php echo Text::_('COM_USERSCHED_EV_TEXT'); ?>
@@ -59,7 +59,7 @@ $canDo		= UserSchedHelper::getActions();
 						<?php echo $i + 1 + $this->pagination->limitstart; ?>
 					</td>
 					<td>
-						<?php echo JHtml::_('grid.id', $i, $item['event_id']); ?>
+						<?php echo HTMLHelper::_('grid.id', $i, $item['event_id']); ?>
 					</td>
 					<td>
 						<?php $date= new DateTime($item['start_date']); echo $date->format($dtimeformat); ?>
@@ -71,7 +71,7 @@ $canDo		= UserSchedHelper::getActions();
 						<?php echo $item['rec_type'] ?>
 					</td>
 					<td>
-						<?php echo str_replace(array("\r\n", "\r", "\n"), "<br />", $item['text']) ?>
+						<?php echo str_replace(["\r\n", "\r", "\n"], "<br />", $item['text']) ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>
@@ -85,7 +85,7 @@ $canDo		= UserSchedHelper::getActions();
 			<input type="hidden" name="isGrp" value="<?php echo $this->state->get('usched_isgrp'); ?>" />
 			<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
 			<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
-			<?php echo JHtml::_('form.token'); ?>
+			<?php echo HTMLHelper::_('form.token'); ?>
 		</div>
 	</div>
 </form>

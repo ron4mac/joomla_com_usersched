@@ -11,20 +11,25 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
+use RJCreations\Component\Usersched\Site\View\UschedView;
 use RJCreations\Component\Usersched\Site\Helper\Events;
 use RJCreations\Component\Usersched\Site\Helper\HtmlUsersched;
 
 define('RJC_DEVR', (JDEBUG) && Factory::getApplication()->input->get('dev',0,'integer'));
 
-class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
+class HtmlView extends UschedView
 {
+	public $message;
+	public $categories;
+	public $sterm;
+	public $data;
 	protected $rBeg;
 	protected $rEnd;
 	protected $canSearch = false;
 	protected $isSearch = false;
 	protected $oCalUrl = '';
 
-	function display ($tpl = null)
+	public function display ($tpl = null): void
 	{
 		$this->message = $this->params->get('message');
 //echo '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'.$this->getLayout().'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@';
@@ -60,7 +65,6 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 			}
 			//var_dump($private);
 		}
-		$cfg = $m->getUdTable('options','name = "config"',false);
 		// get event range
 		$curTime = time();
 		$this->rBeg = $curTime + $this->params->get('relstart');		//echo'<xmp>';var_dump($this->params);echo'</xmp>';
@@ -69,7 +73,7 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 //		$fields = 'strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, *';
 		$fields = 'strtotime(`start_date`) AS t_start, strtotime(`end_date`) as t_end, *';
 		$where = '';
-		if ($private) $where .= 'category NOT IN ('.implode(',',$private).') AND ';
+		if ($private !== []) $where .= 'category NOT IN ('.implode(',',$private).') AND ';
 		$where = '(t_start>'.$this->rBeg.' OR end_date LIKE \'9999%\' OR t_end>'.$this->rBeg.') AND t_start<'.$this->rEnd.' ORDER BY t_start';
 //			$where = '(t_start>'.$this->rBeg.' OR t_end>'.$this->rBeg.') AND t_start<'.$this->rEnd.' ORDER BY t_start';
 		$evts = $m->getUdTable('events', $where, true, $fields);
@@ -104,7 +108,7 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 			HtmlUsersched::makeLinks($evts[$k]['text']);
 		}
 
-		usort($evts, function ($a,$b) { if ($a['t_start']==$b['t_start']) return 0; return ($a['t_start'] < $b['t_start']) ? -1 : 1; });
+		usort($evts, fn(array $a, array $b): int => $a['t_start'] <=> $b['t_start']);
 		$this->data = $evts;
 		parent::display($tpl);
 	}
@@ -117,11 +121,10 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 		$fdt = date('D j F Y g:ia', $from);
 		if ($to) {
 			if ($to-$from > 86400) {
-				if ((date('Hi',$from).date('Hi',$to)) == '00000000') {
+				if ((date('Hi',$from).date('Hi',$to)) === '00000000') {
 					return date('D j F Y', $from).' - '.date('D j F Y', $from);
-				} else {
-					$fdt .= ' - '.date('D j F Y g:ia', $to);
 				}
+				$fdt .= ' - '.date('D j F Y g:ia', $to);
 			} else {
 				$fdt .= ' to '.date('g:ia', $to);
 			}
@@ -133,7 +136,7 @@ class HtmlView extends \RJCreations\Component\Usersched\Site\View\UschedView
 	{
 		$lines = explode("\n",rtrim($txt));
 		$ft = '<span class="evt-desc">'.array_shift($lines).'</span>';
-		if ($lines) $ft .= '<br>'.implode('<br>',$lines);
+		if ($lines !== []) $ft .= '<br>'.implode('<br>',$lines);
 		return $ft;
 	}
 

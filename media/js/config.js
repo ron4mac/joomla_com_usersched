@@ -49,7 +49,45 @@ var USched = function() {
 			}
 			document.getElementById(tabId).style.display = "block";
 			evt.currentTarget.className += " active";
+		},
+		showSMS: () => {
+			const modalElement = document.getElementById('dynamicContentModal');
+			if (!modalElement) return;
+		
+			const modalTitle = modalElement.querySelector('.modal-title');
+			const modalBody = document.getElementById('modalBody');
+		
+			// Instantiate Bootstrap modal instance
+			const bootstrapModal = new bootstrap.Modal(modalElement);
+			const fetchUrl = Joomla.getOptions('Usersched').rawURL+'&task=Raw.showsms';
+			
+			// 1. Reset state to showing loading indicator
+			modalTitle.textContent = 'Please Wait';
+			modalBody.innerHTML = `
+				<div class="text-center py-3">
+					<div class="spinner-border text-primary" role="status"></div>
+					<p class="mt-2">Fetching content...</p>
+				</div>`;
+			
+			// Open the modal container right away
+			bootstrapModal.show();
+
+			try {
+				fetch(fetchUrl, {method: 'GET'})
+				.then(resp => { if (!resp.ok) throw new Error(`HTTP ${resp.status} `+resp.headers.get('errmsg','')); return resp.json() })
+				.then(data => {
+					console.log(data);
+					modalTitle.textContent = data.title || 'Details';
+					modalBody.innerHTML = data.html || data.message || data.error || 'No content returned.';
+				})
+				.catch(err => alert('Failure: '+err));
+			} catch (error) {
+				// Handle fetch failures gracefully
+				modalTitle.textContent = 'Error';
+				modalBody.innerHTML = `<div class="alert alert-danger">Failed to load content. Please try again.</div>`;
+				console.error('Fetch Error:', error);
+			}
 		}
-	}
+	};
 
 }();

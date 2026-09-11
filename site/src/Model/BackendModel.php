@@ -1,9 +1,9 @@
 <?php
 /**
 * @package		com_usersched
-* @copyright	Copyright (C) 2015-2024 RJCreations. All rights reserved.
+* @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.3.0
+* @since		1.4.0
 */
 namespace RJCreations\Component\Usersched\Site\Model;
 
@@ -57,7 +57,7 @@ class BackendModel extends UserschedModel
 		return $this->db->lastInsertId();
 	}
 
-	public function update ($event, $id)
+	public function update ($event, $id): void
 	{
 		$queryText = 'UPDATE `events` SET
 			`start_date`=?,
@@ -83,7 +83,7 @@ class BackendModel extends UserschedModel
 		$this->dbex($queryText, $this->qValues($event, $id));
 	}
 
-	public function delete ($id)
+	public function delete ($id): void
 	{
 		// some logic specific to recurring events support
 		// https://docs.dhtmlx.com/scheduler/server_integration.html#savingrecurringevents
@@ -109,7 +109,7 @@ class BackendModel extends UserschedModel
 		}
 	}
 
-	private function qValues ($evt, $xtra=null)
+	private function qValues (array $evt, $xtra=null): array
 	{
 		$vals = [
 			$evt['start_date'],
@@ -128,7 +128,7 @@ class BackendModel extends UserschedModel
 		return $vals;
 	}
 
-	private function dbex ($qt, $qp, $ftch=false)
+	private function dbex (string $qt, array $qp, $ftch=false)
 	{
 		$q = $this->db->prepare($qt);
 		$this->loggit($q->queryString);
@@ -136,7 +136,7 @@ class BackendModel extends UserschedModel
 		if ($ftch) return $ftch>1 ? $q->fetchAll(\PDO::FETCH_ASSOC) : $q->fetch(\PDO::FETCH_ASSOC);
 	}
 
-	private function loggit ($msg)
+	private function loggit ($msg): void
 	{
 		if (RJC_DEV) file_put_contents('LOG.txt', $msg."\n", FILE_APPEND);
 	}

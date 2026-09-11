@@ -10,6 +10,8 @@ namespace RJCreations\Component\Usersched\Site\View;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomla\Application\Web\WebClient;
 use Joomla\CMS\Component\ComponentHelper;
 use RJCreations\Component\Usersched\Site\Helper\UserschedHelper;
@@ -17,7 +19,7 @@ use RJCreations\Component\Usersched\Site\Helper\UserschedHelper;
 //\JLoader::register('UserSchedHelper', JPATH_SITE . '/components/com_usersched/helpers/usersched.php');
 //\JLoader::register('JHtmlUsersched', JPATH_SITE . '/components/com_usersched/helpers/html/usersched.php');
 
-class UschedView extends \Joomla\CMS\MVC\View\HtmlView
+class UschedView extends BaseHtmlView
 {
 	protected $app;							// provide app instance to views
 	public $document;						//  - and document
@@ -49,9 +51,11 @@ class UschedView extends \Joomla\CMS\MVC\View\HtmlView
 		// and get other generally needed info
 		$this->user = Factory::getUser();
 		$calid = UserschedHelper::uState('calid');	//var_dump($calid);
-		list($this->cal_type, $this->auth) = explode(':',$calid?$calid:'-1:');
+		[$this->cal_type, $this->auth] = explode(':',$calid ?: '-1:');
 		// get the calendar instance params
 		$this->params = $this->app->getParams();
+		$rurl = Route::_('index.php?option=com_usersched&format=raw', false);
+		$this->document->addScriptOptions('Usersched',['rawURL' => $rurl]);
 	}
 
 }

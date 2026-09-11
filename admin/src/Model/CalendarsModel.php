@@ -10,11 +10,12 @@ namespace RJCreations\Component\Usersched\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Access\Access;
+use Joomla\CMS\MVC\Model\ListModel;
 use RJCreations\Library\RJUserCom;
 
 \JLoader::register('UserSchedHelper', JPATH_ADMINISTRATOR.'/components/com_usersched/helpers/usersched.php');
 
-class CalendarsModel extends \Joomla\CMS\MVC\Model\ListModel
+class CalendarsModel extends ListModel
 {
 
 	protected $_total = -1;
@@ -43,7 +44,7 @@ class CalendarsModel extends \Joomla\CMS\MVC\Model\ListModel
 		$start = $this->getState('list.start');
 		$limit = $this->getState('list.limit');
 		// Add the items to the internal cache.
-		$this->cache[$store] = array_slice($scheds,$start,$limit?$limit:null);
+		$this->cache[$store] = array_slice($scheds,$start,$limit ?: null);
 
 		return $this->cache[$store];
 	}

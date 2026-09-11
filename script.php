@@ -28,10 +28,11 @@ class com_userschedInstallerScript extends InstallerScript
 	protected $deleteFiles = [
 		'components/com_usersched/cron.php',
 		'components/com_usersched/cront.php',
-		'components/com_usersched/alertchk.php'
+		'components/com_usersched/alertchk.php',
+		'components/com_usersched/alertcheck.php'
 	];
 
-	public function install ($parent) 
+	public function install ($parent): void
 	{
 		$parent->getParent()->setRedirectURL('index.php?option='.$this->com_name);
 	}
@@ -67,9 +68,10 @@ class com_userschedInstallerScript extends InstallerScript
 		} else {
 			$this->release = $parent->get('manifest')->version;
 		}
+		return null;
 	}
 
-	public function postflight ($type, $parent) 
+	public function postflight ($type, $parent): void
 	{
 		$params['version'] = $this->release;
 		$this->mySetParams($params, true);
@@ -88,7 +90,7 @@ class com_userschedInstallerScript extends InstallerScript
 		}
 	}
 
-	private function mySetParams ($param_array, $replace=false)
+	private function mySetParams (array $param_array, bool $replace=false): void
 	{
 		if (count($param_array) > 0) {
 			// read the existing component value(s)
