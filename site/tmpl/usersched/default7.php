@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.4.0
+* @since		1.4.1
 */
 /** @var \RJCreations\Component\Usersched\Site\View\Usersched\HtmlView $this */
 defined('_JEXEC') or die;
@@ -15,7 +15,7 @@ use RJCreations\Component\Usersched\Site\Helper\UserschedHelper;
 
 // determine needed CSS files and add them
 $is_terrace = true;
-$skin = $this->params->get('default_skin');
+$skin = $this->params->get('default_skin','terrace');
 if ($this->settings['settings_skin']) $skin = $this->settings['settings_skin'];
 $skinpath = 'media/com_usersched/' . "skins/{$skin}/";
 $skinopts = ['version' => 'auto'];
@@ -82,8 +82,6 @@ if ($this->mobile) $jscodes .= 'M';
 
 $this->wa->registerAndUseScript('com_usersched.combo', 'components/com_usersched/js.php?'.$jscodes, $skinopts, [], ['com_usersched.scheduler'.$dhxver]);
 
-
-//$this->document->addScriptDeclaration($script);
 $this->wa->addInlineScript($script);
 
 $tabs = json_encode($this->tabs);

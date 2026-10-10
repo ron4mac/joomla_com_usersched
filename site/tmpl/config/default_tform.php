@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.4.0
+* @since		1.4.1
 */
 /** @var \RJCreations\Component\Usersched\Site\View\Config\HtmlView $this */
 defined('_JEXEC') or die;
@@ -95,6 +95,10 @@ $fact = Route::_('index.php?option=com_usersched&view=usersched&Itemid='.$this->
 	<div class="clr">&nbsp;</div>
 	<label for="settings_skin"><?= Text::_('COM_USERSCHED_CFG_CALSKIN') ?></label>
 	<?=HTMLHelper::_('select.genericlist', $this->skinOptions, 'settings_skin', '', 'value', 'text', $this->config['settings_skin'], 'settings_skin'); ?>
+<!--	<span class="actitm" onclick="window.open('components/com_usersched/prevskin/skinPreview.php?dxv=<?=$this->cOpts->get('dhtmlx_version', '7.2')?>&A=1','_blank','menubar=0,scrollbar=0,toolbar=0,status=0,location=0,titlebar=0,height=675,width=900')"> -->
+	<span class="actitm" onclick="window.open('index.php?option=com_usersched&format=raw&task=Raw.showSkins&skin=terrace','_blank','menubar=0,scrollbar=0,toolbar=0,status=0,location=0,titlebar=0,height=675,width=900')">
+		View Skins
+	</span>
 <?php endif; ?>
 	</div>
 	<div>

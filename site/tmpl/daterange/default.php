@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.4.0
+* @since		1.4.1
 */
 /** @var \RJCreations\Component\Usersched\Site\View\Config\HtmlView $this */
 defined('_JEXEC') or die('Restricted access');
@@ -39,8 +39,8 @@ var USched = {
 	}
 }
 ';
-Factory::getDocument()->addStyleDeclaration($this->categoriesCSS());
-Factory::getDocument()->addScriptDeclaration($script);
+$this->wa->addInlineStyle($this->categoriesCSS());
+$this->wa->addInlineScript($script);
 //echo'<xmp>';var_dump($this->instObj);echo'</xmp>';
 if ($this->canSearch) echo $sform;
 if ($this->params->get('show_page_heading', 1)) {

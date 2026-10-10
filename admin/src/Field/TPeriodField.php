@@ -3,24 +3,31 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.4.0
+* @since		1.4.1
 */
+namespace RJCreations\Component\Usersched\Administrator\Field;
+
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
 
-Factory::getDocument()->addScript('components/com_usersched/fields/tperiod.js');
-
-class JFormFieldTPeriod extends FormField
+class TPeriodField extends FormField
 {
 	protected $type = 'TPeriod';
 
+	public function __construct ($form = null)
+	{
+		parent::__construct($form);
+		$wa = Factory::getApplication('site')->getDocument()->getWebAssetManager();
+		$wa->getRegistry()->addExtensionRegistryFile('com_usersched');
+		$wa->useScript('com_usersched.tperiod');
+	}
+
 	protected function getInput()
 	{
-		$attr = '';
-
 		// Initialize some field attributes.
+		$attr = '';
 		$attr .= $this->element['class'] ? ' class="' . $this->element['class'] . '"' : '';
 		$attr .= ((string) $this->element['disabled'] === 'true') ? ' disabled="disabled"' : '';
 		$attr .= $this->element['size'] ? ' size="' . (int) $this->element['size'] . '"' : '';

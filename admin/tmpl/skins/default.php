@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.4.0
+* @since		1.4.1
 */
 /** @var \RJCreations\Component\Usersched\Administrator\View\Skins\HtmlView $this */
 defined('_JEXEC') or die;
@@ -22,16 +22,16 @@ $script = '
 	var c = document.adminForm, d = c[row];
 	if (d) {
 		skin = encodeURIComponent(d.value);
-		window.open("'.Uri::root().'components/com_usersched/prevskin/skinPreview.php?skin="+skin,"_blank","menubar=0,scrollbar=0,toolbar=0,status=0,location=0,titlebar=0,height=675,width=900")
+		window.open("'.Uri::root().'components/com_usersched/prevskin/skinPreview.php?dxv='.$this->dhxver.'&skin="+skin,"_blank","menubar=0,scrollbar=0,toolbar=0,status=0,location=0,titlebar=0,height=675,width=900")
 		//alert(skin);
 		}
 	}
 ';
 // Add the script to the document head.
-Factory::getDocument()->addScriptDeclaration($script);
+$this->document->getWebAssetManager()->addInlineScript($script);
 
 $canDo = UserSchedHelper::getActions();
-$imgPath = Uri::base().'components/com_usersched/static/';
+$imgPath = Uri::root(true).'/media/com_usersched/img/';
 $selIcon = 'selected.png';
 $unselIcon = 'unselected.png';
 $upform = '<form action="'.Route::_('index.php?option=com_usersched&view=skins').'" onsubmit="return document.formvalidator.isValid(this)" enctype="multipart/form-data" method="post" name="upldForm" id="upldForm">

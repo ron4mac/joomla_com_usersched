@@ -103,10 +103,13 @@ cfg-tabs .numer {
 .actitm {
 	cursor: pointer;
 	color: var(--cassiopeia-color-link);
+	display: inline-block;
+	min-width: 8rem;
 }
 .actitm:hover {
 	font-variant-caps: small-caps;
 }
+
 .smslist {
 	display: grid;
 	grid-template-columns: auto auto auto 15%;

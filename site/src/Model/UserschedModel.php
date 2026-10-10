@@ -3,19 +3,16 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.4.0
+* @since		1.4.1
 */
 namespace RJCreations\Component\Usersched\Site\Model;
 
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-//use Joomla\Database\DatabaseDriver;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use RJCreations\Library\RJUserCom;
 use RJCreations\Component\Usersched\Site\Helper\UserschedHelper;
-
-//require_once JPATH_SITE.'/components/com_usersched/helpers/usersched.php';
 
 class UserschedModel extends BaseDatabaseModel
 {
@@ -91,13 +88,6 @@ class UserschedModel extends BaseDatabaseModel
 			@mkdir($udbPath, 0777, true);
 		}
 
-//		if (class_exists('DatabaseDriver')) {
-//			$db = DatabaseDriver::getInstance(['driver'=>'sqlite','database'=>$udbPath.$dbFile]);
-//		} else {
-//			$db = JDatabaseDriver::getInstance(['driver'=>'sqlite','database'=>$udbPath.$dbFile]);
-//		}
-	//	$db->setDebug(7);
-	//	$db->connect();
 		$db = RJUserCom::getDb(true);
 		$db->getConnection()->sqliteCreateFunction('strtotime', 'strtotime', 1);
 
@@ -106,7 +96,6 @@ class UserschedModel extends BaseDatabaseModel
 
 		if ($this->dbinit) {
 			RJUserCom::createDb($udbPath);
-		//	$this->buildDb($db);
 		}
 	}
 

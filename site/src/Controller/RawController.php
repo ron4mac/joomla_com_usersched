@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.4.0
+* @since		1.4.1
 */
 namespace RJCreations\Component\Usersched\Site\Controller;
 
@@ -121,7 +121,8 @@ class RawController extends BaseController
 
 	private function getGholidays ($yr, $rg)
 	{
-		$key = ComponentHelper::getParams('com_usersched')->get('googapi_key','');
+		$key = ComponentHelper::getParams('com_usersched')->get('googapi_key');
+		if (!$key) return '{"items":[]}';
 		$url = 'https://www.googleapis.com/calendar/v3/calendars/'.$rg.'@holiday.calendar.google.com/events?key='.$key;
 		$url .= '&timeMin='.$yr.'-01-01T00%3A00%3A00%2B00%3A00&timeMax='.($yr+1).'-01-01T00%3A00%3A00%2B00%3A00&singelEvents=true';
 	//	file_put_contents('GOOG.txt', $url);
@@ -288,6 +289,16 @@ class RawController extends BaseController
 			'html'=>$cells.'</div>',
 			'error'=>'NOT YET FULLY IMPLEMENTED'
 		]);
+	}
+
+	public function showSkins (): void
+	{
+		$curskin = $this->input->get('skin');
+		$skins = [];
+		foreach(scandir(JPATH_SITE.'/media/com_usersched/skins') as $skin) {
+			$skins[] = $skin;
+		}
+		include JPATH_SITE.'/components/com_usersched/prevskin/skinPreview.php';
 	}
 
 }

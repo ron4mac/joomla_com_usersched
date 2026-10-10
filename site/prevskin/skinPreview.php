@@ -3,36 +3,43 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.4.0
+* @since		1.4.1
 */
 
-$skin = '';
-$css = '';
 if (isset($_GET['skin']) && $_GET['skin']) {
 	$skin = $_GET['skin'];
-	$csp = '../skins/'.$skin;
-	$fls = scandir($csp);
-	foreach($fls as $fl) {
-		if (preg_match('/^dhtmlxscheduler.+\.css$/', $fl)) {
-			$css = $csp.'/'.$fl;
-			break;
-		}
-	$css = '../scheduler/codebase/dhtmlxscheduler_'.$skin.'.css';
-	}
 }
-$cssPath = $css ?: '../scheduler/codebase/dhtmlxscheduler.css';
+$skin = '';
+if (isset($_GET['skin']) && $_GET['skin']) {
+	$skin = $_GET['skin'];
+}
+$dhxver = '7.2';
+if (isset($_GET['dxv']) && $_GET['dxv']) {
+	$dhxver = $_GET['dxv'];
+}
+$skinPath = 'media/com_usersched/skins/'.$skin;
+$topbar = '';
+if (isset($skins)) {
+	$topbar = '<div class="skelect"><select onchange="loadSkin(this.value)">';
+	foreach ($skins as $s) {
+		$sel = $s===$curskin ? ' selected' : '';
+		if (!str_starts_with($s,'.')) $topbar .= '<option value="'.$s.'"'.$sel.'>'.$s.'</option>';
+	}
+	$topbar .= '</select></div>';
+	$skinPath = 'media/com_usersched/skins/'.$curskin;
+}
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<title>Skin Preview - <?php echo $skin; ?></title>
+	<title>Skin Preview - <?=$skin?></title>
 
-	<script src="../scheduler/codebase/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../skins/<?php echo $skin; ?>/skin.js" type="text/javascript" charset="utf-8"></script>
-	<link rel="stylesheet" href="<?php echo $cssPath; ?>" type="text/css" media="screen" title="no title" charset="utf-8">
-	<script src="../scheduler/codebase/ext/dhtmlxscheduler_editors.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../scheduler/codebase/ext/dhtmlxscheduler_minical.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../scheduler/codebase/ext/dhtmlxscheduler_recurring.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="https://cdn.dhtmlx.com/scheduler/<?=$dhxver?>/dhtmlxscheduler.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<link rel="stylesheet" href="<?=$skinPath?>/skin.css" type="text/css" media="screen" charset="utf-8">
+
+	<script src="https://cdn.dhtmlx.com/scheduler/<?=$dhxver?>/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
+	<script>USched = {bURL: "<?=__DIR__?>"};</script>
+	<script src="<?=$skinPath?>/skin.js" type="text/javascript" charset="utf-8"></script>
 
 	<style type="text/css" media="screen">
 		html, body {
@@ -42,10 +49,20 @@ $cssPath = $css ?: '../scheduler/codebase/dhtmlxscheduler.css';
 			overflow: hidden;
 		}
 		/*.dhx_cal_cover { opacity:0 }*/
+		.skelect {
+			display: flex;
+			justify-content: center;
+			padding: 1rem;
+			background-color: #888;
+		}
+		.skelect select {
+			font-size: large;
+		}
 	</style>
 
 	<script type="text/javascript" charset="utf-8">
-		function init() {
+		scheduler.skin = "<?=$skin?>";
+		function init () {
 			scheduler.config.multi_day = true;
 			var pizza_size = [
 				{ key: 1, label: 'Small' },
@@ -75,14 +92,18 @@ $cssPath = $css ?: '../scheduler/codebase/dhtmlxscheduler.css';
 			scheduler.config.xml_date = "%Y-%m-%d %H:%i";
 			scheduler.init('scheduler_here', new Date(2010, 1, 2), "month");
 			scheduler.config.wide_form = false;
-			scheduler.load("./events.xml", function() {
-				scheduler.showLightbox(47);
-			});
-
+			scheduler.load("components/com_usersched/prevskin/events.xml", () => scheduler.showLightbox(47));
+		}
+		function loadSkin (skin) {
+			const url = new URL(window.location.href);
+			url.searchParams.set('skin', skin);
+			window.location.href = url.href;
 		}
 	</script>
 </head>
 <body onload="init();">
+<?php //echo'<xmp>';var_dump($_ENV,$_SERVER);echo'</xmp>';?>
+<?=$topbar?>
 <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
 	<div class="dhx_cal_navline">
 		<div class="dhx_cal_prev_button">&nbsp;</div>

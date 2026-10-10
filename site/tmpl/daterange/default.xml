@@ -8,7 +8,7 @@
 	<fields name="params">
 
 		<!-- Basic options. -->
-		<fieldset name="basic" label="COM_MENUS_BASIC_FIELDSET_LABEL" addfieldpath="administrator/components/com_usersched/fields">
+		<fieldset name="basic" label="COM_MENUS_BASIC_FIELDSET_LABEL"  addfieldprefix="RJCreations\Component\Usersched\Administrator\Field">
 
 			<field name="message" type="textarea"
 				cols="30"
@@ -23,23 +23,14 @@
 				description="COM_USERSCHED_RANGE_MENU_REF_DESC"
 				required="required"
 			/>
-<!--
-			<field name="relative" type="radio" default="abs"
-				label="Relative/Absolute Date Range"
-				description="Should date range be relative to today or absolute dates. You can also specify dates using the php function strtotime"
-			>
-				<option value="abs">Absolute</option>
-				<option value="rel">Relative</option>
-				<option value="strtotime">strtotime</option>
-			</field>
--->
-			<field name="relstart" type="tperiod"
+
+			<field name="relstart" type="TPeriod"
 				default="-259200"
 				label="COM_USERSCHED_RANGE_START_REL_LABEL"
 				description="COM_USERSCHED_RANGE_START_REL_DESC"
 			/>
 
-			<field name="relend" type="tperiod"
+			<field name="relend" type="TPeriod"
 				default="6048000"
 				label="COM_USERSCHED_RANGE_END_REL_LABEL"
 				description="COM_USERSCHED_RANGE_END_REL_DESC"

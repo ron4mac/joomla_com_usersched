@@ -3,12 +3,12 @@
 <extension type="component" method="upgrade">
 	<name>com_usersched</name>
 	<author>Ron Crans</author>
-	<creationDate>September 2026</creationDate>
+	<creationDate>October 2026</creationDate>
 	<copyright>(C) 2015-2026 RJCreations. All rights reserved</copyright>
 	<license>GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)</license>
 	<authorEmail>ron@rjconline.net</authorEmail>
 	<authorUrl>rjconline.net</authorUrl>
-	<version>1.4.0</version>
+	<version>1.4.1</version>
 	<updater jver="4\.[0-9]||(5\.[0-4])" pver="7.0" />
 	<description>COM_USERSCHED_XML_DESCRIPTION</description>
 	<namespace path="src">RJCreations\Component\Usersched</namespace>
@@ -40,14 +40,12 @@
 		<files folder="admin">
 			<filename>access.xml</filename>
 			<filename>config.xml</filename>
-			<folder>fields</folder>
 			<folder>help</folder>
 			<folder>helpers</folder>
 			<folder>language</folder>
 			<folder>services</folder>
 			<folder>sql</folder>
 			<folder>src</folder>
-			<folder>static</folder>
 			<folder>tmpl</folder>
 		</files>
 	</administration>

@@ -1,4 +1,5 @@
 /* accomodate our event category styling (mostly happens via scheduler.templates.event_class function) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap');
 .dhx_cal_data div.evt-ctg-0 {
 	background-image:none;
 	background-color:revert;

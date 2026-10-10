@@ -3,7 +3,7 @@
 * @package		com_usersched
 * @copyright	Copyright (C) 2015-2026 RJCreations. All rights reserved.
 * @license		GNU General Public License version 3 or later; see LICENSE.txt
-* @since		1.4.0
+* @since		1.4.1
 */
 namespace RJCreations\Component\Usersched\Administrator\View\Skins;
 
@@ -13,6 +13,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Component\ComponentHelper;
 use RJCreations\Component\Usersched\Administrator\View\UschedView;
 
 /**
@@ -23,6 +24,7 @@ class HtmlView extends UschedView
 	protected $items;
 	protected $pagination;
 	protected $state;
+	protected $dhxver;
 	protected $relm = 'skins';
 
 	/**
@@ -30,6 +32,8 @@ class HtmlView extends UschedView
 	 */
 	public function display ($tpl = null): void
 	{
+		$this->dhxver = ComponentHelper::getParams('com_usersched')->get('dhtmlx_version', '7.2');
+
 		$m = $this->getModel();
 
 		$this->items		= $m->getItems();

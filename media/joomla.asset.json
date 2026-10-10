@@ -99,6 +99,11 @@
       "name": "com_usersched.config",
       "type": "script",
       "uri": "com_usersched/config.js"
+    },
+    {
+      "name": "com_usersched.tperiod",
+      "type": "script",
+      "uri": "com_usersched/tperiod.js"
     }
   ]
 }
